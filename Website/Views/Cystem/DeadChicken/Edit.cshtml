@@ -1,0 +1,53 @@
+﻿@using Website.Common.Data
+@using Website.Common.Enums
+@using Website.Common.Viewmodels
+@using Website.Controllers.Cystem
+@model DeadChickenViewModel
+
+<div class="container">
+    @using (Html.BeginForm<DeadChickenController>(c => c.Store(Param<DeadChickenViewModel>.Any), new { }, FormMethod.Post, true, new { }))
+    {
+        @Html.HiddenFor(m => m.Model.Id)
+
+        <div class="row">
+            <div class="col s12">
+                <h2>Legpercentage</h2>
+                <b>Geef het aantal afgedraaide eiren op</b>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-field col l6 s12">
+                @Html.EditorFor(m => m.Model.Date, new { htmlAttributes = new { @class = "validate datepicker", type = "text" } })
+                @Html.LabelFor(m => m.Model.Date)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col s12">
+                <b>Dode kippen</b>
+            </div>
+        </div>
+
+        <div class="row">
+            <div id="separate" class="input-field col l6 s12">
+                @Html.EditorFor(m => m.Model.Amount, new { htmlAttributes = new { @class = "validate" } })
+                @Html.LabelFor(m => m.Model.Amount)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-field col s12">
+                @Html.EditorFor(m => m.Model.Remarks, new { htmlAttributes = new { @class = "materialize-textarea validate" } })
+                @Html.LabelFor(m => m.Model.Remarks)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="right col s12">
+                @Html.CystemSubmitButton("Save", "right", new { data_on_result = ElementAction.Close })
+                @(Html.ActionLink<DeadChickenController>("Delete", c => c.Delete(Model.Model.Id), new { }, new { @class = "ajax-delete right btn-flat waves-effect", data_on_result = ElementAction.Close }))
+            </div>
+        </div>
+    }
+</div>

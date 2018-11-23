@@ -1,0 +1,18 @@
+﻿@import '_variables.scss';
+@import '_mixins.scss';
+
+header {
+    nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 997;
+    }
+}
+
+.header-space {
+    height: 64px;
+    padding-bottom: 10px;
+    box-sizing: content-box;
+}

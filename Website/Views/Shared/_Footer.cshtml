@@ -1,0 +1,21 @@
+﻿@using Website.Common.Enums
+@using Website.Common.Viewmodels
+@using Website.Controllers
+@using Website.Controllers.Cystem
+@model ViewModel
+
+@if (Model.JsPage)
+{
+@:<div class="content" data-url="@(Url.Action<CommonController>(c => c.Header()))" action-type="@ElementAction.Reload">
+}
+    <div class="container">
+        <div class="row">
+            <div class="col s12">
+                foot
+            </div>
+        </div>
+    </div>
+@if (Model.JsPage)
+{
+@:</div>
+}

@@ -1,0 +1,55 @@
+[
+  {
+    "outputFileName": "wwwroot/css/Website.css",
+    "inputFiles": [
+      "wwwroot/css/lib/materialize.css",
+
+      "wwwroot/css/global.css",
+      "wwwroot/css/header.css",
+      "wwwroot/css/footer.css",
+      "wwwroot/css/content.css",
+      "wwwroot/css/overlay.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/Website.min.css",
+    "inputFiles": [
+      "wwwroot/css/Website.css"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false
+  },
+
+  {
+    "outputFileName": "wwwroot/js/Website.js",
+    "inputFiles": [
+      "wwwroot/js/lib/materialize.js",
+      "wwwroot/js/lib/moment.js",
+      "wwwroot/js/lib/chart.js",
+
+      "wwwroot/js/jqextensions.js",
+      "wwwroot/js/cystem.js",
+      "wwwroot/js/materialize.js",
+      "wwwroot/js/chart.js",
+      "wwwroot/js/navigate.js",
+      "wwwroot/js/overlay.js",
+      "wwwroot/js/formtab.js",
+
+      "wwwroot/js/init.js"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/js/Website.min.js",
+    "inputFiles": [
+      "wwwroot/js/widget/Website.js"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false
+  }
+]

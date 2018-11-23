@@ -1,0 +1,15 @@
+﻿@using Website.Common.Enums
+@using Website.Common.Viewmodels
+@model ViewModel
+
+<div class="overlay-wrapper">
+    <div class="overlay z-depth-2">
+        <div class="close btn-floating primary waves-effect">
+            <i class="material-icons">close</i>
+        </div>
+
+        <div class="content" data-url="@Model.Url" data-action="@ElementAction.Reload">
+            @RenderBody()
+        </div>
+    </div>
+</div>

@@ -1,0 +1,7 @@
+﻿@using Website.Common.Enums
+@using Website.Common.Viewmodels
+@model ViewModel
+
+<div class="content" data-url="@Model.Url"  data-action="@ElementAction.Reload">
+    @RenderBody()
+</div>

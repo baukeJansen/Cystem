@@ -1,0 +1,65 @@
+﻿@using Website.Common.Models
+@using Website.Common.Viewmodels
+@using Website.Common.Enums
+@using Website.Controllers.Cystem
+@model DeadChickenOverviewViewModel
+
+<div class="container">
+    <div class="row">
+        <div class="col s12">
+            <h1>Legpercentage</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col s12">
+            <a href="@(Url.Action<DeadChickenController>(c => c.Create()))" class="ajax-get right btn-floating waves-effect waves-light btn-large" data-on-result="@ElementAction.Overlay"><i class='material-icons'>add</i></a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col s12">
+            <ul class="tabs">
+                <li class="tab col s3"><a href="#graph">Grafiek</a></li>
+                <li class="tab col s3"><a href="#data">Data</a></li>
+            </ul>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div id="graph" class="col s12 chart-wrapper">
+            <canvas class="graph" width="400" height="400"></canvas>
+            <div class="graph-data hide">
+                @Model.SerializedData
+            </div>
+        </div>
+        
+        <div id="data" class="col s12">
+            <table class="highlight">
+                <thead>
+                    <tr>
+                        <th>Datum</th>
+                        <th>Dode kippen</th>
+                        <th>Aantekening</th>
+                        <th>Wijzig</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (DeadChicken dc in Model.DeadChickens)
+                    {
+                        <tr>
+                            <td>@dc.Date.ToString("dd-MM-yyyy")</td>
+                            <td>@dc.Amount</td>
+                            <td>@dc.Remarks</td>
+                            <td>
+                                <a href="@(Url.Action<DeadChickenController>(c => c.Edit(dc.Id)))" class="ajax-get" data-on-result="@ElementAction.Overlay"><i class="material-icons">edit</i></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

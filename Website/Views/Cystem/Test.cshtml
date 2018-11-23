@@ -1,0 +1,55 @@
+﻿@using Website.Common.Viewmodels
+@using Website.Controllers
+@using Website.Views.HtmlHelpers
+@model TestViewModel
+
+<div class="container">
+    <div class="row">
+        <h1 class="col s12">System test page</h1>
+    </div>
+
+    <div class="row">
+        <h1 class="col s12">System test page</h1>
+    </div>
+
+    <div class="row">
+        <h1 class="col s12">System test page</h1>
+    </div>
+
+    <div class="row">
+        <h1 class="col s12">System test page</h1>
+    </div>
+
+    <div class="row">
+        <h1 class="col s12">System test page</h1>
+    </div>
+
+    <div class="row">
+        <h1 class="col s12">System test page</h1>
+    </div>
+
+    <div class="row">
+        <h1 class="col s12">System test page</h1>
+    </div>
+
+    <div class="row">
+        <h1 class="col s12">System test page</h1>
+    </div>
+
+    <div class="row">
+        <h1 class="col s12">System test page</h1>
+    </div>
+
+    <div class="row">
+        <h1 class="col s12">System test page</h1>
+    </div>
+
+    <div class="row">
+        <div class="col s12">
+            @using (Html.CystemNavigate<CystemController>(c => c.Test(), new { }, new { data_test = "test", @class = "x" }))
+            {
+                @:<span>test</span>
+            }
+        </div>
+    </div>
+</div>

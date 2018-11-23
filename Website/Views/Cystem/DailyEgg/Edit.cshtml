@@ -1,0 +1,84 @@
+﻿@using Website.Common.Data
+@using Website.Common.Enums
+@using Website.Common.Viewmodels
+@using Website.Controllers.Cystem
+@model DailyEggViewModel
+
+<div class="container">
+    @using (Html.BeginForm<DailyEggController>(c => c.Store(Param<DailyEggViewModel>.Any), new { }, FormMethod.Post, true, new { }))
+    {
+        @Html.HiddenFor(m => m.Model.Id)
+
+        <div class="row">
+            <div class="col s12">
+                <h2>Legpercentage</h2>
+                <b>Geef het aantal afgedraaide eiren op</b>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-field col l6 s12">
+                @Html.DropDownListFor(m => m.Model.ExportType, Model.ExportTypes)
+                @Html.LabelFor(m => m.Model.ExportType)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-field col l6 s12">
+                @Html.EditorFor(m => m.Model.Date, new { htmlAttributes = new { @class = "validate datepicker", type = "text" } })
+                @Html.LabelFor(m => m.Model.Date)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col s12">
+                <b>Eieren</b>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col l6 s12">
+                <ul class="tabs formtab">
+                    <li class="tab col s3"><a href="#stacks"><input type="radio" name="EggInputType" class="hide" value="Stacks" checked="checked" />Stapels</a></li>
+                    <li class="tab col s3"><a href="#separate"><input type="radio" name="EggInputType" class="hide" value="Separate" />Los</a></li>
+                </ul>
+
+            </div>
+        </div>
+
+        <div class="row">
+            <div id="stacks">
+                @Html.EditorFor(m => m.Eggs)
+            </div>
+
+            <div id="separate" class="input-field col l6 s12">
+                @Html.EditorFor(m => m.Model.Eggs, new { htmlAttributes = new { @class = "validate" } })
+                @Html.LabelFor(m => m.Model.Eggs)
+            </div>
+        </div>
+
+
+        <div class="row">
+            <p class="col s12">
+                <label>
+                    @Html.EditorFor(m => m.Model.EmptyAfterRun, new { htmlAttributes = new { @class = "validate" } })
+                    <span>@Html.DisplayNameFor(m => m.Model.EmptyAfterRun)</span>
+                </label>
+            </p>
+        </div>
+
+        <div class="row">
+            <div class="input-field col s12">
+                @Html.EditorFor(m => m.Model.Remarks, new { htmlAttributes = new { @class = "materialize-textarea validate" } })
+                @Html.LabelFor(m => m.Model.Remarks)
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="right col s12">
+                @Html.CystemSubmitButton("Save", "right", new { data_on_result = ElementAction.Close })
+                @(Html.ActionLink<DailyEggController>("Delete", c => c.Delete(Model.Model.Id), new { }, new { @class = "ajax-delete right btn-flat waves-effect", data_on_result = ElementAction.Close }))
+            </div>
+        </div>
+    }
+</div>

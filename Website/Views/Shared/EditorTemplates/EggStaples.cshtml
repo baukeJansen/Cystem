@@ -1,0 +1,23 @@
+﻿@using Website.Common.Data
+@model EggStaples
+
+
+<div class="input-field col l2 m3 s6">
+    @Html.EditorFor(m => m.Pallets, new { htmlAttributes = new { @class = "validate" } })
+    @Html.LabelFor(m => m.Pallets)
+</div>
+
+<div class="input-field col l2 m3 s6">
+    @Html.EditorFor(m => m.Layers, new { htmlAttributes = new { @class = "validate" } })
+    @Html.LabelFor(m => m.Layers)
+</div>
+
+<div class="input-field col l2 m3 s6">
+    @Html.EditorFor(m => m.Stacks, new { htmlAttributes = new { @class = "validate" } })
+    @Html.LabelFor(m => m.Stacks)
+</div>
+
+<div class="input-field col l2 m3 s6">
+    @Html.EditorFor(m => m.Trays, new { htmlAttributes = new { @class = "validate" } })
+    @Html.LabelFor(m => m.Trays)
+</div>

@@ -1,0 +1,76 @@
+﻿@using Website.Common.Models
+@using Website.Common.Viewmodels
+@using Website.Common.Enums
+@using Website.Controllers.Cystem
+@model DailyEggOverviewViewModel
+
+@{ 
+    string exportType;
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col s12">
+            <h1>Legpercentage</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col s12">
+            <a href="@(Url.Action<DailyEggController>(c => c.Create()))" class="ajax-get right btn-floating waves-effect waves-light btn-large" data-on-result="@ElementAction.Overlay"><i class='material-icons'>add</i></a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col s12">
+            <ul class="tabs">
+                <li class="tab col s3"><a href="#graph">Grafiek</a></li>
+                <li class="tab col s3"><a href="#calender">Calender</a></li>
+                <li class="tab col s3"><a href="#data">Data</a></li>
+            </ul>
+
+        </div>
+    </div>
+
+    <div class="row">
+        <div id="graph" class="col s12 chart-wrapper">
+            <canvas class="graph" width="400" height="400"></canvas>
+            <div class="graph-data hide">
+                @Model.SerializedDailyEggs
+            </div>
+        </div>
+
+        <div id="calender" class="col s12">Calender</div>
+
+        <div id="data" class="col s12">
+            <table class="highlight">
+                <thead>
+                    <tr>
+                        <th>Datum</th>
+                        <th>Export type</th>
+                        <th>Eieren</th>
+                        <th>Wijzig</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (DailyEgg lp in Model.Models)
+                    {
+                        {
+                            exportType = EnumHelper<ExportType>.GetDisplayValue(lp.ExportType);
+                        }
+
+                        <tr>
+                            <td>@lp.Date.ToString("dd-MM-yyyy")</td>
+                            <td>@exportType</td>
+                            <td>@lp.Eggs</td>
+                            <td>
+                                <a href="@(Url.Action<DailyEggController>(c => c.Edit(lp.Id)))" class="ajax-get" data-on-result="@ElementAction.Overlay"><i class="material-icons">edit</i></a>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
