@@ -1,19 +1,21 @@
-﻿using System;
+﻿
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Website.Common.Models
 {
-    public class DailyTotal : Model
+    public class Daily : Model
     {
         [Required]
-        [Display(Name = "Datum")]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime Date { get; set; }
 
-        [Required]
-        [Display(Name = "Eieren")]
-        public int EggCount { get; set; }
-        public int ChickenCount { get; set; }
-        public int Average { get; set; }
+        public int NormalEggs { get; set; }
+        public int SecondKindEggs { get; set; }
+        public int SaleEggs { get; set; }
+        public int OtherEggs { get; set; }
+        public int TotalEggs { get; set; }
+        public int AverageEggs { get; set; }
+        public int TotalChickens { get; set; }
+        public int DeadChickens { get; set; } = 0;
     }
 }

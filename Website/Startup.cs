@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -101,6 +102,15 @@ namespace Website
                     o.AreaViewLocationFormats.Add("/Views/{2}/{1}/{0}" + RazorViewEngine.ViewExtension);
                     o.AreaViewLocationFormats.Add("/Views/Shared/{0}" + RazorViewEngine.ViewExtension);
                 })
+
+                // Auto mapper
+                .AddAutoMapper()
+                //.AddSingleton(Mapper.Configuration)
+
+                //.AddScoped<IMapper>(sp =>
+                //    new Mapper(sp.GetRequiredService<AutoMapper.IConfigurationProvider>(), sp.GetService)
+                //)
+
 
                 // Minification
                 .AddWebMarkupMin(options =>

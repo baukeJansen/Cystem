@@ -1,61 +1,56 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Website.BLL;
-using Website.BLL.DailyEggBLL;
+using Website.BL.SL.DailyEggSL;
 using Website.Common.Viewmodels;
-using Website.DAL;
 
 namespace Website.Controllers.Cystem
 {
     [Area("Cystem")]
-    public class DailyEggController : BaseController
+    public class DailyEggController : JsActionController<DailyEggViewModel>
     {
-        private readonly IDailyEggLogic logic;
+        private readonly IDailyEggService service;
 
-        public DailyEggController(IDailyEggLogic dailyEggLogic)
+        public DailyEggController(IDailyEggService service)
         {
-            logic = dailyEggLogic;
+            this.service = service;
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Index(DailyEggOverviewViewModel vm)
         {
-            return Overview();
+            return Overview(vm);
         }
 
         [HttpGet]
-        public IActionResult Overview()
+        public IActionResult Overview(DailyEggOverviewViewModel vm)
         {
-            DailyEggOverviewViewModel vm = logic.GetOverview();
-            return View("Overview", vm);
+            return View("Overview", service.GetOverview(vm));
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public IActionResult Create(DailyEggViewModel vm)
         {
-            DailyEggViewModel vm = logic.Create();
-            return View("Edit", vm);
+            return View("Edit", service.Create(vm));
         }
 
         [HttpGet]
-        public IActionResult Edit(int id)
+        public IActionResult Edit(DailyEggViewModel vm)
         {
-            DailyEggViewModel vm = logic.Get(id);
-            return View(vm);
+            return View(service.Get(vm));
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
         public IActionResult Store(DailyEggViewModel vm)
         {
-            logic.Store(vm);
+            service.Store(vm);
             return Succes();
         }
 
         [HttpDelete]
-        public IActionResult Delete(int id)
+        public IActionResult Delete(DailyEggViewModel vm)
         {
-            logic.Delete(id);
+            service.Delete(vm);
             return Succes();
         }
     }
 }
+    

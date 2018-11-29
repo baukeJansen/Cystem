@@ -1,58 +1,55 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Website.BLL.DeadChickenBLL;
+using Website.BL.SL.DeadChickenSL;
 using Website.Common.Viewmodels;
 
 namespace Website.Controllers.Cystem
 {
     [Area("Cystem")]
-    public class DeadChickenController : BaseController
+    public class DeadChickenController : JsActionController<DeadChickenViewModel>
     {
-        private readonly IDeadChickenLogic logic;
+        private readonly IDeadChickenService service;
 
-        public DeadChickenController(IDeadChickenLogic deadChickenLogic)
+        public DeadChickenController(IDeadChickenService service)
         {
-            logic = deadChickenLogic;
+            this.service = service;
         }
 
         [HttpGet]
-        public IActionResult Index()
+        public IActionResult Index(DeadChickenOverviewViewModel vm)
         {
-            return Overview();
+            return Overview(vm);
         }
 
         [HttpGet]
-        public IActionResult Overview()
+        public IActionResult Overview(DeadChickenOverviewViewModel vm)
         {
-            DeadChickenOverviewViewModel vm = logic.GetOverview();
-            return View("Overview", vm);
+            
+            return View("Overview", service.GetOverview(vm));
         }
 
         [HttpGet]
-        public IActionResult Create()
+        public IActionResult Create(DeadChickenViewModel vm)
         {
-            DeadChickenViewModel vm = logic.Create();
-            return View("Edit", vm);
+            return View("Edit", service.Create(vm));
         }
 
         [HttpGet]
-        public IActionResult Edit(int id)
+        public IActionResult Edit(DeadChickenViewModel vm)
         {
-            DeadChickenViewModel vm = logic.Get(id);
-            return View(vm);
+            return View(service.Create(vm));
         }
 
         [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Store(DeadChickenViewModel vm)
+        public IActionResult Store(DeadChickenViewModel viewModel)
         {
-            logic.Store(vm);
+            service.Store(viewModel);
             return Succes();
         }
 
         [HttpDelete]
-        public IActionResult Delete(int id)
+        public IActionResult Delete(DeadChickenViewModel vm)
         {
-            logic.Delete(id);
+            service.Delete(vm);
             return Succes();
         }
     }

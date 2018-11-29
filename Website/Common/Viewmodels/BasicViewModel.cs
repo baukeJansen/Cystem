@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Website.Common.Viewmodels
 {
-    public class BasicViewModel : ViewModel
+    public class BasicViewModel : ActionViewModel
     {
     }
 }

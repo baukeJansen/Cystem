@@ -6,9 +6,9 @@ using Website.Common.Models;
 
 namespace Website.Common.Viewmodels
 {
-    public class DailyEggOverviewViewModel : ViewModel
+    public class DailyEggOverviewViewModel : ActionViewModel
     {
-        public List<DailyEgg> Models { get; set; }
-        public string SerializedDailyEggs { get; set; }
+        public List<DailyEggViewModel> Data { get; set; }
+        public string SerializedData { get; set; }
     }
 }

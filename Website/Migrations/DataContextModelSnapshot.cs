@@ -19,63 +19,52 @@ namespace Website.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Website.Common.Models.DailyEgg", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<DateTime>("Date");
-
-                    b.Property<int>("Eggs");
-
-                    b.Property<bool>("EmptyAfterRun");
-
-                    b.Property<int>("ExportType");
-
-                    b.Property<string>("Remarks");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DailyEggs");
-                });
-
             modelBuilder.Entity("Website.Common.Models.DailyTotal", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("Average");
-
-                    b.Property<int>("ChickenCount");
+                    b.Property<int>("AverageEggs");
 
                     b.Property<DateTime>("Date");
 
-                    b.Property<int>("EggCount");
+                    b.Property<int>("DeadChickens");
+
+                    b.Property<int>("NormalEggs");
+
+                    b.Property<int>("OtherEggs");
+
+                    b.Property<int>("SaleEggs");
+
+                    b.Property<int>("SecondKindEggs");
+
+                    b.Property<int>("TotalChickens");
+
+                    b.Property<int>("TotalEggs");
 
                     b.HasKey("Id");
 
                     b.HasIndex("Date");
 
-                    b.ToTable("DailyTotals");
+                    b.ToTable("Daily");
                 });
 
-            modelBuilder.Entity("Website.Common.Models.DeadChicken", b =>
+            modelBuilder.Entity("Website.Common.Models.LayingPercentage", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("Amount");
+                    b.Property<DateTime>("EndDate");
 
-                    b.Property<DateTime>("Date");
+                    b.Property<int>("Percentage");
 
-                    b.Property<string>("Remarks");
+                    b.Property<DateTime>("StartDate");
 
                     b.HasKey("Id");
 
-                    b.ToTable("DeadChickens");
+                    b.ToTable("LayingPercentages");
                 });
 
             modelBuilder.Entity("Website.Common.Models.Page", b =>

@@ -1,6 +1,6 @@
-﻿@using Website.Common.Models
+﻿@using Website.Common.Enums
+@using Website.Common.Extensions
 @using Website.Common.Viewmodels
-@using Website.Common.Enums
 @using Website.Controllers.Cystem
 @model DeadChickenOverviewViewModel
 
@@ -13,7 +13,7 @@
 
     <div class="row">
         <div class="col s12">
-            <a href="@(Url.Action<DeadChickenController>(c => c.Create()))" class="ajax-get right btn-floating waves-effect waves-light btn-large" data-on-result="@ElementAction.Overlay"><i class='material-icons'>add</i></a>
+            <a href="@(Url.Action<DeadChickenController>(c => c.Create(null)))" class="ajax-get right btn-floating waves-effect waves-light btn-large" data-on-result="@ElementAction.Overlay"><i class='material-icons'>add</i></a>
         </div>
     </div>
 
@@ -34,7 +34,7 @@
                 @Model.SerializedData
             </div>
         </div>
-        
+
         <div id="data" class="col s12">
             <table class="highlight">
                 <thead>
@@ -47,14 +47,14 @@
                 </thead>
 
                 <tbody>
-                    @foreach (DeadChicken dc in Model.DeadChickens)
+                    @foreach (DeadChickenViewModel data in Model.Data)
                     {
                         <tr>
-                            <td>@dc.Date.ToString("dd-MM-yyyy")</td>
-                            <td>@dc.Amount</td>
-                            <td>@dc.Remarks</td>
+                            <td>@data.Date.ToString("dd-MM-yyyy")</td>
+                            <td>@data.Amount</td>
+                            <td>@data.Remarks</td>
                             <td>
-                                <a href="@(Url.Action<DeadChickenController>(c => c.Edit(dc.Id)))" class="ajax-get" data-on-result="@ElementAction.Overlay"><i class="material-icons">edit</i></a>
+                                <a href="@(Url.Action<DeadChickenController>(c => c.Edit(null)))" class="ajax-get" data-params="@((new { Id = data.Id }).Serialize())" data-on-result="@ElementAction.Overlay"><i class="material-icons">edit</i></a>
                             </td>
                         </tr>
                     }

@@ -18,9 +18,11 @@ namespace Website.Common.Models
         [Display(Name = "Eieren")]
         public int Eggs { get; set; }
 
+
+
         [Required]
         [Display(Name = "Export type")]
-        public ExportType ExportType { get; set; } = ExportType.Standard;
+        public EggType ExportType { get; set; } = EggType.Standard;
 
         [Display(Name = "Leeg na afdraaien")]
         public bool EmptyAfterRun { get; set; } = false;

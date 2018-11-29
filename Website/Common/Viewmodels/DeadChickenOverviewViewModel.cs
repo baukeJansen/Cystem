@@ -6,9 +6,9 @@ using Website.Common.Models;
 
 namespace Website.Common.Viewmodels
 {
-    public class DeadChickenOverviewViewModel : ViewModel
+    public class DeadChickenOverviewViewModel : ActionViewModel
     {
-        public List<DeadChicken> DeadChickens { get; set; }
+        public List<DeadChickenViewModel> Data { get; set; }
         public string SerializedData { get; set; }
     }
 }

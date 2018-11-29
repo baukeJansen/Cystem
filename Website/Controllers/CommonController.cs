@@ -1,13 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Website.Common.Viewmodels;
 
 namespace Website.Controllers
 {
-    public class CommonController : BaseController
+    public class CommonController : JsActionController<BasicViewModel>
     {
         public IActionResult Header()
         {

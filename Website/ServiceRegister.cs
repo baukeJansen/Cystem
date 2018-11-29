@@ -1,15 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Website.BLL;
-using Website.BLL.DeadChickenBLL;
-using Website.BLL.DailyEggBLL;
+using Website.BL.LL.DailyLL;
+using Website.BL.SL.DailyEggSL;
+using Website.BL.SL.DeadChickenSL;
 using Website.DAL;
-using Website.BLL.DailyTotalBLL;
 
 namespace Website
 {
@@ -22,10 +17,11 @@ namespace Website
                 options.UseSqlServer(configuration.GetConnectionString("DataContext"))
             );
 
-            services.AddScoped<IDailyEggLogic, DailyEggLogic>();
-            services.AddScoped<IDailyTotalLogic, DailyTotalLogic>();
-            services.AddScoped<IDeadChickenLogic, DeadChickenLogic>();
+            services.AddScoped<IDailyEggService, DailyEggService>();
+            services.AddScoped<IDeadChickenService, DeadChickenService>();
 
+            services.AddScoped<IDailyLogic, DailyLogic>();
+        
             // Singleton - Only one instance is ever created and returned.
             // services.AddSingleton<IExampleService, ExampleService>();
 

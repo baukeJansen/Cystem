@@ -1,25 +1,26 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Website.BL.LL;
 using Website.Common.Viewmodels;
 
 namespace Website.Controllers
 {
-    public class CystemController : BaseController
+    public class CystemController : JsActionController<BasicViewModel>
     {
-        public IActionResult Index()
+        public CystemController()
         {
-            SystemViewModel vm = new SystemViewModel
-            {
-                test = 1
-            };
 
-            return View(vm);
         }
 
-        public IActionResult Test()
+        [HttpGet]
+        public IActionResult Index(BasicViewModel vm)
         {
-            ViewModel vm = new TestViewModel();
+            return Overview(vm);
+        }
 
-            return View(vm);
+        [HttpGet]
+        public IActionResult Overview(BasicViewModel vm)
+        {
+            return View("Overview", vm);
         }
     }
 }

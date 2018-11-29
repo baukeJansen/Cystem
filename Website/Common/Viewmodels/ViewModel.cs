@@ -7,8 +7,6 @@ namespace Website.Common.Viewmodels
 {
     public abstract class ViewModel
     {
-        public bool JsPage { get; set; } = false;
-        public bool Overlay { get; set; } = false;
-        public string Url { get; set; }
+        public int Id { get; set; } = 0;
     }
 }

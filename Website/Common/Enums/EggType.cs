@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Website.Common.Enums
 {
-    public enum ExportType
+    public enum EggType
     {
         [Display(Name = "Normaal")]
         Standard,

@@ -1,7 +1,6 @@
 ﻿using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System.IO;
-using System.Text.RegularExpressions;
 
 namespace Website.Common.Extensions
 {
@@ -25,7 +24,6 @@ namespace Website.Common.Extensions
                 string json = stringWriter.ToString();
                 string escaped = json.Replace("\"", "\\\"");
                 return json;
-                //return "\"" + json + "\"";
             }
         }
     }

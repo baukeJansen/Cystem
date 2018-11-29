@@ -36,18 +36,11 @@
     };
 
     Navigate.prototype.get = function (self, event, $el) {
-        var action = $el ? $el.data('on-result') : 'display';
-        action = action ? action.toLowerCase() : 'display';
-
-        var url = self._getUrl(self, $el);
-
-        var data = {
-            jsPage: true,
-            overlay: action === 'overlay'
-        };
-
+        var url = self._getUrl(self, $el, true);
+        var data = self._getData(self, $el);
         var o = self._beforeSend(self, $el);
         var state;
+        console.log(url, data);
         if (state === undefined) { state = {}; }
         history.pushState(state, "", url);
 
@@ -61,7 +54,7 @@
 
     Navigate.prototype.post = function (self, event, $el) {
         var url = self._getUrl(self, $el, true);
-        var data = self._getPostaData(self, $el);
+        var data = self._getData(self, $el);
         var o = self._beforeSend(self, $el);
 
         $.post(url, data).done(function (response) {
@@ -74,7 +67,7 @@
 
     Navigate.prototype.put = function (self, event, $el) {
         var url = self._getUrl(self, $el, true);
-        var data = self._getPostaData(self, $el);
+        var data = self._getData(self, $el);
         var o = self._beforeSend(self, $el);
 
         $.put(url, data).done(function (response) {
@@ -87,7 +80,7 @@
 
     Navigate.prototype._delete = function (self, event, $el) {
         var url = self._getUrl(self, $el, true);
-        var data = self._getPostaData(self, $el);
+        var data = self._getData(self, $el);
         var o = self._beforeSend(self, $el);
 
         $.delete(url, data).done(function (response) {
@@ -118,8 +111,7 @@
 
     Navigate.prototype._beforeSend = function (self, $el) {
         var o = {};
-        var action = $el ? $el.data('on-result') : 'display';
-        action = action ? action.toLowerCase() : 'display';
+        var action = self._getAction(self, $el);
 
         switch (action) {
             case 'display':
@@ -197,11 +189,9 @@
     };
 
     Navigate.prototype._done = function (self, $el, o) {
-        var action = $el ? $el.data('on-result') : 'display';
-        action = action ? action.toLowerCase() : 'display';
+        var action = self._getAction(self, $el);
 
-        switch (action.toLowerCase()) {
-
+        switch (action) {
             case 'display':
             case 'reload':
                 self._display(self, $el, o);
@@ -225,7 +215,7 @@
         var response = o.response;
         var $newContent = $(response);
         $newContent.addClass('fade-in');
-
+        
         o.onReady(function () {
             $wrapper.append($newContent);
 
@@ -252,6 +242,12 @@
         }
     };
 
+    Navigate.prototype._getAction = function (self, $el) {
+        var action = $el ? $el.data('on-result') : 'display';
+        action = action ? action.toLowerCase() : 'display';
+        return action;
+    };
+
     Navigate.prototype._getUrl = function (self, $el, removeParams) {
         var url;
         if ($el[0].hasAttribute('href')) {
@@ -267,10 +263,12 @@
         }
     };
 
-    Navigate.prototype._getPostaData = function (self, $el) {
-        var data = {};
-
+    Navigate.prototype._getData = function (self, $el) {
         var url = self._getUrl(self, $el).split('?');
+        var data = $el ? $el.data('params') : {};
+        data = data || {};
+        var action = self._getAction(self, $el);
+
         if (url.length > 1) {
             var paramString = url[1];
             var params = paramString.split('&');
@@ -284,6 +282,10 @@
             });
         }
 
+        data.jsPage = true;
+        data.overlay = action === 'overlay';
+
+        console.log(data);
         return data;
     };
 

@@ -10,23 +10,29 @@ using Website.Common.Models;
 
 namespace Website.Common.Viewmodels
 {
-    public class DailyEggViewModel : ViewModel
+    public class DailyEggViewModel : ActionViewModel
     {
-        public DailyEgg Model { get; set; }
-
-        public EggStaples Eggs { get; set; }
-
-        public SelectList ExportTypes { get; set; }
+        [Display(Name = "Datum")]
+        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
+        public DateTime Date { get; set; } = DateTime.Today;
 
         public EggInputType EggInputType { get; set; }
 
-        /*[Display(Name = "2e soort pallets")]
-        public int SecondTypePallets { get; set; }
-        [Display(Name = "2e soort lagen")]
-        public int SecondTypeLayers { get; set; }
-        [Display(Name = "2e soort stapels")]
-        public int SecondTypeStacks { get; set; }
-        [Display(Name = "2e soort trays")]
-        public int SecondTypeTrays { get; set; }*/
+        [Display(Name = "Eieren")]
+        public int Eggs { get; set; }
+
+        public EggStaples EggStaples { get; set; }
+
+        public SelectList ExportTypes { get; set; }
+
+        [Display(Name = "Export type")]
+        public EggType ExportType { get; set; } = EggType.Standard;
+
+        [Display(Name = "Leeg na afdraaien")]
+        public bool EmptyAfterRun { get; set; } = false;
+
+        [Display(Name = "Opmerkingen")]
+        [DataType(DataType.MultilineText)]
+        public string Remarks { get; set; }
     }
 }

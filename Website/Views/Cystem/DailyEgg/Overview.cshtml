@@ -1,4 +1,4 @@
-﻿@using Website.Common.Models
+﻿@using Website.Common.Extensions
 @using Website.Common.Viewmodels
 @using Website.Common.Enums
 @using Website.Controllers.Cystem
@@ -17,7 +17,7 @@
 
     <div class="row">
         <div class="col s12">
-            <a href="@(Url.Action<DailyEggController>(c => c.Create()))" class="ajax-get right btn-floating waves-effect waves-light btn-large" data-on-result="@ElementAction.Overlay"><i class='material-icons'>add</i></a>
+            <a href="@(Url.Action<DailyEggController>(c => c.Create(null)))" class="ajax-get right btn-floating waves-effect waves-light btn-large" data-on-result="@ElementAction.Overlay"><i class='material-icons'>add</i></a>
         </div>
     </div>
 
@@ -36,7 +36,7 @@
         <div id="graph" class="col s12 chart-wrapper">
             <canvas class="graph" width="400" height="400"></canvas>
             <div class="graph-data hide">
-                @Model.SerializedDailyEggs
+                @Model.SerializedData
             </div>
         </div>
 
@@ -54,18 +54,18 @@
                 </thead>
 
                 <tbody>
-                    @foreach (DailyEgg lp in Model.Models)
+                    @foreach (DailyEggViewModel item in Model.Data)
                     {
                         {
-                            exportType = EnumHelper<ExportType>.GetDisplayValue(lp.ExportType);
+                            exportType = EnumHelper<EggType>.GetDisplayValue(item.ExportType);
                         }
 
                         <tr>
-                            <td>@lp.Date.ToString("dd-MM-yyyy")</td>
+                            <td>@item.Date.ToString("dd-MM-yyyy")</td>
                             <td>@exportType</td>
-                            <td>@lp.Eggs</td>
+                            <td>@item.Eggs</td>
                             <td>
-                                <a href="@(Url.Action<DailyEggController>(c => c.Edit(lp.Id)))" class="ajax-get" data-on-result="@ElementAction.Overlay"><i class="material-icons">edit</i></a>
+                                <a href="@(Url.Action<DailyEggController>(c => c.Edit(null)))" class="ajax-get" data-params="@((new { Id = item.Id, ExportType = item.ExportType }).Serialize())" data-on-result="@ElementAction.Overlay"><i class="material-icons">edit</i></a>
                             </td>
                         </tr>
                     }
