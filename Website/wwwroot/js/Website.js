@@ -31356,6 +31356,35 @@ module.exports = function() {
 },{"1":1,"26":26,"33":33,"34":34,"46":46}]},{},[7])(7)
 });
 
+var ActionResult = (new function () {
+    this.DISPLAY = 'display';
+    this.RELOAD = 'reload';
+    this.OVERLAY = 'overlay';
+    this.POPUP = 'popup';
+    this.CLOSE = 'close';
+    this.NONE = 'none';
+
+    this.get = function (actionResult) {
+        switch (actionResult) {
+            case ActionResult.DISPLAY: return ActionResult.DISPLAY;
+            case ActionResult.RELOAD: return ActionResult.RELOAD;
+            case ActionResult.OVERLAY: return ActionResult.OVERLAY;
+            case ActionResult.POPUP: return ActionResult.POPUP;
+            case ActionResult.CLOSE: return ActionResult.CLOSE;
+            case ActionResult.NONE: return ActionResult.NONE;
+            default: console.log('Invalid action result for:', $el);
+        }
+    };
+});
+Method = (new function () {
+    this.GET = 'get';
+    this.POST = 'post';
+    this.PUT = 'put';
+    this.DELETE = 'delete';
+    this.POPSTATE = 'popstate';
+
+    this.methods = [this.GET, this.POST, this.PUT, this.DELETE];
+});
 jQuery.each( [ "put", "delete" ], function( i, method ) {
   jQuery[ method ] = function( url, data, callback, type ) {
     if ( jQuery.isFunction( data ) ) {
@@ -31635,256 +31664,234 @@ jQuery.each( [ "put", "delete" ], function( i, method ) {
 
 
 (function (global, $) {
-    var navigate;
-    var Navigate = function () {
+    var Action = function (method, url , data, $source, actionResult) {
+        this.method = method;
+        this.url = url;
+        this.data = data;
+        this.actionResult = actionResult || ActionResult.Navigate;
+        this.readyStack = [];
+
+        this.setSource($source);
     };
 
-    Navigate.prototype.init = function (target) {
-        var $target = $(target);
-        var $getButton = $target.find('.ajax-get');
-        var $postButton = $target.find('.ajax-post');
-        var $putButton = $target.find('.ajax-put');
-        var $deleteButton = $target.find('.ajax-delete');
-        var $submitButton = $target.find('.ajax-submit');
+    Action.prototype.setSource = function ($source) {
+        this.$source = $source || undefined;
 
-        $getButton.click(function (e) {
-            return navigate.get(navigate, e, $(this));
-        });
-        $postButton.click(function (e) {
-            return navigate.post(navigate, e, $(this));
-        });
-        $putButton.click(function (e) {
-            return navigate.put(navigate, e, $(this));
-        });
-        $deleteButton.click(function (e) {
-            return navigate._delete(navigate, e, $(this));
-        });
-        $submitButton.click(function (e) {
-            return navigate.submit(navigate, e, $(this));
-        });
+        if (this.hasSource()) {
+            var target = this.$source.data('target');
+            var $target = target ? $(target) : undefined;
 
-        window.onpopstate = navigate.onPopState;
+            if ($target && !$target.length) {
+                $target = undefined;
+            }
+        }
+
+        this.$target = $target || $('.content-wrapper.main-content');
+        this.$oldContent = this.$target.find('.content');
+        this.$newContent = undefined;
+    };
+
+    Action.prototype.hasSource = function() {
+        return !!this.$source && this.$source.length;
+    };
+
+    Action.prototype.hasTarget = function () {
+        return !!this.$target && this.$target.length;
+    };
+
+    Action.prototype.hasOldContent = function () {
+        return !!this.$oldContent && this.$oldContent.length;
+    };
+
+    Action.prototype.hasNewContent = function () {
+        return !!this.$newContent && this.$newContent.length;
+    };
+
+    Action.prototype.onReady = function (fn) {
+        this.readyStack.push(fn);
+    };
+
+    Action.prototype.ready = function () {
+        this.onReady = function (fn) {
+            fn();
+        };
+
+        this.readyStack.forEach(function (fn) { fn(); });
+    };
+
+    var Navigate = function () {
+        var self = this;
+
+        window.onpopstate = function (e) { self.onPopState.call(self, e); };
+    };
+
+    Navigate.prototype.init = function (el) {
+        var self = this;
+        var $el = $(el);
+
+        $el.find('.ajax-get').click(function (e) { return self._action.call(self, e, Method.GET, $(this)); });
+        $el.find('.ajax-post').click(function (e) { return self._action.call(self, e, Method.POST, $(this)); });
+        $el.find('.ajax-put').click(function (e) { return self._action.call(self, e, Method.PUT, $(this)); });
+        $el.find('.ajax-delete').click(function (e) { return self._action.call(self, e, Method.DELETE, $(this)); });
+        $el.find('.ajax-submit').click(function (e) { return self._submit.call(self, e, $(this)); });
     };
 
     Navigate.prototype.reload = function ($content) {
-        var self = navigate;
-        self.get(self, null, $content);
+        this._action(null, Method.GET, $content);
     };
 
-    Navigate.prototype.get = function (self, event, $el) {
-        var url = self._getUrl(self, $el, true);
-        var data = self._getData(self, $el);
-        var o = self._beforeSend(self, $el);
-        var state;
-        console.log(url, data);
-        if (state === undefined) { state = {}; }
-        history.pushState(state, "", url);
+    // Action button
+    Navigate.prototype._action = function (event, method, $el) {
+        var actionResult = this._getActionResult($el);
+        var url = this._getUrl($el);
+        var data = this._getData($el, actionResult);
+        var action = new Action(method, url, data, $el, actionResult);
 
-        $.get(url, data).done(function (response) {
-            o.response = response;
-            self._done(self, $el, o);
-        });
-
+        this._exec(action);
         return false;
     };
 
-    Navigate.prototype.post = function (self, event, $el) {
-        var url = self._getUrl(self, $el, true);
-        var data = self._getData(self, $el);
-        var o = self._beforeSend(self, $el);
+    // Form
+    Navigate.prototype._submit = function (event, $el) {
+        var self = this;
+        var $form = $el.closest('form');
+        var method = $form.attr('method').toLowerCase();
+        var url = $form.attr('action');
+        var data = $form.serialize();
+        var actionResult = this._getActionResult($el);
+        var action = new Action(method, url, data, $el, actionResult);
 
-        $.post(url, data).done(function (response) {
-            o.response = response;
-            self._done(self, $el, o);
-        });
-
-        return false;
-    };
-
-    Navigate.prototype.put = function (self, event, $el) {
-        var url = self._getUrl(self, $el, true);
-        var data = self._getData(self, $el);
-        var o = self._beforeSend(self, $el);
-
-        $.put(url, data).done(function (response) {
-            o.response = response;
-            self._done(self, $el, o);
-        });
-
-        return false;
-    };
-
-    Navigate.prototype._delete = function (self, event, $el) {
-        var url = self._getUrl(self, $el, true);
-        var data = self._getData(self, $el);
-        var o = self._beforeSend(self, $el);
-
-        $.delete(url, data).done(function (response) {
-            o.response = response;
-            self._done(self, $el, o);
-        });
+        this._exec(action);
 
         return false;
     };
 
     // Browser navigate => back or forward button
     Navigate.prototype.onPopState = function (event) {
-        var self = navigate;
         var url = document.location;
-        var state = event.state;
-
+        var state = event.state || {};
         var data = {
             jsPage: true
         };
 
-        var o = self._beforeSend(self, null);
+        var action = new Action(Method.POPSTATE, url, data, undefined, state.actionResult || ActionResult.DISPLAY);
+        this._exec(action);
+    };
 
-        $.get(url, data).done(function (response) {
-            o.response = response;
-            self._done(self, null, o);
+    Navigate.prototype._exec = function (action) {
+        var self = this;
+        this._beforeSend(action);
+        
+        $.ajax({
+            method: action.method,
+            url: action.url,
+            data: action.data
+        }).done(function (response) {
+            action.response = response;
+            self._done.call(self, action);
+        }).fail(function () {
+
         });
     };
 
-    Navigate.prototype._beforeSend = function (self, $el) {
-        var o = {};
-        var action = self._getAction(self, $el);
+    Navigate.prototype._beforeSend = function (action) {
+        var $target = action.$target;
+        var $oldContent = action.$oldContent;
+        var state;
 
-        switch (action) {
-            case 'display':
-            case 'reload':
-                if ($el) {
-                    var wrapper = $el.data('target');
+        if (action.method === Method.GET) {
+            state = state || {};
+            history.pushState(state, "", action.url);
+        }
 
-                    if (wrapper) {
-                        o.$wrapper = $(wrapper);
-                    }
+        if (action.method === Method.POPSTATE) {
+            action.method = Method.GET;
+        }
+
+        switch (action.actionResult) {
+            case ActionResult.DISPLAY:
+            case ActionResult.RELOAD:
+                if (action.hasOldContent()) {
+                    $target.css({ height: action.$oldContent.outerHeight() });
+                    $oldContent.addClass('fade-out');
                 }
-                o.$wrapper = o.$wrapper || $('.content-wrapper.main-content');
-                o.$oldContent = o.$wrapper.find('.content');
-
-                if (o.$oldContent.length) {
-                    o.$wrapper.css({ height: o.$oldContent.outerHeight() });
-                    o.$oldContent.addClass('fade-out');
-                }
-
-                o.onReady = function (fn) { o.readyStack.push(fn); };
-                o.readyStack = [];
 
                 setTimeout(function () {
-                    o.onReady = function (fn) {
-                        fn();
-                    };
-                    o.$oldContent.remove();
-                    o.readyStack.forEach(function (fn) { fn(); });
+                    $oldContent.remove();
+                    action.ready();
                 }, 50);
 
                 break;
-            case 'overlay':
+            case ActionResult.OVERLAY:
                 break;
-            case 'popup':
+            case ActionResult.POPUP:
                 break;
-            case 'close':
+            case ActionResult.CLOSE:
                 break;
-            case 'none':
-            default:
-                break;
-        }
-
-        return o;
-    };
-
-    Navigate.prototype.submit = function (self, event, $el) {
-        var $form = $el.closest('form');
-        var url = $form.attr('action');
-        var method = $form.attr('method');
-        var data = $form.serialize();
-
-        var o = {};
-
-        switch (method.toLowerCase()) {
-            case 'get': $.get(url, data).done(function (response) {
-                o.response = response;
-                self._done(self, $el, o);
-            }); break;
-            default:
-            case 'post': $.post(url, data).done(function (response) {
-                o.response = response;
-                self._done(self, $el, o);
-            }); break;
-            case 'put': $.put(url, data).done(function (response) {
-                o.response = response;
-                self._done(self, $el, o);
-            }); break;
-            case 'delete': $.delete(url).done(function (response) {
-                o.response = response;
-                self._done(self, $el, o);
-            }); break;
-        }
-
-        return false;
-    };
-
-    Navigate.prototype._done = function (self, $el, o) {
-        var action = self._getAction(self, $el);
-
-        switch (action) {
-            case 'display':
-            case 'reload':
-                self._display(self, $el, o);
-                break;
-            case 'overlay':
-                self._overlay(self, $el, o);
-                break;
-            case 'popup':
-                break;
-            case 'close':
-                self._close(self, $el, o);
-                break;
-            case 'none':
-            default:
+            case ActionResult.NONE:
                 break;
         }
     };
 
-    Navigate.prototype._display = function (self, $el, o) {
-        var $wrapper = o.$wrapper;
-        var response = o.response;
-        var $newContent = $(response);
+    Navigate.prototype._done = function (action) {
+        switch (action.actionResult) {
+            case ActionResult.DISPLAY:
+            case ActionResult.RELOAD:
+                this._display(action);
+                break;
+            case ActionResult.OVERLAY:
+                this._overlay(action);
+                break;
+            case ActionResult.POPUP:
+                break;
+            case ActionResult.CLOSE:
+                this._close(action);
+                break;
+            case ActionResult.NONE:
+                break;
+        }
+    };
+
+    Navigate.prototype._display = function (action) {
+        var $target = action.$target;
+        var $newContent = $(action.response);
+        action.$newContent = $newContent;
         $newContent.addClass('fade-in');
-        
-        o.onReady(function () {
-            $wrapper.append($newContent);
+
+        action.onReady(function () {
+            $target.append($newContent);
 
             global.Cystem.init($newContent[0]);
-            $wrapper.css({ height: $newContent.outerHeight() });
+            $target.css({ height: $newContent.outerHeight() });
 
             setTimeout(function () {
                 $newContent.removeClass('fade-in');
-                $wrapper.css({ height: 'auto' });
+                $target.css({ height: 'auto' });
             }, 30);
 
             
         });
     };
 
-    Navigate.prototype._overlay = function (self, $el, o) {
-        global.Cystem.Overlay.open(o.response);
+    Navigate.prototype._overlay = function (action) {
+        global.Cystem.Overlay.open(action.response);
     };
 
-    Navigate.prototype._close = function (self, $el, o) {
-        var $overlayWrapper = $el.closest('.overlay-wrapper');
+    Navigate.prototype._close = function (action) {
+        var $overlayWrapper = action.$source.closest('.overlay-wrapper');
         if ($overlayWrapper.length) {
             global.Cystem.Overlay.close($overlayWrapper);
         }
     };
 
-    Navigate.prototype._getAction = function (self, $el) {
-        var action = $el ? $el.data('on-result') : 'display';
-        action = action ? action.toLowerCase() : 'display';
-        return action;
+    Navigate.prototype._getActionResult = function ($el) {
+        var actionResult = $el ? $el.data('on-result') : ActionResult.DISPLAY;
+        actionResult = actionResult ? actionResult.toLowerCase() : ActionResult.DISPLAY;
+
+        return ActionResult.get(actionResult);
     };
 
-    Navigate.prototype._getUrl = function (self, $el, removeParams) {
+    Navigate.prototype._getUrl = function ($el, keepParams) {
         var url;
         if ($el[0].hasAttribute('href')) {
             url = $el.attr('href');
@@ -31892,18 +31899,17 @@ jQuery.each( [ "put", "delete" ], function( i, method ) {
             url = $el.data('url');
         }
 
-        if (removeParams) {
-            return url.split('?')[0];
-        } else {
+        if (keepParams) {
             return url;
+        } else {
+            return url.split('?')[0];
         }
     };
 
-    Navigate.prototype._getData = function (self, $el) {
-        var url = self._getUrl(self, $el).split('?');
+    Navigate.prototype._getData = function ($el, actionResult) {
+        var url = this._getUrl($el, true).split('?');
         var data = $el ? $el.data('params') : {};
         data = data || {};
-        var action = self._getAction(self, $el);
 
         if (url.length > 1) {
             var paramString = url[1];
@@ -31919,15 +31925,14 @@ jQuery.each( [ "put", "delete" ], function( i, method ) {
         }
 
         data.jsPage = true;
-        data.overlay = action === 'overlay';
+        data.overlay = actionResult === ActionResult.OVERLAY;
 
-        console.log(data);
         return data;
     };
 
-    navigate = new Navigate();
+    var navigate = new Navigate();
 
-    global.Cystem.register('Navigate', navigate, navigate.init);
+    global.Cystem.register('Navigate', navigate, function () { navigate.init.apply(navigate, arguments); });
 })(this, jQuery);
 (function (global, $) {
     var overlay;

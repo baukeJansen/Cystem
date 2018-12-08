@@ -19,7 +19,7 @@ namespace Website.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Website.Common.Models.DailyTotal", b =>
+            modelBuilder.Entity("Website.Common.Models.Daily", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -50,59 +50,124 @@ namespace Website.Migrations
                     b.ToTable("Daily");
                 });
 
-            modelBuilder.Entity("Website.Common.Models.LayingPercentage", b =>
+            modelBuilder.Entity("Website.Common.Models.EAV.Attribute", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<DateTime>("EndDate");
-
-                    b.Property<int>("Percentage");
-
-                    b.Property<DateTime>("StartDate");
+                    b.Property<string>("Label");
 
                     b.HasKey("Id");
 
-                    b.ToTable("LayingPercentages");
+                    b.ToTable("Attributes");
+                });
+
+            modelBuilder.Entity("Website.Common.Models.EAV.Value", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AttributeId");
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired();
+
+                    b.Property<int?>("EntityId");
+
+                    b.Property<int>("Type");
+
+                    b.Property<int?>("ValueId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AttributeId");
+
+                    b.HasIndex("EntityId");
+
+                    b.HasIndex("ValueId");
+
+                    b.ToTable("Values");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Value");
+                });
+
+            modelBuilder.Entity("Website.Common.Models.Entity", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Discriminator")
+                        .IsRequired();
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Entities");
+
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Entity");
+                });
+
+            modelBuilder.Entity("Website.Common.Models.EAV.GroupValue", b =>
+                {
+                    b.HasBaseType("Website.Common.Models.EAV.Value");
+
+
+                    b.ToTable("GroupValue");
+
+                    b.HasDiscriminator().HasValue("GroupValue");
+                });
+
+            modelBuilder.Entity("Website.Common.Models.EAV.IntValue", b =>
+                {
+                    b.HasBaseType("Website.Common.Models.EAV.Value");
+
+                    b.Property<int>("IntVal");
+
+                    b.ToTable("IntValue");
+
+                    b.HasDiscriminator().HasValue("IntValue");
+                });
+
+            modelBuilder.Entity("Website.Common.Models.EAV.StringValue", b =>
+                {
+                    b.HasBaseType("Website.Common.Models.EAV.Value");
+
+                    b.Property<string>("StringVal");
+
+                    b.ToTable("StringValue");
+
+                    b.HasDiscriminator().HasValue("StringValue");
                 });
 
             modelBuilder.Entity("Website.Common.Models.Page", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("TemplateId");
+                    b.HasBaseType("Website.Common.Models.Entity");
 
                     b.Property<string>("Url");
 
-                    b.HasKey("Id");
+                    b.HasIndex("Url");
 
-                    b.HasIndex("TemplateId");
+                    b.ToTable("Page");
 
-                    b.ToTable("Pages");
+                    b.HasDiscriminator().HasValue("Page");
                 });
 
-            modelBuilder.Entity("Website.Common.Models.Template", b =>
+            modelBuilder.Entity("Website.Common.Models.EAV.Value", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Templates");
-                });
-
-            modelBuilder.Entity("Website.Common.Models.Page", b =>
-                {
-                    b.HasOne("Website.Common.Models.Template", "Template")
-                        .WithMany()
-                        .HasForeignKey("TemplateId")
+                    b.HasOne("Website.Common.Models.EAV.Attribute", "Attribute")
+                        .WithMany("Values")
+                        .HasForeignKey("AttributeId")
                         .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("Website.Common.Models.Entity", "Entity")
+                        .WithMany("Values")
+                        .HasForeignKey("EntityId");
+
+                    b.HasOne("Website.Common.Models.EAV.GroupValue", "Val")
+                        .WithMany("Values")
+                        .HasForeignKey("ValueId");
                 });
 #pragma warning restore 612, 618
         }

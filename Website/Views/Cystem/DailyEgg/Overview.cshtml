@@ -1,5 +1,4 @@
-﻿@using Website.Common.Extensions
-@using Website.Common.Viewmodels
+﻿@using Website.Common.Viewmodels
 @using Website.Common.Enums
 @using Website.Controllers.Cystem
 @model DailyEggOverviewViewModel
@@ -65,7 +64,7 @@
                             <td>@exportType</td>
                             <td>@item.Eggs</td>
                             <td>
-                                <a href="@(Url.Action<DailyEggController>(c => c.Edit(null)))" class="ajax-get" data-params="@((new { Id = item.Id, ExportType = item.ExportType }).Serialize())" data-on-result="@ElementAction.Overlay"><i class="material-icons">edit</i></a>
+                                <a href="@(Url.Action<DailyEggController>(c => c.Edit(null), new { Id = item.Id, ExportType = item.ExportType }))" class="ajax-get" data-on-result="@ElementAction.Overlay"><i class="material-icons">edit</i></a>
                             </td>
                         </tr>
                     }

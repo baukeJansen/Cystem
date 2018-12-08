@@ -6,7 +6,7 @@
 @model ActionViewModel
 
 @if(Model.JsPage) {
-@:<div class="content" data-url="@(Url.Action<CommonController>(c => c.Header()))" action-type="@ElementAction.Reload">
+@:<div class="content" data-url="@(Url.Action<CommonController>(c => c.Header(null)))" action-type="@ElementAction.Reload">
 }
     <nav>
         <div class="container">

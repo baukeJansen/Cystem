@@ -6,12 +6,8 @@ using System.Threading.Tasks;
 
 namespace Website.Common.Models
 {
-    public class Page : Model
+    public class Page : Entity
     {
         public string Url { get; set; }
-
-        public int TemplateId { get; set; }
-        [ForeignKey("TemplateId")]
-        public Template Template { get; set; }
     }
 }

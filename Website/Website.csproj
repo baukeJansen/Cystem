@@ -30,8 +30,6 @@
   <ItemGroup>
     <Folder Include="BL\QL\DailyQL\" />
     <Folder Include="Common\Interfaces\" />
-    <Folder Include="Common\Exceptions\" />
-    <Folder Include="Views\Shared\DisplayTemplates\" />
   </ItemGroup>
 
 </Project>

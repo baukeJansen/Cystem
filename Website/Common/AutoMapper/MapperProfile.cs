@@ -12,6 +12,12 @@ namespace Website.Common.AutoMapper
     {
         public MapperProfile()
         {
+            CreateMap<Entity, GenericViewModel>(MemberList.None);
+            CreateMap<GenericViewModel, Entity>(MemberList.None);
+
+            CreateMap<Page, GenericViewModel>(MemberList.None);
+            CreateMap<GenericViewModel, Page>(MemberList.None);
+
             CreateMap<Daily, DailyEggViewModel>(MemberList.None);
             CreateMap<DailyEggViewModel, Daily>(MemberList.None);
 

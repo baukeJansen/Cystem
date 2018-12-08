@@ -80,7 +80,7 @@
                 @Html.CystemSubmitButton("Save", "right", new { data_on_result = ElementAction.Close })
                 @if (Model.Id != 0)
                 {
-                @(Html.ActionLink<DailyEggController>("Delete", c => c.Delete(null), new { }, new { @class = "ajax-delete right btn-flat waves-effect", data_params = (new { Id = Model.Id }).Serialize() , data_on_result = ElementAction.Close }))
+                @(Html.ActionLink<DailyEggController>("Delete", c => c.Delete(null), new { Id = Model.Id }, new { @class = "ajax-delete right btn-flat waves-effect", data_on_result = ElementAction.Close }))
                 }
             </div>
         </div>

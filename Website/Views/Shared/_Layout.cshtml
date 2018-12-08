@@ -39,7 +39,7 @@
 
     <header>
         <div class="content-wrapper load z-depth-1">
-            <div class="content" data-url="@(Url.Action<CommonController>(c => c.Header()))" data-action="@ElementAction.Load">
+            <div class="content" data-url="@(Url.Action<CommonController>(c => c.Load(null), new { Actions = new []{ "_Header" }}))" data-action="@ElementAction.Load">
                 @await Html.PartialAsync("_Header")
             </div>
         </div>
@@ -47,7 +47,7 @@
 
     <footer>
         <div class="content-wrapper load z-depth-1">
-            <div class="content" data-url="@(Url.Action<CommonController>(c => c.Footer()))" data-action="@ElementAction.Load">
+            <div class="content" data-url="@(Url.Action<CommonController>(c => c.Load(null), new { Actions = new []{ "_Footer" }}))" data-action="@ElementAction.Load">
                 @await Html.PartialAsync("_Footer")
             </div>
         </div>

@@ -2,8 +2,11 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Website.BL.LL.DailyLL;
+using Website.BL.LL.EavLL;
+using Website.BL.LL.PageLL;
 using Website.BL.SL.DailyEggSL;
 using Website.BL.SL.DeadChickenSL;
+using Website.BL.SL.RouterSL;
 using Website.DAL;
 
 namespace Website
@@ -17,10 +20,13 @@ namespace Website
                 options.UseSqlServer(configuration.GetConnectionString("DataContext"))
             );
 
+            services.AddScoped<IPageLogic, PageLogic>();
+            services.AddScoped<IEavLogic, EavLogic>();
+            services.AddScoped<IDailyLogic, DailyLogic>();
+
+            services.AddScoped<IRouterService, RouterService>();
             services.AddScoped<IDailyEggService, DailyEggService>();
             services.AddScoped<IDeadChickenService, DeadChickenService>();
-
-            services.AddScoped<IDailyLogic, DailyLogic>();
         
             // Singleton - Only one instance is ever created and returned.
             // services.AddSingleton<IExampleService, ExampleService>();

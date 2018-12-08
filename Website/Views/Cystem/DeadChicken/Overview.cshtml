@@ -54,7 +54,7 @@
                             <td>@data.Amount</td>
                             <td>@data.Remarks</td>
                             <td>
-                                <a href="@(Url.Action<DeadChickenController>(c => c.Edit(null)))" class="ajax-get" data-params="@((new { Id = data.Id }).Serialize())" data-on-result="@ElementAction.Overlay"><i class="material-icons">edit</i></a>
+                                <a href="@(Url.Action<DeadChickenController>(c => c.Edit(null), new { Id = data.Id }))" class="ajax-get" data-on-result="@ElementAction.Overlay"><i class="material-icons">edit</i></a>
                             </td>
                         </tr>
                     }

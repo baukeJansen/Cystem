@@ -19,36 +19,25 @@ namespace Website.Controllers
             return Ok("Succes");
         }
 
-
-
-        public IActionResult View()
+        /*public ViewResult View()
         {
             return base.View();
         }
 
-        public IActionResult View(string viewName)
+        public ViewResult View(string viewName)
         {
             return base.View(viewName);
-        }
+        }*/
 
-        public IActionResult View(object viewModel)
+        public ViewResult View<T>(T viewModel) where T : ActionViewModel
         {
-            if(!(viewModel is ActionViewModel)) {
-                throw new Exception();
-            }
-
-            SetupView((ActionViewModel)viewModel);
+            SetupView(viewModel);
             return base.View(viewModel);
         }
 
-        public IActionResult View(string viewName, object viewModel)
+        public ViewResult View<T>(string viewName, T viewModel) where T : ActionViewModel
         {
-            if (!(viewModel is ActionViewModel))
-            {
-                throw new Exception();
-            }
-
-            SetupView((ActionViewModel)viewModel);
+            SetupView(viewModel);
             return base.View(viewName, viewModel);
         }
 

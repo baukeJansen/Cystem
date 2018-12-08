@@ -1,36 +1,42 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using Website.BL.SL.RouterSL;
+using Website.Common.Enums;
+using Website.Common.Exceptions;
 using Website.Common.Models;
 using Website.Common.Viewmodels;
 using Website.DAL;
 
 namespace Website.Controllers
 {
-    public class RouterController : JsActionController<BasicViewModel>
+    public class RouterController : JsActionController<GenericViewModel>
     {
-        private readonly DataContext context;
-        private readonly IMapper mapper;
+        private readonly IRouterService service;
 
-        public RouterController(DataContext context, IMapper mapper)
+        public RouterController(IRouterService service)
         {
-            this.context = context;
-            this.mapper = mapper;
+            this.service = service;
         }
-
-        public IActionResult Route(BasicViewModel vm)
+        
+        public IActionResult Route(GenericViewModel vm)
         {
-            string route = HttpContext.Request.Path;
-            var ps = context.Pages.ToList();
-            Page page = context.Pages.Where(p => p.Url == route).FirstOrDefault();
+            vm.Url = HttpContext.Request.Path;
 
-            if (page != null)
-            {
-                TemplateViewModel tvm = mapper.Map<TemplateViewModel>(vm);
-                return View("Template" + page.TemplateId, tvm);
+            try { 
+                
+                vm = service.Get(vm);
+                string template = service.GetTemplate(vm);
+                return View(template, vm);
             }
-
-            return View(vm);
+            catch (InvalidPageException)
+            {
+                return View(vm);
+            }
+            catch (InvalidTemplateException)
+            {
+                return View(vm);
+            }
         }
     }
 }

@@ -1,9 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Website.Common.Models;
+using Website.Common.Models.EAV;
 
 namespace Website.DAL
 {
@@ -11,19 +8,29 @@ namespace Website.DAL
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         { }
-
+        public DbSet<Entity> Entities { get; set; }
+        public DbSet<Attribute> Attributes { get; set; }
+        public DbSet<Value> Values { get; set; }
+        public DbSet<IntValue> IntValues { get; set; }
+        public DbSet<StringValue> StringValues { get; set; }
+        public DbSet<GroupValue> GroupValues { get; set; }
         public DbSet<Page> Pages { get; set; }
-        public DbSet<Template> Templates { get; set; }
 
         public DbSet<Daily> Daily { get; set; }
-        public DbSet<LayingPercentage> LayingPercentages { get; set; }
-        //public DbSet<DailyEgg> DailyEggs { get; set; }
-        //public DbSet<DeadChicken> DeadChickens { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Value>()
+                .HasIndex(v => v.EntityId);
+
+            modelBuilder.Entity<Value>()
+                .HasIndex(v => v.AttributeId);
+
+            modelBuilder.Entity<Page>()
+                .HasIndex(p => p.Url);
+
             modelBuilder.Entity<Daily>()
-                .HasIndex(e => new { e.Date });
+                .HasIndex(e => e.Date);
         }
     }
 }

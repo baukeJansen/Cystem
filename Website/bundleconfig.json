@@ -30,7 +30,10 @@
       "wwwroot/js/lib/moment.js",
       "wwwroot/js/lib/chart.js",
 
+      "wwwroot/js/common/actionresult.js",
+      "wwwroot/js/common/method.js",
       "wwwroot/js/jqextensions.js",
+
       "wwwroot/js/cystem.js",
       "wwwroot/js/materialize.js",
       "wwwroot/js/chart.js",
