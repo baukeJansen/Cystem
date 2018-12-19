@@ -7,18 +7,13 @@ using Website.DAL;
 
 namespace Website.BL.QL
 {
-    public abstract class Query <TModel> where TModel : Model
+    public abstract class Query
     {
-        readonly DataContext context;
+        protected readonly DataContext context;
 
         public Query(DataContext context)
         {
             this.context = context;
-        }
-
-        public TModel Get(int id)
-        {
-            return context.Find<TModel>(id);
         }
     }
 }

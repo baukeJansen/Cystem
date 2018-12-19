@@ -3,7 +3,7 @@
         this.method = method;
         this.url = url;
         this.data = data;
-        this.actionResult = actionResult || ActionResult.Navigate;
+        this.actionResult = actionResult || ActionResult.DISPLAY;
         this.readyStack = [];
 
         this.setSource($source);
@@ -11,12 +11,17 @@
 
     Action.prototype.setSource = function ($source) {
         this.$source = $source || undefined;
+        var $target;
 
         if (this.hasSource()) {
             var target = this.$source.data('target');
-            var $target = target ? $(target) : undefined;
+            $target = target ? $(target) : undefined;
 
-            if ($target && !$target.length) {
+            if (!($target && $target.length)) {
+                $target = this.$source.closest('.content-wrapper');
+            }
+
+            if (!($target && $target.length)) {
                 $target = undefined;
             }
         }
@@ -57,7 +62,7 @@
     var Navigate = function () {
         var self = this;
 
-        window.onpopstate = function (e) { self.onPopState.call(self, e); };
+        global.onpopstate = function (e) { self.onPopState.call(self, e); };
     };
 
     Navigate.prototype.init = function (el) {
@@ -69,6 +74,8 @@
         $el.find('.ajax-put').click(function (e) { return self._action.call(self, e, Method.PUT, $(this)); });
         $el.find('.ajax-delete').click(function (e) { return self._action.call(self, e, Method.DELETE, $(this)); });
         $el.find('.ajax-submit').click(function (e) { return self._submit.call(self, e, $(this)); });
+
+        $el.find('.ajax-load').each(function (i, el) { self._action.call(self, null, Method.GET, $(el)); });
     };
 
     Navigate.prototype.reload = function ($content) {
@@ -134,7 +141,7 @@
         var $oldContent = action.$oldContent;
         var state;
 
-        if (action.method === Method.GET) {
+        if (action.method === Method.GET && action.actionResult === ActionResult.DISPLAY) {
             state = state || {};
             history.pushState(state, "", action.url);
         }
@@ -145,6 +152,7 @@
 
         switch (action.actionResult) {
             case ActionResult.DISPLAY:
+            case ActionResult.LOAD:
             case ActionResult.RELOAD:
                 if (action.hasOldContent()) {
                     $target.css({ height: action.$oldContent.outerHeight() });
@@ -171,6 +179,7 @@
     Navigate.prototype._done = function (action) {
         switch (action.actionResult) {
             case ActionResult.DISPLAY:
+            case ActionResult.LOAD:
             case ActionResult.RELOAD:
                 this._display(action);
                 break;
@@ -213,9 +222,9 @@
     };
 
     Navigate.prototype._close = function (action) {
-        var $overlayWrapper = action.$source.closest('.overlay-wrapper');
-        if ($overlayWrapper.length) {
-            global.Cystem.Overlay.close($overlayWrapper);
+        var $overlay = action.$source.closest('.overlay-wrapper');
+        if ($overlay.length) {
+            global.Cystem.Overlay.close();
         }
     };
 

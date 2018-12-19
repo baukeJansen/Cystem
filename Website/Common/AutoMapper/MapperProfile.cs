@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Website.Common.Models;
+using Website.Common.Models.EAV;
 using Website.Common.Viewmodels;
 
 namespace Website.Common.AutoMapper
@@ -12,11 +13,8 @@ namespace Website.Common.AutoMapper
     {
         public MapperProfile()
         {
-            CreateMap<Entity, GenericViewModel>(MemberList.None);
-            CreateMap<GenericViewModel, Entity>(MemberList.None);
-
-            CreateMap<Page, GenericViewModel>(MemberList.None);
-            CreateMap<GenericViewModel, Page>(MemberList.None);
+            CreateMap<PageValue, GenericViewModel>(MemberList.None);
+            CreateMap<GenericViewModel, PageValue>(MemberList.None);
 
             CreateMap<Daily, DailyEggViewModel>(MemberList.None);
             CreateMap<DailyEggViewModel, Daily>(MemberList.None);

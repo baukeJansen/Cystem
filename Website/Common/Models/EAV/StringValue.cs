@@ -6,8 +6,8 @@ using Website.Common.Enums;
 
 namespace Website.Common.Models.EAV
 {
-    public class StringValue : Value
+    public class StringValue : Value, IStringValue
     {
-        public string StringVal { get; set; }
+        public string String { get; set; }
     }
 }

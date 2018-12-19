@@ -2,6 +2,6 @@
 @using Website.Common.Viewmodels
 @model ActionViewModel
 
-<div class="content" data-url="@Model.Url"  data-action="@ElementAction.Reload">
+<div class="content" data-url="@Model.Url"  data-on-result="@ElementAction.Reload">
     @RenderBody()
 </div>

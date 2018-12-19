@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Website.Common.Enums;
 using Website.Common.Extensions;
+using Website.Common.Models.EAV;
 
 namespace Website.Views.HtmlHelpers
 {
@@ -59,6 +60,54 @@ namespace Website.Views.HtmlHelpers
             button.AddHtmlAttributes(htmlAttributes);
 
             return button.RenderSelfClosingTag();
+        }
+
+        public static IHtmlContent DisplayValue<T>(this IHtmlHelper<T> htmlHelper, Value value)
+        {
+            if (value == null)
+            {
+                return HtmlString.Empty;
+            }
+
+            string type = value.GetType().ToString();
+            type = type.Split('.').Last();
+
+            return HtmlHelperDisplayExtensions.DisplayFor(htmlHelper, m => value, type);
+        }
+
+        public static IHtmlContent DisplayValue<T>(this IHtmlHelper<T> htmlHelper, List<Value> values, string label)
+        {
+            if (values == null)
+            {
+                return HtmlString.Empty;
+            }
+
+            foreach (Value value in values)
+            {
+                if (value.Attribute.Label == label)
+                {
+                    return DisplayValue(htmlHelper, value);
+                }
+            }
+
+            return HtmlString.Empty;
+        }
+
+        public static IHtmlContent DisplayValue<T>(this IHtmlHelper<T> htmlHelper, List<Value> values)
+        {
+            if (values == null)
+            {
+                return HtmlString.Empty;
+            }
+
+            HtmlContentBuilder builder = new HtmlContentBuilder();
+
+            foreach (Value value in values) {
+                IHtmlContentContainer content = (IHtmlContentContainer)DisplayValue(htmlHelper, value);
+                content.MoveTo(builder);
+            }
+
+            return builder;
         }
     }
 }

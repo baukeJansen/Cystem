@@ -45,8 +45,6 @@ namespace Website.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Date");
-
                     b.ToTable("Daily");
                 });
 
@@ -74,39 +72,17 @@ namespace Website.Migrations
                     b.Property<string>("Discriminator")
                         .IsRequired();
 
-                    b.Property<int?>("EntityId");
-
-                    b.Property<int>("Type");
-
-                    b.Property<int?>("ValueId");
+                    b.Property<int?>("GroupId");
 
                     b.HasKey("Id");
 
                     b.HasIndex("AttributeId");
 
-                    b.HasIndex("EntityId");
-
-                    b.HasIndex("ValueId");
+                    b.HasIndex("GroupId");
 
                     b.ToTable("Values");
 
                     b.HasDiscriminator<string>("Discriminator").HasValue("Value");
-                });
-
-            modelBuilder.Entity("Website.Common.Models.Entity", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired();
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Entities");
-
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Entity");
                 });
 
             modelBuilder.Entity("Website.Common.Models.EAV.GroupValue", b =>
@@ -123,7 +99,8 @@ namespace Website.Migrations
                 {
                     b.HasBaseType("Website.Common.Models.EAV.Value");
 
-                    b.Property<int>("IntVal");
+                    b.Property<int>("Int")
+                        .HasColumnName("Int");
 
                     b.ToTable("IntValue");
 
@@ -134,24 +111,38 @@ namespace Website.Migrations
                 {
                     b.HasBaseType("Website.Common.Models.EAV.Value");
 
-                    b.Property<string>("StringVal");
+                    b.Property<string>("String")
+                        .HasColumnName("String");
 
                     b.ToTable("StringValue");
 
                     b.HasDiscriminator().HasValue("StringValue");
                 });
 
-            modelBuilder.Entity("Website.Common.Models.Page", b =>
+            modelBuilder.Entity("Website.Common.Models.EAV.TemplateValue", b =>
                 {
-                    b.HasBaseType("Website.Common.Models.Entity");
+                    b.HasBaseType("Website.Common.Models.EAV.GroupValue");
 
-                    b.Property<string>("Url");
+                    b.Property<string>("TemplateName")
+                        .HasColumnName("String");
+
+                    b.ToTable("TemplateValue");
+
+                    b.HasDiscriminator().HasValue("TemplateValue");
+                });
+
+            modelBuilder.Entity("Website.Common.Models.EAV.PageValue", b =>
+                {
+                    b.HasBaseType("Website.Common.Models.EAV.TemplateValue");
+
+                    b.Property<string>("Url")
+                        .HasColumnName("SerializedString");
 
                     b.HasIndex("Url");
 
-                    b.ToTable("Page");
+                    b.ToTable("PageValue");
 
-                    b.HasDiscriminator().HasValue("Page");
+                    b.HasDiscriminator().HasValue("PageValue");
                 });
 
             modelBuilder.Entity("Website.Common.Models.EAV.Value", b =>
@@ -161,13 +152,9 @@ namespace Website.Migrations
                         .HasForeignKey("AttributeId")
                         .OnDelete(DeleteBehavior.Cascade);
 
-                    b.HasOne("Website.Common.Models.Entity", "Entity")
+                    b.HasOne("Website.Common.Models.EAV.GroupValue", "Group")
                         .WithMany("Values")
-                        .HasForeignKey("EntityId");
-
-                    b.HasOne("Website.Common.Models.EAV.GroupValue", "Val")
-                        .WithMany("Values")
-                        .HasForeignKey("ValueId");
+                        .HasForeignKey("GroupId");
                 });
 #pragma warning restore 612, 618
         }

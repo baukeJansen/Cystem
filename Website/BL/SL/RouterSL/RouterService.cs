@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Website.BL.LL.EavLL;
 using Website.BL.LL.PageLL;
 using Website.Common.Enums;
@@ -26,13 +27,13 @@ namespace Website.BL.SL.RouterSL
         {
             return new GenericViewModel
             {
-                Values = new List<Value>()
+                Page = new PageValue { Values = new List<Value>() }
             };
         }
 
-        public override GenericViewModel Get(GenericViewModel viewModel)
+        public override async Task<GenericViewModel> Get(GenericViewModel viewModel)
         {
-            Page page = pageLogic.Get(viewModel.Url);
+            PageValue page = await pageLogic.Get(viewModel.Url);
 
             if (page == null)
             {
@@ -40,32 +41,18 @@ namespace Website.BL.SL.RouterSL
             }
 
             mapper.Map(page, viewModel);
+            viewModel.Page = page;
             return viewModel;
-        }
-
-        public string GetTemplate(GenericViewModel vm)
-        {
-            int templateId = vm.Values.Where(v => v.AttributeId == DefaultAttributes.TemplateAttribute).Select(v => v.Id).FirstOrDefault();
-
-            if (templateId == 0)
-            {
-                throw new InvalidTemplateException();
-            }
-
-            return "/Views/Shared/Templates/Template" + templateId + ".cshtml";
         }
 
         public override void Store(GenericViewModel viewModel)
         {
-            eavLogic.Store(viewModel.Values);
+            eavLogic.Store(viewModel.Page);
         }
 
         public override void Delete(GenericViewModel viewModel)
         {
-            eavLogic.Delete(viewModel.Values);
-
-            Entity entity = new Entity { Id = viewModel.Id };
-            context.Remove(entity);
+            eavLogic.Delete(viewModel.Page);
         }
     }
 }

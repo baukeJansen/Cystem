@@ -15,17 +15,17 @@ nupkg/
 *.sln.docstates
 
 # Build results
-[Dd]ebug/
-[Dd]ebugPublic/
-[Rr]elease/
-[Rr]eleases/
-x64/
-x86/
-build/
-bld/
-[Bb]in/
-[Oo]bj/
-[Oo]ut/
+Website/[Dd]ebug/
+Website/[Dd]ebugPublic/
+Website/[Rr]elease/
+Website/[Rr]eleases/
+Website/x64/
+Website/x86/
+Website/build/
+Website/bld/
+Website/[Bb]in/
+Website/[Oo]bj/
+Website/[Oo]ut/
 msbuild.log
 msbuild.err
 msbuild.wrn
@@ -33,9 +33,5 @@ msbuild.wrn
 # Visual Studio 2015
 .vs/
 
-# Node modules
-node_modules
+node_modules/
 package-lock.json
-
-#Temp ignore
-TestApplication/

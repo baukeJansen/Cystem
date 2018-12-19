@@ -19,7 +19,7 @@ namespace Website.Controllers
             return Ok("Succes");
         }
 
-        /*public ViewResult View()
+        public ViewResult View()
         {
             return base.View();
         }
@@ -27,7 +27,7 @@ namespace Website.Controllers
         public ViewResult View(string viewName)
         {
             return base.View(viewName);
-        }*/
+        }
 
         public ViewResult View<T>(T viewModel) where T : ActionViewModel
         {

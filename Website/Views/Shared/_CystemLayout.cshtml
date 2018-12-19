@@ -1,0 +1,95 @@
+﻿@using HtmlHelpers
+@using Website.Common.Enums
+@using Website.Common.Viewmodels
+@using Website.Controllers
+@model ActionViewModel
+@inject Microsoft.AspNetCore.Hosting.IHostingEnvironment HostingEnvironment
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Website</title>
+
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,400i,700" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+    <environment names="Development">
+        @Bundler.Unpack(HostingEnvironment.ContentRootPath, "/css/Website.css", Context)
+    </environment>
+
+    <environment names="Staging,Production">
+        <link rel="stylesheet" type="text/css" href="~/css/Website.min.css" asp-append-version="true" />
+    </environment>
+
+    @RenderSection("Style", required: false)
+</head>
+
+<body>
+    <div class="header-space"></div>
+
+    <div class="content-wrapper main-content">
+        <div class="content" data-url="@Model.Url" data-on-result="@ElementAction.Reload">
+            @RenderBody()
+        </div>
+    </div>
+
+    <div class="footer-space"></div>
+
+    @*<header>
+            <div class="content-wrapper load z-depth-1">
+                <div class="content" data-url="@(Url.Action<CommonController>(c => c.Load(null), new { Actions = new []{ "_Header" }}))" data-on-result="@ElementAction.Load">
+                    @await Html.PartialAsync("_Header")
+                </div>
+            </div>
+        </header>
+
+        <footer>
+            <div class="content-wrapper load z-depth-1">
+                <div class="content" data-url="@(Url.Action<CommonController>(c => c.Load(null), new { Actions = new []{ "_Footer" }}))" data-on-result="@ElementAction.Load">
+                    @await Html.PartialAsync("_Footer")
+                </div>
+            </div>
+        </footer>*@
+
+    <header>
+        <div class="content-wrapper z-depth-1">
+            <div class="content ajax-load" data-url="@Url.Action("header", "cystem", new { Area = "" })" data-on-result="@ElementAction.Load">
+
+            </div>
+        </div>
+    </header>
+
+    <footer>
+        <div class="content-wrapper z-depth-1">
+            <div class="content ajax-load" data-url="@Url.Action("footer", "cystem", new { Area = "" })" data-on-result="@ElementAction.Load">
+
+            </div>
+        </div>
+    </footer>
+
+    <div class="content-wrapper z-depth-1">
+        <div class="content ajax-load" data-url="@Url.Action("overlay", "cystem", new { Area = "" })" data-on-result="@ElementAction.Load">
+
+        </div>
+    </div>
+
+    <environment names="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        @Bundler.Unpack(HostingEnvironment.ContentRootPath, "/js/Website.js", Context)
+    </environment>
+
+    <environment names="Staging,Production">
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery"
+                crossorigin="anonymous"
+                integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
+        </script>
+        <script src="~/js/Website.min.js" async="async" defer="defer" asp-append-version="true"></script>
+    </environment>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

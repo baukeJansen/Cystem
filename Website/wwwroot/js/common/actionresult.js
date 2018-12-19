@@ -1,5 +1,6 @@
-﻿var ActionResult = (new function () {
+﻿var ActionResult = new (function () {
     this.DISPLAY = 'display';
+    this.LOAD = 'load';
     this.RELOAD = 'reload';
     this.OVERLAY = 'overlay';
     this.POPUP = 'popup';
@@ -7,8 +8,10 @@
     this.NONE = 'none';
 
     this.get = function (actionResult) {
+
         switch (actionResult) {
             case ActionResult.DISPLAY: return ActionResult.DISPLAY;
+            case ActionResult.LOAD: return ActionResult.LOAD;
             case ActionResult.RELOAD: return ActionResult.RELOAD;
             case ActionResult.OVERLAY: return ActionResult.OVERLAY;
             case ActionResult.POPUP: return ActionResult.POPUP;

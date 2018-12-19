@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
 using System.Linq;
+using System.Threading.Tasks;
 using Website.BL.SL.RouterSL;
 using Website.Common.Enums;
 using Website.Common.Exceptions;
@@ -19,23 +20,21 @@ namespace Website.Controllers
             this.service = service;
         }
         
-        public IActionResult Route(GenericViewModel vm)
+        public async Task<IActionResult> Route(GenericViewModel vm)
         {
             vm.Url = HttpContext.Request.Path;
 
             try { 
-                
-                vm = service.Get(vm);
-                string template = service.GetTemplate(vm);
-                return View(template, vm);
+                vm = await service.Get(vm);
+                return View(vm);
             }
             catch (InvalidPageException)
             {
-                return View(vm);
+                return View("Error", vm);
             }
             catch (InvalidTemplateException)
             {
-                return View(vm);
+                return View("Error", vm);
             }
         }
     }

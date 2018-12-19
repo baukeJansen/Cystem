@@ -1,0 +1,13 @@
+﻿@using Website.Common.Models.EAV
+@model List<Value>
+
+<div class="col l4 m6 s12">
+    <a href="@Html.DisplayValue(Model, "Link")" class="ajax-get card grey darken-3">
+        <div class="card-content white-text">
+            <span class="card-title">@Html.DisplayValue(Model, "Title")</span>
+            <p>
+                @Html.DisplayValue(Model, "Text")
+            </p>
+        </div>
+    </a>
+</div>

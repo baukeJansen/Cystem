@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 using Website.BL.SL.DailyEggSL;
 using Website.Common.Viewmodels;
 
@@ -33,9 +34,9 @@ namespace Website.Controllers.Cystem
         }
 
         [HttpGet]
-        public IActionResult Edit(DailyEggViewModel vm)
+        public async Task<IActionResult> Edit(DailyEggViewModel vm)
         {
-            return View(service.Get(vm));
+            return View(await service.Get(vm));
         }
 
         [HttpPost]

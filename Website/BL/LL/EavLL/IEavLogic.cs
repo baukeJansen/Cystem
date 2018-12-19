@@ -11,8 +11,6 @@ namespace Website.BL.LL.EavLL
     {
         Value Get(int id);
         List<Value> GetForId(int id);
-        List<Value> GetForEntity(Entity entity);
-        List<Value> GetForEntity(int id);
         void Store(Value value);
         void Store(List<Value> values);
         void Delete(Value value);

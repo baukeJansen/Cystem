@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Website.BL.LL.DailyLL;
 using Website.Common.Data;
 using Website.Common.Enums;
@@ -20,7 +21,7 @@ namespace Website.BL.SL.DailyEggSL
             this.logic = logic;
         }
 
-        public override DailyEggViewModel Get(DailyEggViewModel viewModel)
+        public override Task<DailyEggViewModel> Get(DailyEggViewModel viewModel)
         {
             Daily model = context.Daily.Find(viewModel.Id);
             if (model == null) throw new NullReferenceException();
@@ -38,7 +39,7 @@ namespace Website.BL.SL.DailyEggSL
             viewModel.ExportTypes = logic.GetExportTypes(viewModel.ExportType);
             viewModel.EggStaples = logic.EggsToStaples(viewModel.Eggs);
 
-            return viewModel;
+            return Task.FromResult(viewModel);
         }
 
         public DailyEggOverviewViewModel GetOverview(DailyEggOverviewViewModel viewModel)

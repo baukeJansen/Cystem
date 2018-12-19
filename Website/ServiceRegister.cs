@@ -4,6 +4,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Website.BL.LL.DailyLL;
 using Website.BL.LL.EavLL;
 using Website.BL.LL.PageLL;
+using Website.BL.QL.ValueQL;
+using Website.BL.SL.CystemSL;
 using Website.BL.SL.DailyEggSL;
 using Website.BL.SL.DeadChickenSL;
 using Website.BL.SL.RouterSL;
@@ -20,10 +22,13 @@ namespace Website
                 options.UseSqlServer(configuration.GetConnectionString("DataContext"))
             );
 
+            services.AddScoped<IValueQuery, ValueQuery>();
+
             services.AddScoped<IPageLogic, PageLogic>();
             services.AddScoped<IEavLogic, EavLogic>();
             services.AddScoped<IDailyLogic, DailyLogic>();
 
+            services.AddScoped<ICystemService, CystemService>();
             services.AddScoped<IRouterService, RouterService>();
             services.AddScoped<IDailyEggService, DailyEggService>();
             services.AddScoped<IDeadChickenService, DeadChickenService>();

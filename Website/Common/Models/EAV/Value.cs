@@ -10,14 +10,9 @@ namespace Website.Common.Models.EAV
         [ForeignKey("AttributeId")]
         public Attribute Attribute { get; set; }
 
-        public int? EntityId { get; set; }
+        public int? GroupId { get; set; }
 
-        [ForeignKey("EntityId")]
-        public Entity Entity { get; set; }
-
-        public int? ValueId { get; set; }
-
-        [ForeignKey("ValueId")]
-        public Value Val { get; set; }
+        [ForeignKey("GroupId")]
+        public Value Group { get; set; }
     }
 }

@@ -3211,7 +3211,8 @@ header nav {
 
 .header-space {
   height: 64px;
-  padding-bottom: 10px;
-  box-sizing: content-box; }
+  margin-bottom: 10px;
+  box-sizing: content-box;
+  background: #ff8f00; }
 
 /*# sourceMappingURL=header.css.map */

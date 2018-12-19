@@ -19,7 +19,7 @@ namespace Website.BL.SL
             this.mapper = mapper;
         }
 
-        public abstract TViewModel Get(TViewModel viewModel);
+        public abstract Task<TViewModel> Get(TViewModel viewModel);
         public abstract TViewModel Create(TViewModel viewModel);
         public abstract void Store(TViewModel viewModel);
         public abstract void Delete(TViewModel viewModel);

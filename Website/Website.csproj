@@ -9,6 +9,8 @@
     <Compile Remove="Migrations\20181122130736_daily-eggs.Designer.cs" />
     <Compile Remove="Migrations\20181122132234_test.cs" />
     <Compile Remove="Migrations\20181122132234_test.Designer.cs" />
+    <Compile Remove="Migrations\20181208141554_eav-test5.cs" />
+    <Compile Remove="Migrations\20181208141554_eav-test5.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -16,6 +18,7 @@
     <PackageReference Include="AutoMapper" Version="8.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="BuildBundlerMinifier" Version="2.8.391" />
+    <PackageReference Include="FastMember.NetCore" Version="1.1.0" />
     <PackageReference Include="Grunt" Version="0.1.13" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
@@ -28,8 +31,28 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="BL\QL\DailyQL\" />
     <Folder Include="Common\Interfaces\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Views\Shared\EditorTemplates\GroupValue.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Shared\EditorTemplates\IntValue.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Shared\EditorTemplates\StringValue.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Shared\EditorTemplates\TemplateValue.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Shared\Templates\overlay.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Shared\Templates\footer.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
   </ItemGroup>
 
 </Project>

@@ -6,8 +6,8 @@ using Website.Common.Enums;
 
 namespace Website.Common.Models.EAV
 {
-    public class IntValue : Value
+    public class IntValue : Value, IIntValue
     {
-        public int IntVal { get; set; }
+        public int Int { get; set; }
     }
 }

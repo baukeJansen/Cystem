@@ -27,16 +27,6 @@ namespace Website.BL.LL.EavLL
             return context.Values.Where(v => v.Id == id).ToList();
         }
 
-        public List<Value> GetForEntity(Entity entity)
-        {
-            return GetForEntity(entity.Id);
-        }
-
-        public List<Value> GetForEntity(int id)
-        {
-            return context.Values.Where(v => v.EntityId == id).ToList();
-        }
-
         public void Store(Value value)
         {
             if (value.Id == 0)

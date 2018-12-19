@@ -19,7 +19,7 @@ namespace Website.BL.SL.DeadChickenSL
             this.logic = logic;
         }
 
-        public override DeadChickenViewModel Get(DeadChickenViewModel viewModel)
+        public override Task<DeadChickenViewModel> Get(DeadChickenViewModel viewModel)
         {
             Daily model = context.Daily.Find(viewModel.Id);
 
@@ -27,7 +27,7 @@ namespace Website.BL.SL.DeadChickenSL
 
             mapper.Map(model, viewModel);
 
-            return viewModel;
+            return Task.FromResult(viewModel);
         }
 
         public DeadChickenOverviewViewModel GetOverview(DeadChickenOverviewViewModel viewModel)

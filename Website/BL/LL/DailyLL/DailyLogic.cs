@@ -79,11 +79,11 @@ namespace Website.BL.LL.DailyLL
                 throw new NullReferenceException();
             }
 
-            Daily previous = context.Daily.Where(d => d.Date < model.Date).OrderByDescending(d => d.Date).FirstOrDefault();
-            if (previous == null) { throw new Exception("No previous data"); }
+            //Daily previous = context.Daily.Where(d => d.Date < model.Date).OrderByDescending(d => d.Date).FirstOrDefault();
+            //if (previous == null) { throw new Exception("No previous data"); }
 
-            model.TotalEggs = model.NormalEggs + model.SecondKindEggs + model.SaleEggs + model.OtherEggs;
-            model.TotalChickens = previous.TotalChickens - model.DeadChickens;
+            //model.TotalEggs = model.NormalEggs + model.SecondKindEggs + model.SaleEggs + model.OtherEggs;
+            //model.TotalChickens = previous.TotalChickens - model.DeadChickens;
 
             //if (model.)
         }

@@ -9,7 +9,7 @@ namespace Website.BL.SL
 {
     public interface IService<TViewModel> where TViewModel : ViewModel
     {
-        TViewModel Get(TViewModel viewModel);
+        Task<TViewModel> Get(TViewModel viewModel);
 
         TViewModel Create(TViewModel viewModel);
 

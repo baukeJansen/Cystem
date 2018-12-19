@@ -1,60 +1,84 @@
 ﻿(function (global, $) {
-    var overlay;
-    var $body = $('body');
-    var $window = $(global);
+    var overlays = [], overlayHelper, $body, $window, $overlayTemplate;
 
-    var Overlay = function () {
-
-    };
-
-    Overlay.prototype.init = function (el) {
-
-    };
-
-    Overlay.prototype.open = function (overlayWrapper) {
+    var Overlay = function ($overlayContent) {
         var self = this;
-        var $overlayWrapper = $(overlayWrapper);
-        var $closeButton = $overlayWrapper.find('.close');
-        var $background = $overlayWrapper;
+        this.$overlay = $overlayTemplate.clone();
 
-        $closeButton.click(function () { self.close($overlayWrapper); });
+        var $contentWrapper = this.$overlay.find('.content-wrapper');
+        $contentWrapper.append($overlayContent);
 
-        $background.click(function (e) {
+        var $closeButton = this.$overlay.find('.close');
+
+        $closeButton.click(function () { self.close(); });
+        this.$overlay.click(function (e) {
             var $target = $(e.target);
 
             if ($target.hasClass('overlay-wrapper')) {
-                self.close($overlayWrapper);
+                self.close();
             }
         });
 
-        this._moveParents($overlayWrapper, 'left');
-
-        $overlayWrapper.addClass('fade');
-
-        $body.append($overlayWrapper);
-        global.Cystem.init($overlayWrapper[0]);
-
-        setTimeout(function () {
-            $overlayWrapper.removeClass('fade');
-        }, 50);
-
-        return $overlayWrapper;
+        this.open();
     };
 
-    Overlay.prototype.close = function ($overlayWrapper) {
-        if ($overlayWrapper.hasClass('fade')) return;
+    Overlay.prototype.open = function () {
+        var self = this;
+        overlayHelper._moveParents(this, 'left');
 
-        $overlayWrapper.addClass('fade');
-        this._moveParents($overlayWrapper, 'right');
-        this._reloadParent($overlayWrapper);
+        this.$overlay.removeClass('hide');
+        this.$overlay.addClass('fade');
+
+        $body.append(this.$overlay);
+        global.Cystem.init(this.$overlay[0]);
 
         setTimeout(function () {
-            $overlayWrapper.remove();
+            self.$overlay.removeClass('fade');
+        }, 50);
+    };
+
+    Overlay.prototype.close = function () {
+        var self = this;
+        if (this.$overlay.hasClass('fade')) return;
+
+        this.$overlay.addClass('fade');
+        overlayHelper._moveParents(this, 'right');
+        overlayHelper._reloadParent(this);
+
+        setTimeout(function () {
+            self.$overlay.remove();
         }, 400);
     };
 
-    Overlay.prototype._moveParents = function ($overlayWrapper, direction) {
-        $('.overlay-wrapper .content').not($overlayWrapper).each(function (_, el) {
+    var OverlayHelper = function () {
+        $window = $(global);
+        $body = $('body');
+    };
+
+    OverlayHelper.prototype.init = function (el) {
+        var $template = $body.find('.overlay-template');
+
+        if ($template.length) {
+            $overlayTemplate = $template;
+            $overlayTemplate.removeClass('overlay-template');
+            $overlayTemplate.detach();
+        }
+    };
+
+    OverlayHelper.prototype.open = function (overlayContent) {
+        var self = this;
+        var overlay = new Overlay($(overlayContent));
+        overlays.push(overlay);
+        return overlay;
+    };
+
+    OverlayHelper.prototype.close = function () {
+        var overlay = overlays.pop();
+        overlay.close();
+    };
+
+    OverlayHelper.prototype._moveParents = function (overlay, direction) {
+        $('.overlay-wrapper .content').not(overlay.$overlay).each(function (_, el) {
             var leftOffset = parseInt($(el).css('margin-left'));
 
             if (direction === 'left') {
@@ -66,7 +90,7 @@
         });
     };
 
-    Overlay.prototype._reloadParent = function ($overlayWrapper) {
+    OverlayHelper.prototype._reloadParent = function (overlay) {
 
         var $overlayWrappers = $('.overlay-wrapper');
         var $content;
@@ -80,7 +104,7 @@
         global.Cystem.Navigate.reload($content);
     };
 
-    overlay = new Overlay();
+    overlayHelper = new OverlayHelper();
 
-    global.Cystem.register("Overlay", overlay, overlay.init);
+    global.Cystem.register("Overlay", overlayHelper, overlayHelper.init);
 })(this, jQuery);

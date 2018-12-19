@@ -9,6 +9,6 @@ namespace Website.Common.Viewmodels
 {
     public class GenericViewModel : ActionViewModel
     {
-        public List<Value> Values { get; set; }
+        public PageValue Page { get; set; }
     }
 }

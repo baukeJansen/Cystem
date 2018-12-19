@@ -1,10 +1,11 @@
-﻿using Website.Common.Models;
+﻿using System.Threading.Tasks;
+using Website.Common.Models.EAV;
 
 namespace Website.BL.LL.PageLL
 {
     public interface IPageLogic
     {
-        Page Get(int id);
-        Page Get(string url);
+        //PageValue Get(string url);
+        Task<PageValue> Get(string url);
     }
 }

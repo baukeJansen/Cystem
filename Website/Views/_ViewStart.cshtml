@@ -2,15 +2,11 @@
 @model ActionViewModel
 
 @{
-    if (Model.Overlay)
-    {
-        Layout = "_OverlayLayout";
-    }
-    else if (Model.JsPage)
+    if (Model.JsPage)
     {
         Layout = "_AjaxLayout";
     } else
     {
-        Layout = "_Layout";
+        Layout = "_CystemLayout";
     }
 }

@@ -7,9 +7,9 @@ using Website.Common.Enums;
 
 namespace Website.Common.Models.EAV
 {
-    public class GroupValue : Value
+    public class GroupValue : Value, IGroupValue
     {
-        [InverseProperty("Val")]
-        public List<Value> Values { get; set; }
+        [InverseProperty("Group")]
+        public virtual List<Value> Values { get; set; }
     }
 }

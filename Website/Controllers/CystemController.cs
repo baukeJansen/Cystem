@@ -1,26 +1,24 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Website.BL.LL;
+using Website.BL.SL.CystemSL;
 using Website.Common.Viewmodels;
 
 namespace Website.Controllers
 {
     public class CystemController : JsActionController<BasicViewModel>
     {
-        public CystemController()
-        {
+        private readonly ICystemService service;
 
+        public CystemController(ICystemService service)
+        {
+            this.service = service;
         }
 
         [HttpGet]
-        public IActionResult Index(BasicViewModel vm)
+        public IActionResult Debug()
         {
-            return Overview(vm);
-        }
-
-        [HttpGet]
-        public IActionResult Overview(BasicViewModel vm)
-        {
-            return View("Overview", vm);
+            service.Test();
+            return View("Overview");
         }
     }
 }
