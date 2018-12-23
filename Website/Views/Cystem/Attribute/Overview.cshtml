@@ -1,0 +1,30 @@
+﻿@using Website.Common.Models.EAV
+@using Website.Common.Models.EAV.EAVInterfaces
+@using Website.Common.Viewmodels
+@using Website.Common.Enums
+@using Attribute = Website.Common.Models.EAV.Attribute;
+@model AttributeOverviewViewModel
+
+<div class="container">
+    <div class="row">
+        <div class="col s12">
+            <h1>Values overview</h1>
+
+            @Html.LargeButton(Url.Action("create", "attribute", new { Area = "Cystem" }), ElementAction.Overlay)
+
+            <table>
+                <tbody>
+                    @foreach (Attribute attribute in Model.Attributes)
+                    {
+                    <tr>
+                        <td>@attribute.Id</td>
+                        <td>@attribute.Label</td>
+                        <td><a href="@Url.Action("Edit", "Attribute", new { id = attribute.Id, Area = "Cystem"})" class="ajax-get" data-on-result="@ElementAction.Overlay"><i class="material-icons">edit</i></a></td>
+                        <td><a href="@Url.Action("Delete", "Attribute", new { id = attribute.Id, Area = "Cystem"})" class="ajax-get" data-on-result="@ElementAction.Overlay"><i class="material-icons">delete</i></a></td>
+                    </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

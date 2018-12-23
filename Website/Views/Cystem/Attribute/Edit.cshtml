@@ -1,0 +1,37 @@
+﻿@using Website.Common.Data
+@using Website.Controllers.Cystem
+@using Website.Common.Viewmodels
+@model AttributeViewModel
+
+<div class="container">
+    <div class="row">
+        <div class="col s12">
+            <h1>Value</h1>
+        </div>
+    </div>
+    @using (Html.BeginForm<AttributeController>(c => c.Store(Param<AttributeViewModel>.Any), new { Area = "System" }, FormMethod.Post, true, new { }))
+    {
+        @Html.HiddenFor(m => m.Id)
+
+        <div class="row">
+            <div class="col s12 input-field ">
+                @Html.EditorFor(m => m.Label)
+                @Html.LabelFor(m => m.Label)
+            </div>
+        </div>
+
+        <div class="row button-row">
+            <div class="col s12">
+                @if (Model.Id == 0)
+                {
+                    @Html.SubmitButton("Create", "add")
+                }
+                else
+                {
+                    @Html.DeleteButton(Url.Action<AttributeController>(c => c.Delete(null), new { Id = Model.Id }))
+                    @Html.SubmitButton("Update")
+                }
+            </div>
+        </div>
+    }
+</div>

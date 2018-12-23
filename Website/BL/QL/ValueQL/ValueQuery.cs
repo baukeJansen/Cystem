@@ -35,6 +35,7 @@ namespace Website.BL.QL.ValueQL
                         case "PageValue": value = new PageValue(); break;
                         case "TemplateValue": value = new TemplateValue(); break;
                         case "GroupValue": value = new GroupValue(); break;
+                        case "RelatedValue": value = new RelatedValue(); break;
                         case "StringValue": value = new StringValue(); break;
                         case "IntValue": value = new IntValue(); break;
                         default: throw new Exception("Invalid discriminator");
@@ -55,6 +56,7 @@ namespace Website.BL.QL.ValueQL
                 }
             }
 
+            if (values.Count == 0) return null;
             return SortValues(values, attributes);
         }
 
@@ -74,6 +76,12 @@ namespace Website.BL.QL.ValueQL
                         if (group.Values == null) group.Values = new List<Value>();
                         group.Values.Add(value);
                     }
+                }
+
+                if (value.GetType() == typeof(RelatedValue))
+                {
+                    RelatedValue related = (RelatedValue)value;
+                    related.Related = values.Find(v => v.Id == related.RelatedId);
                 }
             }
 

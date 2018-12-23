@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Website.Common.Models.EAV.EAVInterfaces
 {
-    interface ISerializedStringValue
+    public interface ISerializedStringValue
     {
         string SerializedString { get; set; }
     }

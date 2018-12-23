@@ -44,9 +44,9 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="right col s12">
-                @Html.CystemSubmitButton("Save", "right", new { data_on_result = ElementAction.Close })
+        <div class="row button-row">
+            <div class="col s12">
+                @Html.SubmitButton("Save")
                 @if (Model.Id > 0)
                 {
                 @(Html.ActionLink<DeadChickenController>("Delete", c => c.Delete(null), new { Id = Model.Id }, new { @class = "ajax-delete right btn-flat waves-effect", data_on_result = ElementAction.Close }))

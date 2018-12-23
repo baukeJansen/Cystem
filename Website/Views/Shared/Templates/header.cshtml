@@ -1,15 +1,12 @@
 ﻿@using Website.Common.Viewmodels
-@using Website.Common.Models.EAV
-@using Website.Controllers
 @using Website.Controllers.Cystem
-@using Microsoft.AspNetCore.Mvc
-@model List<Value>
+@model GenericViewModel
 
 <nav>
     <div class="container">
         <div class="row">
             <div class="col s12">
-                @(Html.ActionLink("Overzicht", "Index", "Cystem", new { }, new { @class = "ajax-get brand-logo", data_target = ".main-content" }))
+                @(Html.ActionLink("Overzicht", "Overview", "Value", new { Area = "Cystem" }, new { @class = "ajax-get brand-logo", data_target = ".main-content" }))
                 <a href="#" data-target="nav-mobile" class="sidenav-trigger hide-on-large-and-up"><i class="material-icons">menu</i></a>
 
                 <ul class="right hide-on-med-and-down">

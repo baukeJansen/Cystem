@@ -320,3 +320,12 @@ button.btn-floating {
 .btn-block {
   display: block;
 }
+
+.btn-outline {
+    box-shadow: 0 0 0 2px $secondary-color inset;
+    margin-right: 8px;
+}
+
+.btn-outline:hover {
+    box-shadow: 0 0 0 2px $secondary-color-dark inset;
+}

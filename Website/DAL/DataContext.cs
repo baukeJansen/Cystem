@@ -16,6 +16,7 @@ namespace Website.DAL
             public DbSet<GroupValue> GroupValues { get; set; }
             public DbSet<TemplateValue> TemplateValues { get; set; }
             public DbSet<PageValue> PageValues { get; set; }
+            public DbSet<RelatedValue> RelatedValues { get; set; }
 
         public DbSet<Daily> Daily { get; set; }
 
@@ -28,7 +29,11 @@ namespace Website.DAL
                 .Property(i => i.Int)
                 .HasColumnName("Int");
 
-            /* String values */ 
+            modelBuilder.Entity<RelatedValue>()
+                .Property(i => i.Int)
+                .HasColumnName("Int");
+
+            /* String values */
             modelBuilder.Entity<StringValue>()
                 .Property(s => s.String)
                 .HasColumnName("String");

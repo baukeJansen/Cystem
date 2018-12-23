@@ -1,20 +1,31 @@
 [
   {
+    "outputFileName": "wwwroot/css/Editor.css",
+    "inputFiles": [
+      "wwwroot/css/editor/editor.css"
+    ]
+  },
+  {
     "outputFileName": "wwwroot/css/Website.css",
     "inputFiles": [
-      "wwwroot/css/lib/materialize.css",
-
-      "wwwroot/css/global.css",
-      "wwwroot/css/header.css",
-      "wwwroot/css/footer.css",
-      "wwwroot/css/content.css",
-      "wwwroot/css/overlay.css"
+      "wwwroot/css/website/website.css"
     ]
   },
   {
     "outputFileName": "wwwroot/css/Website.min.css",
     "inputFiles": [
       "wwwroot/css/Website.css"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false
+  },
+  {
+    "outputFileName": "wwwroot/css/Editor.min.css",
+    "inputFiles": [
+      "wwwroot/css/Editor.css"
     ],
     "minify": {
       "enabled": true,

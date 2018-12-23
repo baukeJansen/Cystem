@@ -23,19 +23,18 @@ namespace Website.BL.LL.PageLL
 
         public async Task<PageValue> Get(string url)
         {
-            Value value;
+            PageValue value;
 
-            //using (DbCommand command = context.Database.GetDbConnection().CreateCommand())
             using (SqlCommand command = new SqlCommand()) {
                 SqlParameter param = new SqlParameter("@url", url);
 
                 command.CommandText = "GetPage @url";
                 command.Parameters.Add(param);
 
-                value = await valueQuery.GetValues(command);
+                value = (PageValue) await valueQuery.GetValues(command);
             }
 
-            return (PageValue)value;
+            return value;
         }
     }
 }

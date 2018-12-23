@@ -1,0 +1,26 @@
+﻿// 1. Primary
+// ==========================================================================
+
+$primary-color: color("blue", "darken-2") !default;
+$primary-color-light: lighten($primary-color, 15%) !default;
+$primary-color-dark: darken($primary-color, 15%) !default;
+
+// 2. Secondary
+// ==========================================================================
+$secondary-color: color("lime", "darken-2") !default;
+$success-color: color("green", "base") !default;
+$error-color: color("red", "base") !default;
+$link-color: color("lime", "darken-2") !default;
+
+
+$background-color: color("grey", "darken-2") !default;
+$background-color-light: lighten($background-color, 15%) !default;
+$background-color-dark: darken($background-color, 15%) !default;
+
+$text-color: color("grey", "lighten-3") !default;
+$tabs-text-color: #fff !default;
+$tabs-bg-color: $background-color;
+
+$table-striped-color: rgba(255, 255, 255, 0.2) !default;
+
+$button-flat-color: #fff !default;

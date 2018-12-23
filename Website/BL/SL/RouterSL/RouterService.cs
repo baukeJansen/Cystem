@@ -27,7 +27,7 @@ namespace Website.BL.SL.RouterSL
         {
             return new GenericViewModel
             {
-                Page = new PageValue { Values = new List<Value>() }
+                Values = new List<Value>()
             };
         }
 
@@ -41,18 +41,17 @@ namespace Website.BL.SL.RouterSL
             }
 
             mapper.Map(page, viewModel);
-            viewModel.Page = page;
             return viewModel;
         }
 
         public override void Store(GenericViewModel viewModel)
         {
-            eavLogic.Store(viewModel.Page);
+            eavLogic.Store(viewModel.Values);
         }
 
         public override void Delete(GenericViewModel viewModel)
         {
-            eavLogic.Delete(viewModel.Page);
+            eavLogic.Delete(viewModel.Values);
         }
     }
 }

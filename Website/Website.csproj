@@ -35,6 +35,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Update="Views\Cystem\Attribute\Edit.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Cystem\Attribute\Overview.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
     <Content Update="Views\Shared\EditorTemplates\GroupValue.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Website.Common.Models.EAV
+namespace Website.Common.Models.EAV.EAVInterfaces
 {
     public interface IIntValue
     {
