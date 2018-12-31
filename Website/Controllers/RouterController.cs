@@ -20,6 +20,7 @@ namespace Website.Controllers
             this.service = service;
         }
         
+        [HttpGet]
         public async Task<IActionResult> Route(GenericViewModel vm)
         {
             vm.Url = HttpContext.Request.Path;
@@ -36,6 +37,24 @@ namespace Website.Controllers
             {
                 return View("Error", vm);
             }
+        }
+
+        [HttpPost]
+        [ActionName("Route")]
+        public IActionResult Store(GenericViewModel vm)
+        {
+            service.Store(vm);
+
+            return Ok();
+        }
+
+        [HttpDelete]
+        [ActionName("Route")]
+        public IActionResult Delete(GenericViewModel vm)
+        {
+            //service.Delete(vm);
+
+            return Ok();
         }
     }
 }

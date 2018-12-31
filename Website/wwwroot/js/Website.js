@@ -31781,7 +31781,8 @@ jQuery.each( [ "put", "delete" ], function( i, method ) {
         var url = document.location;
         var state = event.state || {};
         var data = {
-            jsPage: true
+            CurrentLayout: $("#Layout").val(),
+            Layout: "AjaxLayout"
         };
 
         var action = new Action(Method.POPSTATE, url, data, undefined, state.actionResult || ActionResult.DISPLAY);
@@ -31795,7 +31796,8 @@ jQuery.each( [ "put", "delete" ], function( i, method ) {
         $.ajax({
             method: action.method,
             url: action.url,
-            data: action.data
+            data: action.data,
+            mimeType: 'text/html'
         }).done(function (response) {
             action.response = response;
             self._done.call(self, action);
@@ -31849,6 +31851,7 @@ jQuery.each( [ "put", "delete" ], function( i, method ) {
 
                 break;
             case ActionResult.OVERLAY:
+                action.overlay = global.Cystem.Overlay.open();
                 break;
             case ActionResult.POPUP:
                 break;
@@ -31901,14 +31904,11 @@ jQuery.each( [ "put", "delete" ], function( i, method ) {
     };
 
     Navigate.prototype._overlay = function (action) {
-        global.Cystem.Overlay.open(action.response);
+        action.overlay.setContent(action.response);
     };
 
     Navigate.prototype._close = function (action) {
-        var $overlay = action.$source.closest('.overlay-wrapper');
-        if ($overlay.length) {
-            global.Cystem.Overlay.close();
-        }
+        global.Cystem.Overlay.close();
     };
 
     Navigate.prototype._getActionResult = function ($el) {
@@ -31951,7 +31951,8 @@ jQuery.each( [ "put", "delete" ], function( i, method ) {
             });
         }
 
-        data.jsPage = true;
+        data.CurrentLayout = $("#Layout").val();
+        data.Layout = "AjaxLayout";
         data.overlay = actionResult === ActionResult.OVERLAY;
 
         return data;
@@ -31964,12 +31965,9 @@ jQuery.each( [ "put", "delete" ], function( i, method ) {
 (function (global, $) {
     var overlays = [], overlayHelper, $body, $window, $overlayTemplate;
 
-    var Overlay = function ($overlayContent) {
+    var Overlay = function () {
         var self = this;
         this.$overlay = $overlayTemplate.clone();
-
-        var $contentWrapper = this.$overlay.find('.content-wrapper');
-        $contentWrapper.append($overlayContent);
 
         var $closeButton = this.$overlay.find('.close');
 
@@ -31993,11 +31991,17 @@ jQuery.each( [ "put", "delete" ], function( i, method ) {
         this.$overlay.addClass('fade');
 
         $body.append(this.$overlay);
-        global.Cystem.init(this.$overlay[0]);
 
         setTimeout(function () {
             self.$overlay.removeClass('fade');
         }, 50);
+    };
+
+    Overlay.prototype.setContent = function (overlayContent) {
+        var $overlayContent = $(overlayContent);
+        var $contentWrapper = this.$overlay.find('.content-wrapper');
+        $contentWrapper.append($overlayContent);
+        global.Cystem.init(this.$overlay[0]);
     };
 
     Overlay.prototype.close = function () {
@@ -32028,15 +32032,17 @@ jQuery.each( [ "put", "delete" ], function( i, method ) {
         }
     };
 
-    OverlayHelper.prototype.open = function (overlayContent) {
+    OverlayHelper.prototype.open = function () {
         var self = this;
-        var overlay = new Overlay($(overlayContent));
+        var overlay = new Overlay();
         overlays.push(overlay);
         return overlay;
     };
 
     OverlayHelper.prototype.close = function () {
-        var overlay = overlays.pop();
+        if (overlays.length) {
+            overlay = overlays.pop();
+        }
         overlay.close();
     };
 

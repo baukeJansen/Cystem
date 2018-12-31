@@ -6,6 +6,6 @@ namespace Website.BL.LL.PageLL
     public interface IPageLogic
     {
         //PageValue Get(string url);
-        Task<PageValue> Get(string url);
+        Task<Value> Get(string url, int param = 0);
     }
 }

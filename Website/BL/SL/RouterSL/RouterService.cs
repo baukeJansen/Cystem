@@ -27,31 +27,39 @@ namespace Website.BL.SL.RouterSL
         {
             return new GenericViewModel
             {
-                Values = new List<Value>()
+                Value = new Value(),
+                Options = RenderOption.Display
             };
         }
 
         public override async Task<GenericViewModel> Get(GenericViewModel viewModel)
         {
-            PageValue page = await pageLogic.Get(viewModel.Url);
-
-            if (page == null)
-            {
-                throw new InvalidPageException();
-            }
-
-            mapper.Map(page, viewModel);
+            Value value = await pageLogic.Get(viewModel.Url, viewModel.Id);
+            viewModel.Value = value ?? throw new InvalidPageException();
+            viewModel.Options = RenderOption.Display;
             return viewModel;
         }
 
         public override void Store(GenericViewModel viewModel)
         {
-            eavLogic.Store(viewModel.Values);
+            List<Value> values;
+            if (viewModel.Value.AttributeId != 0)
+            {
+                values = new List<Value> { viewModel.Value };
+            }
+            else
+            {
+                values = viewModel.Value.Values;
+            }
+
+            eavLogic.Store(values);
+            context.SaveChanges();
         }
 
         public override void Delete(GenericViewModel viewModel)
         {
-            eavLogic.Delete(viewModel.Values);
+            eavLogic.Delete(viewModel.Value);
+            context.SaveChanges();
         }
     }
 }

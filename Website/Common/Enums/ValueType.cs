@@ -9,18 +9,20 @@ namespace Website.Common.Enums
     public enum ValueType
     {
         [Display(Name = "Onbekend")]
-        None,
+        None = 0,
         [Display(Name = "Int")]
-        IntValue,
+        IntValue = 1,
         [Display(Name = "String")]
-        StringValue,
-        [Display(Name = "Groep")]
-        GroupValue,
-        [Display(Name = "Gerelateerd")]
-        RelatedValue,
-        [Display(Name = "Template")]
-        TemplateValue,
-        [Display(Name = "Pagina")]
-        PageValue
+        StringValue = 2,
+        [Display(Name = "Serialized")]
+        SerializedStringValue = 8,
+        [Display(Name = "Group")]
+        GroupValue = 3,
+        [Display(Name = "Related")]
+        RelatedValue = 4,
+        [Display(Name = "Attribuut")]
+        RelatedAttribute = 6,
+        [Display(Name = "Param")]
+        ParamValue = 7
     }
 }

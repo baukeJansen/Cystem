@@ -10,6 +10,7 @@ using Website.BL.SL.DailyEggSL;
 using Website.BL.SL.DeadChickenSL;
 using Website.BL.SL.RouterSL;
 using Website.DAL;
+using Website.Views.HtmlHelpers;
 
 namespace Website
 {
@@ -32,6 +33,8 @@ namespace Website
             services.AddScoped<IRouterService, RouterService>();
             services.AddScoped<IDailyEggService, DailyEggService>();
             services.AddScoped<IDeadChickenService, DeadChickenService>();
+
+            services.AddTransient<IValueHelper, ValueHelper>();
         
             // Singleton - Only one instance is ever created and returned.
             // services.AddSingleton<IExampleService, ExampleService>();

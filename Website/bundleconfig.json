@@ -1,10 +1,22 @@
 [
   {
-    "outputFileName": "wwwroot/css/Editor.css",
+    "outputFileName": "wwwroot/css/Cystem.css",
     "inputFiles": [
       "wwwroot/css/editor/editor.css"
     ]
   },
+  {
+    "outputFileName": "wwwroot/css/Cystem.min.css",
+    "inputFiles": [
+      "wwwroot/css/Editor.css"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": false
+  },
+
   {
     "outputFileName": "wwwroot/css/Website.css",
     "inputFiles": [
@@ -22,18 +34,6 @@
     },
     "sourceMap": false
   },
-  {
-    "outputFileName": "wwwroot/css/Editor.min.css",
-    "inputFiles": [
-      "wwwroot/css/Editor.css"
-    ],
-    "minify": {
-      "enabled": true,
-      "renameLocals": true
-    },
-    "sourceMap": false
-  },
-
   {
     "outputFileName": "wwwroot/js/Website.js",
     "inputFiles": [

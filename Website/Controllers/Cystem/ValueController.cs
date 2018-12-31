@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Website.Common.Extensions;
 using Website.Common.Models.EAV;
 using Website.Common.Viewmodels;
 using Website.DAL;
@@ -32,6 +33,34 @@ namespace Website.Controllers.Cystem
         }
 
         [HttpGet]
+        public IActionResult SortedOverview(ValueOverviewViewModel vm)
+        {
+            List<Value> values = context.Values.Include(v => v.Attribute).ToList();
+            List<Value> parentValues = values.Where(v => v.GroupId == null).ToList();
+            /*List<Value> sortedValues = new List<Value>();
+
+            foreach(Value value in values)
+            {
+                if (value.GroupId == null)
+                {
+                    sortedValues.Add(value);
+                }
+                else
+                {
+                    Value parent = values.Find(v => v.Id == value.GroupId);
+
+                    if (parent.Values == null) parent.Values = new List<Value>();
+
+                    parent.Values.Add(value);
+                }
+            }*/
+
+            vm.Values = parentValues;
+
+            return View(vm);
+        }
+
+        [HttpGet]
         public IActionResult Create(ValueViewModel vm)
         {
             vm.Types = GetValueTypes();
@@ -44,7 +73,6 @@ namespace Website.Controllers.Cystem
             Value value = context.Values.Find(vm.Id);
             mapper.Map(value, vm);
             vm.Types = GetValueTypes(vm.Type);
-            vm.Type = GetValueType(value);
             return View("Edit", vm);
         }
 
@@ -53,21 +81,7 @@ namespace Website.Controllers.Cystem
         {
             if (vm.Id == 0)
             {
-                Value value;
-
-                switch (vm.Type)
-                {
-                    case ValueType.IntValue: value = new IntValue(); break;
-                    case ValueType.StringValue: value = new StringValue(); break;
-                    case ValueType.GroupValue: value = new GroupValue(); break;
-                    case ValueType.RelatedValue: value = new RelatedValue(); break;
-                    case ValueType.TemplateValue: value = new TemplateValue(); break;
-                    case ValueType.PageValue: value = new PageValue(); break;
-                    case ValueType.None: throw new Exception("No type selected for value");
-                    default: throw new Exception("Invalid value type");
-                }
-
-                value = mapper.Map(vm, value);
+                Value value = mapper.Map<Value>(vm);
                 context.Values.Add(value);
             }
             else
@@ -84,6 +98,10 @@ namespace Website.Controllers.Cystem
         [HttpDelete]
         public IActionResult Delete(ValueViewModel vm)
         {
+            Value value = new Value { Id = vm.Id };
+            context.Values.Remove(value);
+            context.SaveChanges();
+
             return Ok();
         }
 
@@ -94,31 +112,21 @@ namespace Website.Controllers.Cystem
             return View("Overview");
         }
 
-        public SelectList GetValueTypes(ValueType _default = ValueType.None)
+        public static SelectList GetValueTypes(ValueType _default = ValueType.None)
         {
             List<SelectListItem> valueTypeOptions = new List<SelectListItem>();
 
-            foreach (var value in @EnumHelper<ValueType>.GetValues(ValueType.None))
+            foreach (ValueType value in @EnumHelper<ValueType>.GetValues(ValueType.None))
             {
+
                 valueTypeOptions.Add(new SelectListItem
                 {
-                    Text = EnumHelper<ValueType>.GetDisplayValue(value),
+                    Text = value.Name(),
                     Value = value.ToString()
                 });
             }
 
             return new SelectList(valueTypeOptions, "Value", "Text", _default);
-        }
-
-        public ValueType GetValueType(Value value)
-        {
-            Type type = value.GetType();
-            if (type == typeof(IntValue)) return ValueType.IntValue;
-            if (type == typeof(StringValue)) return ValueType.StringValue;
-            if (type == typeof(GroupValue)) return ValueType.GroupValue;
-            if (type == typeof(TemplateValue)) return ValueType.TemplateValue;
-            if (type == typeof(PageValue)) return ValueType.PageValue;
-            return ValueType.None;
         }
     }
 }

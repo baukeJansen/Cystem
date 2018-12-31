@@ -1,0 +1,27 @@
+﻿@using Website.Common.Enums
+@using Website.Common.Viewmodels
+@model GenericViewModel
+
+<div class="container">
+    <div class="row">
+        <div class="col s12">
+            <h1>@Value.Display(Model, "Title")</h1>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col s12">
+            <a href="/cystem/edit-page/" class="ajax-get right btn-floating waves-effect waves-light btn-large" data-on-result="@ElementAction.Overlay"><i class='material-icons'>add</i></a>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col s12">
+            <table>
+                <tbody>
+                    @{await Value.Render(Model, "Group");}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>

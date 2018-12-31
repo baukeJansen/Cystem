@@ -12,7 +12,7 @@ namespace Website.BL.SL
         Task<TViewModel> Get(TViewModel viewModel);
 
         TViewModel Create(TViewModel viewModel);
-
+        
         void Store(TViewModel viewModel);
 
         void Delete(TViewModel viewModel);

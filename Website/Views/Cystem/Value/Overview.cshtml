@@ -1,7 +1,7 @@
 ﻿@using Website.Common.Models.EAV
-@using Website.Common.Models.EAV.EAVInterfaces
 @using Website.Common.Viewmodels
 @using Website.Common.Enums
+@using ValueType = Website.Common.Enums.ValueType
 @model ValueOverviewViewModel
 
 <div class="container">
@@ -20,22 +20,17 @@
                         <td>@value.Attribute.Label</td>
 
                         <td>
-                            @if (value is IStringValue)
+                            @switch (value.Type)
                             {
-                                @(((IStringValue)value).String)
-
-                            }
-                            @if (value is IIntValue)
-                            {
-                                @(((IIntValue)value).Int)
-                            }
-                            @if (value is ISerializedStringValue)
-                            {
-                                @(((ISerializedStringValue)value).SerializedString)
+                                case ValueType.StringValue:@value.String break;
+                                case ValueType.SerializedStringValue:@value.SerializedString break;
+                                case ValueType.IntValue: @value.Int break;
+                                case ValueType.RelatedValue: @value.Int break;
+                                case ValueType.RelatedAttribute: @value.Int break;
                             }
                         </td>
                         <td><a href="@Url.Action("Edit", "Value", new { id = value.Id, Area = "Cystem"})" class="ajax-get" data-on-result="@ElementAction.Overlay"><i class="material-icons">edit</i></a></td>
-                        <td><a href="@Url.Action("Delete", "Value", new { id = value.Id, Area = "Cystem"})" class="ajax-get" data-on-result="@ElementAction.Overlay"><i class="material-icons">delete</i></a></td>
+                        <td><a href="@Url.Action("Delete", "Value", new { id = value.Id, Area = "Cystem"})" class="ajax-delete" data-on-result="@ElementAction.None"><i class="material-icons">delete</i></a></td>
                     </tr>
                     }
                 </tbody>

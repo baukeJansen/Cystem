@@ -8,7 +8,9 @@ using System.Linq;
 using System.Threading.Tasks;
 using Website.Common.Models.EAV;
 using Website.DAL;
+using Website.Common.Enums;
 using Attribute = Website.Common.Models.EAV.Attribute;
+using ValueType = Website.Common.Enums.ValueType;
 
 namespace Website.BL.QL.ValueQL
 {
@@ -28,19 +30,7 @@ namespace Website.BL.QL.ValueQL
 
                 while (reader.HasRows && await reader.ReadAsync())
                 {
-                    Value value;
-                    string discriminator = reader.GetString(1);
-                    switch (discriminator)
-                    {
-                        case "PageValue": value = new PageValue(); break;
-                        case "TemplateValue": value = new TemplateValue(); break;
-                        case "GroupValue": value = new GroupValue(); break;
-                        case "RelatedValue": value = new RelatedValue(); break;
-                        case "StringValue": value = new StringValue(); break;
-                        case "IntValue": value = new IntValue(); break;
-                        default: throw new Exception("Invalid discriminator");
-                    }
-
+                    Value value = new Value();
                     reader.MapDataToObject(value);
                     values.Add(value);
                 }
@@ -57,10 +47,17 @@ namespace Website.BL.QL.ValueQL
             }
 
             if (values.Count == 0) return null;
-            return SortValues(values, attributes);
+
+            int param = 0;
+            if (command.Parameters.Contains("@paramPAR"))
+            {
+                param = (int)command.Parameters["@paramPAR"].Value;
+            }
+
+            return SortValues(values, attributes, param);
         }
 
-        public Value SortValues(List<Value> values, List<Attribute> attributes)
+        public Value SortValues(List<Value> values, List<Attribute> attributes, int param = 0)
         {
             foreach (Value value in values)
             {
@@ -68,7 +65,7 @@ namespace Website.BL.QL.ValueQL
 
                 if (value.GroupId.HasValue)
                 {
-                    GroupValue group = (GroupValue) values.Find(v => v.Id == value.GroupId);
+                    Value group = values.Find(v => v.Id == value.GroupId);
 
                     if (group != null)
                     {
@@ -78,10 +75,19 @@ namespace Website.BL.QL.ValueQL
                     }
                 }
 
-                if (value.GetType() == typeof(RelatedValue))
+                if (value.Type == ValueType.RelatedValue)
                 {
-                    RelatedValue related = (RelatedValue)value;
-                    related.Related = values.Find(v => v.Id == related.RelatedId);
+                    value.RelatedValue = values.Find(v => v.Id == value.Int);
+                }
+
+                if (value.Type == ValueType.RelatedAttribute)
+                {
+                    value.RelatedAttribute = attributes.Find(a => a.Id == value.Int);
+                }
+
+                if (value.Type == ValueType.ParamValue)
+                {
+                    value.RelatedValue = values.Find(v => v.Id == param);
                 }
             }
 

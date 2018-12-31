@@ -113,7 +113,8 @@
         var url = document.location;
         var state = event.state || {};
         var data = {
-            jsPage: true
+            CurrentLayout: $("#Layout").val(),
+            Layout: "AjaxLayout"
         };
 
         var action = new Action(Method.POPSTATE, url, data, undefined, state.actionResult || ActionResult.DISPLAY);
@@ -127,7 +128,8 @@
         $.ajax({
             method: action.method,
             url: action.url,
-            data: action.data
+            data: action.data,
+            mimeType: 'text/html'
         }).done(function (response) {
             action.response = response;
             self._done.call(self, action);
@@ -181,6 +183,7 @@
 
                 break;
             case ActionResult.OVERLAY:
+                action.overlay = global.Cystem.Overlay.open();
                 break;
             case ActionResult.POPUP:
                 break;
@@ -233,14 +236,11 @@
     };
 
     Navigate.prototype._overlay = function (action) {
-        global.Cystem.Overlay.open(action.response);
+        action.overlay.setContent(action.response);
     };
 
     Navigate.prototype._close = function (action) {
-        var $overlay = action.$source.closest('.overlay-wrapper');
-        if ($overlay.length) {
-            global.Cystem.Overlay.close();
-        }
+        global.Cystem.Overlay.close();
     };
 
     Navigate.prototype._getActionResult = function ($el) {
@@ -283,7 +283,8 @@
             });
         }
 
-        data.jsPage = true;
+        data.CurrentLayout = $("#Layout").val();
+        data.Layout = "AjaxLayout";
         data.overlay = actionResult === ActionResult.OVERLAY;
 
         return data;

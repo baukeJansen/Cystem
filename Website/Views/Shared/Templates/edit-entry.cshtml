@@ -1,0 +1,46 @@
+﻿@using Website.Common.Viewmodels
+@using Website.Common.Models.EAV
+@using ValueType = Website.Common.Enums.ValueType
+@using Attribute = Website.Common.Models.EAV.Attribute
+@model GenericViewModel
+
+@{
+    Value attributeReference = Model.Value;
+    Value settings = Value.Get(Model, "Settings");
+    Value template = Value.Get(Model, "Template");
+    List<Value> childAttributeReferences = Value.GetAll(attributeReference, ValueType.RelatedAttribute);
+
+    if (settings == null)
+    {
+        settings = new Value
+        {
+            String = "Value",
+            Attribute = new Attribute
+            {
+                Label = "Settings"
+            }
+        };
+        attributeReference.Values.Add(settings);
+    }
+
+    string Name = settings.String;
+}
+
+<div class="row">
+    @{await Html.EditValue(attributeReference);}
+</div>
+
+@for (int i = 0; i < childAttributeReferences.Count; i++)
+{
+    Value childAttributeReference = childAttributeReferences[i];
+
+    settings.String = Name + ".Values[" + i + "]";
+    if (childAttributeReference.Values == null)
+    {
+        childAttributeReference.Values = new List<Value>();
+    }
+    childAttributeReference.Values.Add(settings);
+    childAttributeReference.Values.Add(template);
+
+    await Value.Render(childAttributeReference, Model.Options);
+}

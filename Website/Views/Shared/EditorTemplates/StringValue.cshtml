@@ -1,6 +1,3 @@
-﻿@using Website.Common.Enums
-@using Website.Common.Models.EAV
-@model StringValue
-test
-<input type="text" value="@Model.String" />
-@*<a class="edit" href="/Cyste/edit?id=@Model.Id" data-on-result="@ElementAction.Popup">@Model.String</a>*@
+﻿@using Website.Common.Viewmodels
+@model GenericViewModel
+@Html.EditorFor(m => m.Value.String)

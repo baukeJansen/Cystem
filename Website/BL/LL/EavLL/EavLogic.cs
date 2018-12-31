@@ -41,12 +41,16 @@ namespace Website.BL.LL.EavLL
 
         public void Store(List<Value> values)
         {
-            throw new NotImplementedException();
+            List<Value> add = values.Where(v => v.Id == 0).ToList();
+            List<Value> update = values.Where(v => v.Id != 0).ToList();
+
+            context.Values.AddRange(add);
+            context.Values.UpdateRange(update);
         }
 
         public void Delete(Value value)
         {
-            context.Values.Remove((StringValue)value);
+            context.Values.Remove(value);
         }
 
         public void Delete(List<Value> values)

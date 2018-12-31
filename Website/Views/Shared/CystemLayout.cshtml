@@ -1,7 +1,7 @@
 ﻿@using HtmlHelpers
 @using Website.Common.Enums
 @using Website.Common.Viewmodels
-@using Website.Controllers
+@using _Layout = Website.Common.Enums.Layout
 @model ActionViewModel
 @inject Microsoft.AspNetCore.Hosting.IHostingEnvironment HostingEnvironment
 
@@ -16,7 +16,7 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <environment names="Development">
-        @Bundler.Unpack(HostingEnvironment.ContentRootPath, "/css/Website.css", Context)
+        @Bundler.Unpack(HostingEnvironment.ContentRootPath, "/css/Cystem.css", Context)
     </environment>
 
     <environment names="Staging,Production">
@@ -55,7 +55,7 @@
 
     <header>
         <div class="content-wrapper z-depth-1">
-            <div class="content ajax-load" data-url="@Url.Action("header", "cystem", new { Area = "" })" data-on-result="@ElementAction.Load">
+            <div class="content ajax-load" data-url="/cystem/header/" data-on-result="@ElementAction.Load">
 
             </div>
         </div>
@@ -63,16 +63,18 @@
 
     <footer>
         <div class="content-wrapper z-depth-1">
-            <div class="content ajax-load" data-url="@Url.Action("footer", "cystem", new { Area = "" })" data-on-result="@ElementAction.Load">
+            <div class="content ajax-load" data-url="/cystem/footer/" data-on-result="@ElementAction.Load">
 
             </div>
         </div>
     </footer>
 
     <div class="content-wrapper z-depth-1">
-        <div class="content ajax-load" data-url="@Url.Action("overlay", "cystem", new { Area = "" })" data-on-result="@ElementAction.Load">
+        <div class="content ajax-load" data-url="/cystem/overlay/" data-on-result="@ElementAction.Load"></div>
+    </div>
 
-        </div>
+    <div class="content-wrapper z-depth-1">
+        <div class="content ajax-load" data-url="/cystem/modal/" data-on-result="@ElementAction.Load"></div>
     </div>
 
     <environment names="Development">
@@ -91,5 +93,6 @@
     </environment>
 
     @RenderSection("Scripts", required: false)
+    @Html.Hidden("Layout", _Layout.CystemLayout)
 </body>
 </html>

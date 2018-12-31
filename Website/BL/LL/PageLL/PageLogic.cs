@@ -21,17 +21,24 @@ namespace Website.BL.LL.PageLL
             this.valueQuery = valueQuery;
         }
 
-        public async Task<PageValue> Get(string url)
+        public async Task<Value> Get(string url, int param = 0)
         {
-            PageValue value;
+            Value value;
 
             using (SqlCommand command = new SqlCommand()) {
-                SqlParameter param = new SqlParameter("@url", url);
+                command.Parameters.Add(new SqlParameter("@paramURL", url));
+                command.Parameters.Add(new SqlParameter("@paramREC", 20));
+                command.Parameters.Add(new SqlParameter("@paramRELREC", 2));
 
-                command.CommandText = "GetPage @url";
-                command.Parameters.Add(param);
+                command.CommandText = "GetPage @url = @paramURL, @recursionDepth = @paramREC, @relatedRecursionDepth = @paramRELREC";
 
-                value = (PageValue) await valueQuery.GetValues(command);
+                if (param != 0)
+                {
+                    command.Parameters.Add(new SqlParameter("@paramPAR", param));
+                    command.CommandText += ", @param = @paramPAR";
+                }
+
+                value = await valueQuery.GetValues(command);
             }
 
             return value;

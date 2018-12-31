@@ -1,12 +1,9 @@
 ﻿(function (global, $) {
     var overlays = [], overlayHelper, $body, $window, $overlayTemplate;
 
-    var Overlay = function ($overlayContent) {
+    var Overlay = function () {
         var self = this;
         this.$overlay = $overlayTemplate.clone();
-
-        var $contentWrapper = this.$overlay.find('.content-wrapper');
-        $contentWrapper.append($overlayContent);
 
         var $closeButton = this.$overlay.find('.close');
 
@@ -30,11 +27,17 @@
         this.$overlay.addClass('fade');
 
         $body.append(this.$overlay);
-        global.Cystem.init(this.$overlay[0]);
 
         setTimeout(function () {
             self.$overlay.removeClass('fade');
         }, 50);
+    };
+
+    Overlay.prototype.setContent = function (overlayContent) {
+        var $overlayContent = $(overlayContent);
+        var $contentWrapper = this.$overlay.find('.content-wrapper');
+        $contentWrapper.append($overlayContent);
+        global.Cystem.init(this.$overlay[0]);
     };
 
     Overlay.prototype.close = function () {
@@ -65,15 +68,17 @@
         }
     };
 
-    OverlayHelper.prototype.open = function (overlayContent) {
+    OverlayHelper.prototype.open = function () {
         var self = this;
-        var overlay = new Overlay($(overlayContent));
+        var overlay = new Overlay();
         overlays.push(overlay);
         return overlay;
     };
 
     OverlayHelper.prototype.close = function () {
-        var overlay = overlays.pop();
+        if (overlays.length) {
+            overlay = overlays.pop();
+        }
         overlay.close();
     };
 

@@ -31,6 +31,7 @@ namespace Website.Controllers.Cystem
         [HttpGet]
         public IActionResult Create(AttributeViewModel vm)
         {
+            vm.Types = ValueController.GetValueTypes();
             return View("Edit", vm);
         }
 
@@ -39,6 +40,7 @@ namespace Website.Controllers.Cystem
         {
             Attribute model = context.Attributes.Find(vm.Id);
             mapper.Map(model, vm);
+            vm.Types = ValueController.GetValueTypes();
             return View("Edit", vm);
         }
 
@@ -66,7 +68,7 @@ namespace Website.Controllers.Cystem
         [HttpDelete]
         public IActionResult Delete(AttributeViewModel vm)
         {
-            //context.Remove(new Attribute { Id = vm.Id });
+            context.Remove(new Attribute { Id = vm.Id });
             context.SaveChanges();
             return Ok();
         }

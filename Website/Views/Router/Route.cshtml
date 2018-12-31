@@ -1,9 +1,6 @@
 ﻿@using Website.Common.Viewmodels
-@using Website.Common.Models.EAV
 @model GenericViewModel
-
 @{
-    TemplateValue template = Model.Page;
+    @*await Html.RenderValue(Model, "Template");*@
+    await Value.Render(Model);
 }
-
-@Html.DisplayFor(m => template)

@@ -1,119 +1,181 @@
-﻿using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.Routing;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using System;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Linq.Expressions;
-using System.Text;
-using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Website.Common.Enums;
-using Website.Common.Extensions;
 using Website.Common.Models.EAV;
 using Website.Common.Viewmodels;
+using ValueType = Website.Common.Enums.ValueType;
 
 namespace Website.Views.HtmlHelpers
 {
-    public static class Cystem
+    public static partial class Cystem
     {
-        public static CystemLink<TController> CystemNavigate<TController>(this IHtmlHelper htmlHelper, Expression<Action<TController>> action) where TController : class
+        public static string Value<T>(this IHtmlHelper<T> htmlHelper, GenericViewModel vm, string label)
         {
-            return CystemNavigate(htmlHelper, action, new { }, new { });
+            if (vm == null || vm.Value == null)
+            {
+                return "";
+            }
+
+            return Value(htmlHelper, vm.Value.Values, label);
         }
 
-        public static CystemLink<TController> CystemNavigate<TController>(this IHtmlHelper htmlHelper, Expression<Action<TController>> action, object routeValues) where TController : class
-        {
-            return CystemNavigate(htmlHelper, action, routeValues, new { });
-        }
-
-        public static CystemLink<TController> CystemNavigate<TController>(this IHtmlHelper htmlHelper, Expression<Action<TController>> action, object routeValues, object htmlAttributes) where TController : class
-        {
-            return new CystemLink<TController>(htmlHelper.ViewContext, action, routeValues, htmlAttributes, LinkType.Navigate);
-        }
-
-        public static CystemLink<TController> CystemOverlay<TController>(this IHtmlHelper htmlHelper, Expression<Action<TController>> action) where TController : class
-        {
-            return CystemOverlay(htmlHelper, action, new { }, new { });
-        }
-
-        public static CystemLink<TController> CystemOverlay<TController>(this IHtmlHelper htmlHelper, Expression<Action<TController>> action, object routeValues) where TController : class
-        {
-            return CystemOverlay(htmlHelper, action, routeValues, new { });
-        }
-
-        public static CystemLink<TController> CystemOverlay<TController>(this IHtmlHelper htmlHelper, Expression<Action<TController>> action, object routeValues, object htmlAttributes) where TController : class
-        {
-            return new CystemLink<TController>(htmlHelper.ViewContext, action, routeValues, htmlAttributes, LinkType.Popup);
-        }
-
-        public static IHtmlContent DisplayValue<T>(this IHtmlHelper<T> htmlHelper, Value value)
+        public static string Value<T>(this IHtmlHelper<T> htmlHelper, Value value, string label)
         {
             if (value == null)
             {
-                return HtmlString.Empty;
+                return "";
             }
 
-            string type = value.GetType().ToString();
-            type = type.Split('.').Last();
-
-            //return HtmlHelperDisplayExtensions.DisplayFor(htmlHelper, m => value, type);
-            return htmlHelper.DisplayFor(m => value, type);
+            return Value(htmlHelper, value.Values, label);
         }
 
-        public static IHtmlContent DisplayValue<T>(this IHtmlHelper<T> htmlHelper, GenericViewModel vm, string label)
+        public static string Value<T>(this IHtmlHelper<T> htmlHelper, List<Value> values, string label)
         {
-            if (vm.Values == null)
+            if (values == null)
+                return "";
+
+            Value value = GetValue(htmlHelper, values, label);
+            if (value == null) return "";
+
+            if (value.Type == ValueType.IntValue)
+                return value.Int.ToString();
+
+            if (value.Type == ValueType.SerializedStringValue)
+                return value.SerializedString;
+
+            return value.String;
+        }
+
+        public async static Task RenderValue<T>(this IHtmlHelper<T> htmlHelper, Value value, RenderOption options = RenderOption.Display)
+        {
+            await RenderValue(htmlHelper, new GenericViewModel { Value = value, Options = options });
+        }
+
+        public async static Task RenderValue<T>(this IHtmlHelper<T> htmlHelper, GenericViewModel vm)
+        {
+            if (vm.Value == null)
             {
-                return HtmlString.Empty;
+                return;
+            }
+            string template = GetTemplate(vm.Value, vm.Options);
+            await htmlHelper.RenderPartialAsync(template, vm);
+        }
+
+        public async static Task RenderValue<T>(this IHtmlHelper<T> htmlHelper, List<Value> values, string label, RenderOption options = RenderOption.Display)
+        {
+            Value value = GetValue(htmlHelper, values, label);
+            await RenderValue(htmlHelper, value, options);
+        }
+
+        public async static Task RenderValue<T>(this IHtmlHelper<T> htmlHelper, GenericViewModel vm, string label)
+        {
+            List<Value> values = vm.Value.Values;
+
+            if (values == null)
+            {
+                return;
             }
 
-            foreach (Value value in vm.Values)
+            foreach (Value value in values)
             {
                 if (value.Attribute.Label == label)
                 {
-                    return DisplayValue(htmlHelper, value);
+                    await RenderValue(htmlHelper, value, vm.Options);
+                }
+            }
+        }
+
+        public async static Task RenderValues<T>(this IHtmlHelper<T> htmlHelper, List<Value> values, RenderOption options)
+        {
+            if (values == null)
+            {
+                return;
+            }
+
+            foreach (Value value in values)
+            {
+                await RenderValue(htmlHelper, new GenericViewModel { Value = value, Options = options });
+            }
+        }
+
+        public async static Task RenderValues<T>(this IHtmlHelper<T> htmlHelper, GenericViewModel vm)
+        {
+            await RenderValues(htmlHelper, vm.Value.Values, vm.Options);
+        }
+
+        public async static Task EditValue<T>(this IHtmlHelper<T> htmlHelper, Value value, RenderOption options = RenderOption.Display)
+        {
+            GenericViewModel vm = new GenericViewModel { Value = value, Options = options };
+            await htmlHelper.RenderPartialAsync("/Views/Shared/EditorTemplates/" + vm.Value.Type + ".cshtml", vm);
+        }
+
+        public static Value GetValue<T>(this IHtmlHelper<T> htmlHelper, GenericViewModel model, string label)
+        {
+            if (model == null || model.Value == null) return null;
+            return GetValue(htmlHelper, model.Value.Values, label);
+        }
+
+        public static Value GetValue<T>(this IHtmlHelper<T> htmlHelper, Value value, string label)
+        {
+            if (value == null) return null;
+            return GetValue(htmlHelper, value.Values, label);
+        }
+
+        public static Value GetValue<T>(this IHtmlHelper<T> htmlHelper, List<Value> values, string label)
+        {
+            if (values == null) return null;
+
+            foreach (Value value in values)
+            {
+                if (value.Attribute.Label == label)
+                {
+                    return value;
                 }
             }
 
-            return HtmlString.Empty;
+            return null;
         }
 
-        public static IHtmlContent DisplayValue<T>(this IHtmlHelper<T> htmlHelper, GenericViewModel vm,)
+        public static Value GetValue<T>(this IHtmlHelper<T> htmlHelper, List<Value> values, ValueType type)
         {
-            if (vm.Values == null)
+            if (values == null) return null;
+
+            foreach (Value value in values)
             {
-                return HtmlString.Empty;
+                if (value.Type == type)
+                {
+                    return value;
+                }
             }
 
-            HtmlContentBuilder builder = new HtmlContentBuilder();
-
-            foreach (Value value in vm.Values) {
-                IHtmlContentContainer content = (IHtmlContentContainer)DisplayValue(htmlHelper, value);
-                content.MoveTo(builder);
-            }
-
-            return builder;
+            return null;
         }
 
-        public static IHtmlContent EditValue<T>(this IHtmlHelper<T> htmlHelper, Value value)
+        private static string GetTemplate(Value value, RenderOption option = RenderOption.Display)
         {
-            if (value == null)
+            List<string> Templates = new List<string> { "page", "template" };
+            string Location = "/Views/Shared/";
+            string Option = "DisplayTemplates/";
+            string FileType = ".cshtml";
+
+            string label = value.Attribute.Label.ToLower();
+
+            if (Templates.Contains(label))
             {
-                return HtmlString.Empty;
+                return Location + Option + label + FileType;
             }
-
-            string type = value.GetType().ToString();
-            type = type.Split('.').Last();
-
-            return htmlHelper.EditorFor(m => value, type);
+            else
+            {
+                return Location + Option + value.Type.ToString() + FileType;
+            }
         }
 
-        public static IHtmlContent EditValue<T>(this IHtmlHelper<T> htmlHelper, List<Value> values, string label)
+        /*public static IHtmlContent EditValue<T>(this IHtmlHelper<T> htmlHelper, GenericViewModel vm, string label)
         {
+            List<Value> values = vm.Value.Values;
+
             if (values == null)
             {
                 return HtmlString.Empty;
@@ -128,84 +190,6 @@ namespace Website.Views.HtmlHelpers
             }
 
             return HtmlString.Empty;
-        }
-
-        public static IHtmlContent LargeButton<T>(this IHtmlHelper<T> htmlHelper, string action, string controller, ElementAction actionResult, object routeValues = null, object htmlAttributes = null)
-        {
-            IUrlHelper urlHelper = new UrlHelper(htmlHelper.ViewContext);
-            string url = urlHelper.Action(action, controller, routeValues);
-            return LargeButton(htmlHelper, url, actionResult, htmlAttributes);
-        }
-
-        public static IHtmlContent LargeButton<T>(this IHtmlHelper<T> htmlHelper, string url, ElementAction actionResult, object htmlAttributes = null)
-        {
-            TagBuilder link = new TagBuilder("a");
-            TagBuilder icon = new TagBuilder("i");
-
-            icon.AddCssClass("material-icons");
-            icon.InnerHtml.Append("add");
-
-            if (htmlAttributes != null) {
-                link.AddHtmlAttributes(htmlAttributes);
-            }
-            link.AddCssClass("ajax-get right btn-floating waves-effect waves-light btn-large");
-            link.MergeAttribute("href", url);
-            link.MergeAttribute("data-on-result", actionResult.ToString());
-            link.InnerHtml.AppendHtml(icon);
-
-            return link.Render();
-        }
-
-        public static IHtmlContent SubmitButton<T>(this IHtmlHelper<T> htmlHelper, string buttonText = "Submit", string iconName = "send", ElementAction actionResult = ElementAction.Close, string classes = "", object htmlAttributes = null)
-        {
-            TagBuilder button = new TagBuilder("button");
-            TagBuilder icon = new TagBuilder("i");
-
-            icon.AddCssClass("material-icons right");
-            icon.InnerHtml.Append(iconName);
-
-            if (htmlAttributes != null)
-            {
-                button.AddHtmlAttributes(htmlAttributes);
-            }
-
-            button.AddCssClass("ajax-submit btn waves-effect waves-light " + classes);
-            button.MergeAttribute("type", "submit");
-            button.MergeAttribute("data-on-result", actionResult.ToString());
-
-            button.InnerHtml.Append(buttonText);
-            button.InnerHtml.AppendHtml(icon);
-
-            return button.Render();
-        }
-
-        public static IHtmlContent DeleteButton<T>(this IHtmlHelper<T> htmlHelper, string action, string controller, string buttonText = "Delete", ElementAction actionResult = ElementAction.Close, object routeValues = null, object htmlAttributes = null)
-        {
-            IUrlHelper urlHelper = new UrlHelper(htmlHelper.ViewContext);
-            string url = urlHelper.Action(action, controller, routeValues);
-            return DeleteButton(htmlHelper, url, buttonText, actionResult, htmlAttributes);
-        }
-
-        public static IHtmlContent DeleteButton<T>(this IHtmlHelper<T> htmlHelper, string url, string buttonText = "Delete", ElementAction actionResult = ElementAction.Close, object htmlAttributes = null)
-        {
-            TagBuilder link = new TagBuilder("a");
-            TagBuilder icon = new TagBuilder("i");
-
-            icon.AddCssClass("material-icons right");
-            icon.InnerHtml.Append("delete");
-
-            if (htmlAttributes != null)
-            {
-                link.AddHtmlAttributes(htmlAttributes);
-            }
-            link.AddCssClass("ajax-delete btn-flat btn-outline waves-effect");
-            link.MergeAttribute("href", url);
-            link.MergeAttribute("data-on-result", actionResult.ToString());
-
-            link.InnerHtml.Append(buttonText);
-            link.InnerHtml.AppendHtml(icon);
-
-            return link.Render();
-        }
+        }*/
     }
 }

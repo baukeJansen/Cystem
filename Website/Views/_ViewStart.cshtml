@@ -1,12 +1,29 @@
 ﻿@using Website.Common.Viewmodels
+@using Website.Common.Extensions
+@using _Layout = Website.Common.Enums.Layout
 @model ActionViewModel
 
 @{
-    if (Model.JsPage)
+    if (Model is GenericViewModel)
     {
-        Layout = "_AjaxLayout";
-    } else
+        string currentLayout = Model.CurrentLayout.Name();
+        string newLayout = Value.Display((GenericViewModel)Model, "Layout");
+
+        if (currentLayout != newLayout && newLayout != null)
+        {
+            Layout = newLayout;
+        }
+    }
+
+    if (String.IsNullOrEmpty(Layout))
     {
-        Layout = "_CystemLayout";
+        if (Model.Layout != _Layout.None)
+        {
+            Layout = Model.Layout.Name();
+        }
+        else
+        {
+            Layout = "CystemLayout";
+        }
     }
 }

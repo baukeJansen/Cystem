@@ -9,6 +9,8 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.TagHelpers.Internal;
+using Microsoft.AspNetCore.Mvc.Razor.Infrastructure;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace HtmlHelpers
 {
@@ -36,9 +38,10 @@ namespace HtmlHelpers
         public static HtmlString Unpack(string baseFolder, string bundlePath, HttpContext context)
         {
             // Cache busting -> append ?v={version} as querystring
-            IMemoryCache cache = context.RequestServices.GetRequiredService<IMemoryCache>();
-            var hostingEnvironment = context.RequestServices.GetRequiredService<IHostingEnvironment>();
-            var versionProvider = new FileVersionProvider(hostingEnvironment.WebRootFileProvider, cache, context.Request.Path);
+            //IMemoryCache cache = context.RequestServices.GetRequiredService<IMemoryCache>();
+            //var hostingEnvironment = context.RequestServices.GetRequiredService<IHostingEnvironment>();
+            var versionProvider = context.RequestServices.GetRequiredService<IFileVersionProvider>();
+            //var versionProvider = new FileVersionProvider (hostingEnvironment, cache);
 
             var configFile = Path.Combine(baseFolder, "bundleconfig.json");
             var bundle = GetBundle(configFile, bundlePath);
@@ -49,8 +52,8 @@ namespace HtmlHelpers
             var inputFiles = bundle.InputFiles.Select(file => file.Substring(VirtualFolder.Length));
 
             var outputString = bundlePath.EndsWith(".js") ?
-                inputFiles.Select(inputFile => $"<script src='{versionProvider.AddFileVersionToPath("/js/" + inputFile)}'></script>") :
-                inputFiles.Select(inputFile => $"<link rel='stylesheet' href='{versionProvider.AddFileVersionToPath("/css" + inputFile)}' />");
+                inputFiles.Select(inputFile => $"<script src='{versionProvider.AddFileVersionToPath(new PathString(""), "/js/" + inputFile)}'></script>") :
+                inputFiles.Select(inputFile => $"<link rel='stylesheet' href='{versionProvider.AddFileVersionToPath(new PathString(""), "/css/" + inputFile)}' />");
 
             return new HtmlString(string.Join("\n", outputString));
         }

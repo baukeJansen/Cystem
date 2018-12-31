@@ -3,6 +3,7 @@
 @using Website.Common.Extensions
 @using Website.Controllers.Cystem
 @using Website.Common.Viewmodels
+@using Website.Common.Enums
 @using ValueType = Website.Common.Enums.ValueType
 @model ValueViewModel
 
@@ -13,9 +14,9 @@
         TagBuilder a = new TagBuilder("a");
         TagBuilder input = new TagBuilder("input");
 
-        li.AddCssClass("tab col s3");
-        if (Model.Type != ValueType.None && Model.Type != type)
-            li.AddCssClass("disabled");
+        li.AddCssClass("tab col");
+        //if (Model.Type != ValueType.None && Model.Type != type)
+        //    li.AddCssClass("disabled");
 
         a.MergeAttribute("href", "#" + type.ToString());
         if (Model.Type == type)
@@ -25,6 +26,8 @@
         input.MergeAttribute("type", "radio");
         input.MergeAttribute("name", "Type");
         input.MergeAttribute("value", type.ToString());
+        if (Model.Type == type)
+            input.MergeAttribute("checked", "checked");
 
         a.InnerHtml.AppendHtml(input);
         a.InnerHtml.Append(name);
@@ -32,8 +35,6 @@
         li.InnerHtml.AppendHtml(a);
 
         return li.Render();
-
-        /*return $@"<li class='tab col s3'><a href='#{@ValueType.IntValue}' {@(Model.Type == ValueType.IntValue ? "class=active" : "")}><input type='radio' name='Type' class='hide' value='{@ValueType.IntValue}' />Int</a></li>".Replace("'", "\"");*/
     }
 }
 
@@ -61,14 +62,12 @@
         </div>*/
 
         <div class="row">
-            <div class="col l6 s12">
+            <div class="col s12">
                 <ul class="tabs formtab">
-                    @CreateTab("String", ValueType.StringValue)
-                    @CreateTab("Int", ValueType.IntValue)
-                    @CreateTab("Group", ValueType.GroupValue)
-                    @CreateTab("Related", ValueType.RelatedValue)
-                    @CreateTab("Template", ValueType.TemplateValue)
-                    @CreateTab("Page", ValueType.PageValue)
+                    @foreach (ValueType type in Enum.GetValues(ValueType.None.GetType()))
+                    {
+                        @CreateTab(type.Name(), type);
+                    }
                 </ul>
 
             </div>
@@ -78,6 +77,11 @@
             <div id="@ValueType.StringValue" class="input-field col l6 s12">
                 @Html.EditorFor(m => m.String)
                 @Html.LabelFor(m => m.String)
+            </div>
+
+            <div id="@ValueType.SerializedStringValue" class="input-field col l6 s12">
+                @Html.EditorFor(m => m.SerializedString)
+                @Html.LabelFor(m => m.SerializedString)
             </div>
 
             <div id="@ValueType.IntValue" class="input-field col l6 s12">
@@ -94,22 +98,12 @@
                 @Html.LabelFor(m => m.Int)
             </div>
 
-            <div id="@ValueType.TemplateValue" class="input-field col l6 s12">
-                @Html.EditorFor(m => m.String)
-                @Html.LabelFor(m => m.String)
+            <div id="@ValueType.RelatedAttribute" class="input-field col l6 s12">
+                @Html.EditorFor(m => m.Int)
+                @Html.LabelFor(m => m.Int)
             </div>
 
-            <div id="@ValueType.PageValue">
-                <div class="input-field col l6 s12">
-
-                    @Html.EditorFor(m => m.String)
-                    @Html.LabelFor(m => m.String)
-                </div>
-
-                <div class="input-field col l6 s12">
-                    @Html.EditorFor(m => m.SerializedString)
-                    @Html.LabelFor(m => m.SerializedString)
-                </div>
+            <div id="@ValueType.ParamValue" class="input-field col l6 s12">
             </div>
         </div>
 
@@ -135,7 +129,7 @@
                 }
                 else
                 {
-                    @Html.DeleteButton(Url.Action<ValueController>(c => c.Delete(null), new { Id = Model.Id }))
+                    @Html.DeleteButton(Url.Action<ValueController>(c => c.Delete(null), new { Id = Model.Id }), null, "Delete", ElementAction.Close, new { @class = "btn-outline" })
                     @Html.SubmitButton("Update")
                 }
             </div>

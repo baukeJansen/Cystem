@@ -8,13 +8,13 @@ namespace Website.Common.Enums
 {
     public enum EggType
     {
-        [Display(Name = "Normaal")]
+        [Display(Description = "Normaal")]
         Standard,
-        [Display(Name = "2e soort")]
+        [Display(Description = "2e soort")]
         SecondKind,
-        [Display(Name = "Verkoop")]
+        [Display(Description = "Verkoop")]
         Sale,
-        [Display(Name = "Anders")]
+        [Display(Description = "Anders")]
         Other
     }
 }

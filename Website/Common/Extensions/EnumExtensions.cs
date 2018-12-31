@@ -9,7 +9,7 @@ namespace Website.Common.Extensions
 {
     public static class EnumExtensions
     {
-        public static string Description(this Enum value)
+        public static string Name(this Enum value)
         {
             // get attributes  
             var field = value.GetType().GetField(value.ToString());
@@ -25,7 +25,7 @@ namespace Website.Common.Extensions
             }
 
             // return description
-            return displayAttribute?.Description ?? "Description Not Found";
+            return displayAttribute?.Name ?? "Description Not Found";
         }
     }
 }

@@ -1,0 +1,108 @@
+﻿@using Website.Common.Models.EAV
+@using Website.Common.Viewmodels
+@using Website.Common.Enums
+@using Microsoft.AspNetCore.Html
+@using ValueType = Website.Common.Enums.ValueType
+@model ValueOverviewViewModel
+
+@{ 
+    Func<Value, IHtmlContent> RenderValue = @<div></div>;
+}
+
+@{
+    RenderValue = @<div class="block-row">
+        <div class="block v-id">@item.Id</div>
+        <div class="block v-label"><a class="ajax-get" href="/cystem/attribute/edit?id=@item.Attribute.Id" data-on-result="@ElementAction.Overlay"><span class="v-attribute">@item.Attribute.Label</span></a></div>
+
+        <div class="block v-item">
+            @switch (item.Type)
+            {
+                case ValueType.StringValue:@item.String break;
+                case ValueType.SerializedStringValue:@item.SerializedString break;
+                case ValueType.IntValue: @item.Int break;
+                case ValueType.GroupValue:
+                    @: {group}
+                    break;
+                case ValueType.RelatedValue: 
+                    <a class="ajax-get" href="/cystem/value/edit?id=@item.Int" data-on-result="@ElementAction.Overlay"><span class="v-related-value">@item.Int</span></a>
+                    break;
+                case ValueType.RelatedAttribute: 
+                    <a class="ajax-get" href="/cystem/attribute/edit?id=@item.Int" data-on-result="@ElementAction.Overlay"><span class="v-related-attribute">@item.Int</span></a>
+                    break;
+                case ValueType.ParamValue:
+                    @:{param}
+                    break;
+            }
+        </div>
+
+        <div class="block v-icons">
+            <div class="block"><a href="@Url.Action("Edit", "Value", new { id = item.Id, Area = "Cystem"})" class="ajax-get" data-on-result="@ElementAction.Overlay"><i class="material-icons">edit</i></a></div>
+            <div class="block"><a href="@Url.Action("Delete", "Value", new { id = item.Id, Area = "Cystem"})" class="ajax-delete" data-on-result="@ElementAction.None"><i class="material-icons">delete</i></a></div>
+        </div>
+        
+        @if (item.Values != null) {
+            foreach (Value value in item.Values) {
+                <div class="indent">@RenderValue(value)</div>
+            }
+        }
+     </div>;
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col s12">
+            <h1>Values overview</h1>
+
+            @Html.LargeButton(Url.Action("create", "value", new { Area = "Cystem" }), ElementAction.Overlay)
+
+            <div>
+                @foreach (Value value in Model.Values)
+                {
+                    @RenderValue(value)
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .indent {
+        padding-left: 20px;
+    }
+    .block {
+        display: inline-block;
+        min-height: 32px;
+        padding: 0 4px;
+        vertical-align: bottom;
+        border-bottom: 1px solid #555;
+    }
+
+    .block-row {
+        padding-bottom: 8px;
+    }
+
+    .v-label {
+        width: 100px;
+    }
+
+    .v-item {
+        width: 400px;
+    }
+
+    .v-icons {
+        width: 80px;
+        padding: 0;
+    }
+
+    .v-attribute {
+        color: white;
+    }
+
+    .v-related-value {
+        color: #1976D2;
+    }
+
+    .v-attribute:hover, .v-related-value:hover, .v-related-attribute:hover {
+        text-decoration: underline;
+    }
+</style>
