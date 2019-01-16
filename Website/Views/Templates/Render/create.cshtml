@@ -1,0 +1,50 @@
+﻿@using Website.Common.Viewmodels
+@using Website.Common.Models.EAV
+@using Attribute = Website.Common.Models.EAV.Attribute
+@model GenericViewModel
+@inject IValueHelper Value
+
+@{
+    Value attributes = Value.Get(Model, "Entry");
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col s12">
+            <h2>@await Render.Value(Model, "Title")</h2>
+        </div>
+    </div>
+
+    @if (attributes != null)
+    {
+        @using (Html.BeginForm(null, null, new { }, FormMethod.Post, true, new { action = "/cystem/edit-page/" }))
+        {
+            @Html.Hidden("Value.Type", "RelatedValue")
+            @Html.Hidden("Value.AttributeId", 37)
+            @Html.Hidden("Value.GroupId", 76)
+
+            @Html.Hidden("Value.Values[0].Type", "RelatedValue")
+            @Html.Hidden("Value.Values[0].Int", 64)
+            @Html.Hidden("Value.Values[0].AttributeId", 25)
+
+            Value settings = new Value
+            {
+                String = "Value.RelatedValue",
+                Attribute = new Attribute
+                {
+                    Label = "Settings"
+                }
+            };
+
+            attributes.Values.Add(settings);
+
+            @await Render.Value(attributes, Model.Options)
+
+            <div class="row">
+                <div class="col s12 right-align">
+                    @await Render.SubmitButton("Create", "add")
+                </div>
+            </div>
+        }
+    }
+</div>

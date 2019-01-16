@@ -1,0 +1,44 @@
+﻿// 1. Primary
+// ==========================================================================
+$primary-color: color('amber', 'darken-3');
+$primary-color-light: lighten($primary-color, 15%);
+$primary-color-dark: darken($primary-color, 15%);
+$on-primary-color: color('shades', 'black');
+
+// 2. Secondary
+// ==========================================================================
+$secondary-color: color('blue', 'darken-2');
+$secondary-color-light: lighten($secondary-color, 15%);
+$secondary-color-dark: darken($secondary-color, 15%);
+$on-secondary-color: color('shades', 'black');
+
+// 3. Background
+// ==========================================================================
+$background-color: color('grey', 'darken-3');
+$background-color-light: lighten($background-color, 15%);
+$background-color-dark: darken($background-color, 15%);
+$on-background-color: color('grey', 'lighten-3');
+
+// 4. Surface
+// ==========================================================================
+$surface-color: color('grey', 'darken-2');
+$surface-color-light: lighten($surface-color, 15%);
+$surface-color-dark: darken($surface-color, 15%);
+$on-surface-color: color('shades', 'white');
+
+// 5. Actions
+// ==========================================================================
+$success-color: color('green', 'base');
+$on-succes-color: color('shades', 'white');
+$error-color: color('red', 'base');
+$on-error-color: color('shades', 'white');
+$link-color: color('amber', 'darken-2');
+
+
+// 6. Other
+// ==========================================================================
+$text-color: $on-background-color;
+$tabs-bg-color: $background-color;
+$tabs-text-color: $on-background-color;
+$table-striped-color: rgba(255, 255, 255, .2);
+$button-flat-color: color('shades', 'white');

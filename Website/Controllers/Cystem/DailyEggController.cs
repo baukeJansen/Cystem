@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Website.BL.SL.DailyEggSL;
 using Website.Common.Viewmodels;
+using Website.Views.HtmlHelpers;
 
 namespace Website.Controllers.Cystem
 {
@@ -10,7 +11,7 @@ namespace Website.Controllers.Cystem
     {
         private readonly IDailyEggService service;
 
-        public DailyEggController(IDailyEggService service)
+        public DailyEggController(IDailyEggService service, IValueHelper valueHelper) : base(valueHelper)
         {
             this.service = service;
         }

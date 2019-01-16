@@ -1,7 +1,0 @@
-﻿@using Website.Common.Viewmodels
-@using Website.Common.Models.EAV
-@model GenericViewModel
-@{ 
-    List<Value> cards = Value.GetAll(Model, "Card");
-    await Value.RenderList(cards, Model.Options);
-}

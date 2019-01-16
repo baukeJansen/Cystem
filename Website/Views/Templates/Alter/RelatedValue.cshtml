@@ -1,0 +1,21 @@
+﻿@using Website.Common.Viewmodels
+@using Website.Common.Models.EAV
+@using Website.Common.Enums
+@model GenericViewModel
+@inject IValueHelper Value
+
+<li class="collection-item related">
+    <div class="row">
+        @if (Model.Value.RelatedValue != null)
+        {
+            <div class="col s2 l1">@Model.Value.RelatedValue.Attribute.Label:</div>
+            <div class="col s8 l10">@Value.Display(Model.Value.RelatedValue)</div>
+        }
+
+        <div class="col s2 l1">
+            @await Render.EditButton("/cystem/edit-value/", new { id = Model.Value.Id }, "", "edit", Model.Options, ElementAction.Overlay, new { @class = "right" })
+        </div>
+    </div>
+
+    @{ await Cystem.DisplayChilds(Model.Value, DisplaySetting.Alter); }
+</li>

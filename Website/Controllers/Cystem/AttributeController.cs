@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Website.Common.Models.EAV;
 using Website.Common.Viewmodels;
 using Website.DAL;
+using Website.Views.HtmlHelpers;
 
 namespace Website.Controllers.Cystem
 {
@@ -15,7 +16,7 @@ namespace Website.Controllers.Cystem
         private readonly DataContext context;
         private readonly IMapper mapper;
 
-        public AttributeController(DataContext context, IMapper mapper)
+        public AttributeController(DataContext context, IMapper mapper, IValueHelper valueHelper) : base(valueHelper)
         {
             this.context = context;
             this.mapper = mapper;

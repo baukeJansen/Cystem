@@ -1,0 +1,17 @@
+﻿@using Website.Common.Viewmodels
+@using Website.Common.Models.EAV
+@inject IAttributeHelper AttributeHelper
+@model GenericViewModel
+
+<li class="collection-item related-attribute">
+    @if (Model.Value.RelatedAttribute != null)
+    {
+        <div class="row">
+            <div class="col s12 l12">
+                @Model.Value.RelatedAttribute.Label
+            </div>
+        </div>
+    }
+
+    @{ await Cystem.DisplayChilds(Model.Value); }
+</li>

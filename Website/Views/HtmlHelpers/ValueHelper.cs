@@ -1,4 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿
+
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,15 +12,16 @@ using ValueType = Website.Common.Enums.ValueType;
 
 namespace Website.Views.HtmlHelpers
 {
-    public class ValueHelper : IValueHelper, IViewContextAware
-    {   
-        private readonly List<string> TemplateAttributes = new List<string> { "page", "overview", "edit", "group" };
-        private readonly IHtmlHelper Html;
-
-        public ValueHelper(IHtmlHelper htmlHelper)
-        {
-            Html = htmlHelper;
-        }
+    public class ValueHelper : IValueHelper
+    {
+        public const string TemplateLocation = "/Views/Templates/";
+        public const string RenderPath = "Render/";
+        public const string DisplayPath = "Display/";
+        public const string EditPath = "Edit/";
+        public const string AlterPath = "Alter/";
+        public const string JsonPath = "Json/";
+        public const string XmlPath = "Xml/";
+        public const string FileType = ".cshtml";
 
         /* Get */
         public Value Get(GenericViewModel model, string label)
@@ -122,64 +125,24 @@ namespace Website.Views.HtmlHelpers
         {
             if (value == null) return "";
 
-            if (value.Type == ValueType.IntValue)
-                return value.Int.ToString();
-
-            if (value.Type == ValueType.SerializedStringValue)
-                return value.SerializedString;
-
-            return value.String;
-        }
-
-        /* Render */
-        public async Task Render(GenericViewModel vm, string label)
-        {
-            Value value = Get(vm, label);
-            await Render(value, vm.Options);
-        }
-
-        public async Task Render(List<Value> values, string label, RenderOption options = RenderOption.Display)
-        {
-            Value value = Get(values, label);
-            await Render(value, options);
-        }
-
-        public async Task Render(Value value, string label, RenderOption options = RenderOption.Display)
-        {
-            Value renderValue = Get(value, label);
-            await Render(renderValue, options);
-        }
-
-        public async Task Render(Value value, RenderOption options = RenderOption.Display)
-        {
-            await Render(new GenericViewModel { Value = value, Options = options });
-        }
-
-        public async Task Render(GenericViewModel vm)
-        {
-            if (vm.Value == null)
+            switch(value.Type)
             {
-                return;
+                default:
+                case ValueType.StringValue:
+                    return value.String;
+
+                case ValueType.SerializedStringValue:
+                    return value.SerializedString;
+
+                case ValueType.IntValue:
+                    return value.Int.ToString();
+
+                case ValueType.RelatedValue:
+                    return value.Int.ToString();
+
+                case ValueType.RelatedAttribute:
+                    return value.Int.ToString();
             }
-            string template = GetTemplate(vm.Value, vm.Options);
-            await Html.RenderPartialAsync(template, vm);
-        }
-
-        /* Render list */
-        public async Task RenderList(List<Value> values, RenderOption options = RenderOption.Display)
-        {
-            if (values == null) return;
-
-            foreach (Value value in values)
-            {
-                await Render(value, options);
-            }
-        }
-
-        public async Task RenderList(GenericViewModel vm)
-        {
-            if (vm == null || vm.Value == null) return;
-            await RenderList(vm.Value.Values, vm.Options);
         }
 
         /* Merge */
@@ -188,7 +151,7 @@ namespace Website.Views.HtmlHelpers
             if (target == null || source == null || source.RelatedValue == null || source.RelatedValue.Values == null)
                 return;
 
-            MergeEditorValues(source.RelatedValue, GetAll(target, "Attribute"));
+            MergeEditorValues(source.RelatedValue, new List<Value> { target });
         }
 
         private void MergeEditorValues(Value source, List<Value> targets)
@@ -209,35 +172,6 @@ namespace Website.Views.HtmlHelpers
                         MergeEditorValues(sourceChild, target.Values);
                     }
                 }
-            }
-        }
-
-        private string GetTemplate(Value value, RenderOption option = RenderOption.Display)
-        {
-            string Location = "/Views/Shared/";
-            string Option = "Templates/";
-            string FileType = ".cshtml";
-
-            Value template = Get(value, "Template");
-            if (template != null)
-            {
-                return Location + Option + template.String + FileType;
-            }
-
-            string label = value.Attribute.Label.ToLower();
-            if (TemplateAttributes.Contains(label))
-            {
-                return Location + Option + label + FileType;
-            }
-
-            return Location + Option + "default" + FileType;
-        }
-
-        void IViewContextAware.Contextualize(ViewContext viewContext)
-        {
-            if (Html is IViewContextAware)
-            {
-                ((IViewContextAware)Html).Contextualize(viewContext);
             }
         }
     }

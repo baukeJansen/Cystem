@@ -3,6 +3,7 @@
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,12 +16,24 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\src\tmp\common\actionresult.ts" />
+    <Content Remove="wwwroot\src\tmp\common\method.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Remove="wwwroot\src\js\common\actionresult.ts" />
+    <None Remove="wwwroot\src\js\common\method.ts" />
+    <None Remove="wwwroot\src\js\service\iservicemanager.ts" />
+    <None Remove="wwwroot\src\js\overlayhelper.ts" />
+    <None Remove="wwwroot\src\js\servicemanager.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="AspNet.Mvc.TypedRouting" Version="1.3.0" />
     <PackageReference Include="AutoMapper" Version="8.0.0" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="6.0.0" />
     <PackageReference Include="BuildBundlerMinifier" Version="2.8.391" />
     <PackageReference Include="FastMember.NetCore" Version="1.1.0" />
-    <PackageReference Include="Grunt" Version="0.1.13" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.0">
@@ -33,6 +46,148 @@
 
   <ItemGroup>
     <Folder Include="Common\Interfaces\" />
+    <Folder Include="wwwroot\src\img\" />
+    <Folder Include="Views\Shared\DisplayTemplates\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="wwwroot\src\css\cystem.scss" />
+    <None Include="wwwroot\src\css\cystem\_content.scss" />
+    <None Include="wwwroot\src\css\cystem\_variables_cystem.scss" />
+    <None Include="wwwroot\src\css\cystem\_footer.scss" />
+    <None Include="wwwroot\src\css\cystem\_global.scss" />
+    <None Include="wwwroot\src\css\cystem\_header.scss" />
+    <None Include="wwwroot\src\css\cystem\_mixins.scss" />
+    <None Include="wwwroot\src\css\cystem\_modal.scss" />
+    <None Include="wwwroot\src\css\cystem\_overlay.scss" />
+    <None Include="wwwroot\src\css\cystem\_variables.scss" />
+    <None Include="wwwroot\src\css\cystem\_variables-website.scss" />
+    <None Include="wwwroot\src\css\materialize\components\forms\_checkboxes.scss" />
+    <None Include="wwwroot\src\css\materialize\components\forms\_file-input.scss" />
+    <None Include="wwwroot\src\css\materialize\components\forms\_forms.scss" />
+    <None Include="wwwroot\src\css\materialize\components\forms\_input-fields.scss" />
+    <None Include="wwwroot\src\css\materialize\components\forms\_radio-buttons.scss" />
+    <None Include="wwwroot\src\css\materialize\components\forms\_range.scss" />
+    <None Include="wwwroot\src\css\materialize\components\forms\_select.scss" />
+    <None Include="wwwroot\src\css\materialize\components\forms\_switches.scss" />
+    <None Include="wwwroot\src\css\materialize\components\_badges.scss" />
+    <None Include="wwwroot\src\css\materialize\components\_buttons.scss" />
+    <None Include="wwwroot\src\css\materialize\components\_cards.scss" />
+    <None Include="wwwroot\src\css\materialize\components\_carousel.scss" />
+    <None Include="wwwroot\src\css\materialize\components\_chips.scss" />
+    <None Include="wwwroot\src\css\materialize\components\_collapsible.scss" />
+    <None Include="wwwroot\src\css\materialize\components\_color-classes.scss" />
+    <None Include="wwwroot\src\css\materialize\components\_color-variables.scss" />
+    <None Include="wwwroot\src\css\materialize\components\_datepicker.scss" />
+    <None Include="wwwroot\src\css\materialize\components\_dropdown.scss" />
+    <None Include="wwwroot\src\css\materialize\components\_global.scss" />
+    <None Include="wwwroot\src\css\materialize\components\_grid.scss" />
+    <None Include="wwwroot\src\css\materialize\components\_icons-material-design.scss" />
+    <None Include="wwwroot\src\css\materialize\components\_materialbox.scss" />
+    <None Include="wwwroot\src\css\materialize\components\_modal.scss" />
+    <None Include="wwwroot\src\css\materialize\components\_navbar.scss" />
+    <None Include="wwwroot\src\css\materialize\components\_normalize.scss" />
+    <None Include="wwwroot\src\css\materialize\components\_preloader.scss" />
+    <None Include="wwwroot\src\css\materialize\components\_pulse.scss" />
+    <None Include="wwwroot\src\css\materialize\components\_sidenav.scss" />
+    <None Include="wwwroot\src\css\materialize\components\_slider.scss" />
+    <None Include="wwwroot\src\css\materialize\components\_table_of_contents.scss" />
+    <None Include="wwwroot\src\css\materialize\components\_tabs.scss" />
+    <None Include="wwwroot\src\css\materialize\components\_tapTarget.scss" />
+    <None Include="wwwroot\src\css\materialize\components\_timepicker.scss" />
+    <None Include="wwwroot\src\css\materialize\components\_toast.scss" />
+    <None Include="wwwroot\src\css\materialize\components\_tooltip.scss" />
+    <None Include="wwwroot\src\css\materialize\components\_transitions.scss" />
+    <None Include="wwwroot\src\css\materialize\components\_typography.scss" />
+    <None Include="wwwroot\src\css\materialize\components\_variables.scss" />
+    <None Include="wwwroot\src\css\materialize\components\_waves.scss" />
+    <None Include="wwwroot\src\css\materialize\_materialize.scss" />
+    <None Include="wwwroot\src\css\website.scss" />
+    <None Include="wwwroot\src\js\action.js" />
+    <None Include="wwwroot\src\js\action.js.map" />
+    <None Include="wwwroot\src\js\action.ts" />
+    <None Include="wwwroot\src\js\common\actionresult.js" />
+    <None Include="wwwroot\src\js\common\actionresult.js.map" />
+    <None Include="wwwroot\src\js\common\method.js" />
+    <None Include="wwwroot\src\js\common\method.js.map" />
+    <None Include="wwwroot\src\js\common\servicename.js" />
+    <None Include="wwwroot\src\js\common\servicename.js.map" />
+    <None Include="wwwroot\src\js\common\servicename.ts" />
+    <None Include="wwwroot\src\js\cystem.js" />
+    <None Include="wwwroot\src\js\cystem.js.map" />
+    <None Include="wwwroot\src\js\cystem.ts" />
+    <None Include="wwwroot\src\js\modalhelper.js" />
+    <None Include="wwwroot\src\js\modalhelper.js.map" />
+    <None Include="wwwroot\src\js\modalhelper.ts" />
+    <None Include="wwwroot\src\js\navigate.js" />
+    <None Include="wwwroot\src\js\navigate.js.map" />
+    <None Include="wwwroot\src\js\navigate.ts" />
+    <None Include="wwwroot\src\js\overlay.js" />
+    <None Include="wwwroot\src\js\overlay.js.map" />
+    <None Include="wwwroot\src\js\overlay.ts" />
+    <None Include="wwwroot\src\js\overlayhelper.js" />
+    <None Include="wwwroot\src\js\overlayhelper.js.map" />
+    <None Include="wwwroot\src\js\service\iservice.js" />
+    <None Include="wwwroot\src\js\service\iservice.js.map" />
+    <None Include="wwwroot\src\js\service\iservice.ts" />
+    <None Include="wwwroot\src\js\service\iservicemanager.js" />
+    <None Include="wwwroot\src\js\service\iservicemanager.js.map" />
+    <None Include="wwwroot\src\js\service\servicemanager.js" />
+    <None Include="wwwroot\src\js\service\servicemanager.js.map" />
+    <None Include="wwwroot\src\js\service\servicemanager.ts" />
+    <None Include="wwwroot\src\lib\chart.js" />
+    <None Include="wwwroot\src\lib\materialize.js" />
+    <None Include="wwwroot\src\lib\moment.js" />
+    <None Include="wwwroot\src\tmp\chart.js" />
+    <None Include="wwwroot\src\tmp\chart.ts" />
+    <None Include="wwwroot\src\tmp\common\actionresult.js" />
+    <None Include="wwwroot\src\tmp\common\actionresult.ts" />
+    <None Include="wwwroot\src\tmp\common\method.js" />
+    <None Include="wwwroot\src\tmp\common\method.ts" />
+    <None Include="wwwroot\src\tmp\config\ioc_config.js" />
+    <None Include="wwwroot\src\tmp\config\ioc_config.ts" />
+    <None Include="wwwroot\src\tmp\constants\identifiers.js" />
+    <None Include="wwwroot\src\tmp\constants\identifiers.ts" />
+    <None Include="wwwroot\src\tmp\constants\tags.js" />
+    <None Include="wwwroot\src\tmp\constants\tags.ts" />
+    <None Include="wwwroot\src\tmp\cystem.js" />
+    <None Include="wwwroot\src\tmp\cystem.ts" />
+    <None Include="wwwroot\src\tmp\entities\index.js" />
+    <None Include="wwwroot\src\tmp\entities\index.ts" />
+    <None Include="wwwroot\src\tmp\entities\modal.js" />
+    <None Include="wwwroot\src\tmp\entities\modal.ts" />
+    <None Include="wwwroot\src\tmp\formtab.js" />
+    <None Include="wwwroot\src\tmp\formtab.ts" />
+    <None Include="wwwroot\src\tmp\init.js" />
+    <None Include="wwwroot\src\tmp\init.ts" />
+    <None Include="wwwroot\src\tmp\interfaces\imodal.js" />
+    <None Include="wwwroot\src\tmp\interfaces\imodal.ts" />
+    <None Include="wwwroot\src\tmp\interfaces\index.js" />
+    <None Include="wwwroot\src\tmp\interfaces\index.ts" />
+    <None Include="wwwroot\src\tmp\materialize.js" />
+    <None Include="wwwroot\src\tmp\materialize.ts" />
+    <None Include="wwwroot\src\tmp\navigate.js" />
+    <None Include="wwwroot\src\tmp\navigate.ts" />
+    <None Include="wwwroot\src\tmp\overlay.js" />
+    <None Include="wwwroot\src\tmp\overlay.ts" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <TypeScriptCompile Include="wwwroot\src\js\common\actionresult.ts" />
+    <TypeScriptCompile Include="wwwroot\src\js\common\method.ts" />
+    <TypeScriptCompile Include="wwwroot\src\js\service\servicemanager.ts" />
+    <TypeScriptCompile Include="wwwroot\src\js\service\iservicemanager.ts" />
+    <TypeScriptCompile Include="wwwroot\src\js\overlayhelper.ts" />
+    <TypeScriptCompile Include="wwwroot\src\tmp\chart.ts" />
+    <TypeScriptCompile Include="wwwroot\src\tmp\common\actionresult.ts" />
+    <TypeScriptCompile Include="wwwroot\src\tmp\common\method.ts" />
+    <TypeScriptCompile Include="wwwroot\src\tmp\cystem.ts" />
+    <TypeScriptCompile Include="wwwroot\src\tmp\formtab.ts" />
+    <TypeScriptCompile Include="wwwroot\src\tmp\init.ts" />
+    <TypeScriptCompile Include="wwwroot\src\tmp\materialize.ts" />
+    <TypeScriptCompile Include="wwwroot\src\tmp\entities\modal.ts" />
+    <TypeScriptCompile Include="wwwroot\src\tmp\navigate.ts" />
+    <TypeScriptCompile Include="wwwroot\src\tmp\overlay.ts" />
   </ItemGroup>
 
   <ItemGroup>
@@ -45,24 +200,29 @@
     <Content Update="Views\Cystem\Value\SortedOverview.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
-    <Content Update="Views\Shared\EditorTemplates\GroupValue.cshtml">
+    <Content Update="Views\Templates\Render\overlay.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
-    <Content Update="Views\Shared\EditorTemplates\IntValue.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
-    <Content Update="Views\Shared\EditorTemplates\StringValue.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
-    <Content Update="Views\Shared\EditorTemplates\TemplateValue.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
-    <Content Update="Views\Shared\Templates\overlay.cshtml">
-      <Pack>$(IncludeRazorContentInPack)</Pack>
-    </Content>
-    <Content Update="Views\Shared\Templates\footer.cshtml">
+    <Content Update="Views\Templates\Render\footer.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
   </ItemGroup>
+
+  <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
+    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TypeScriptLib>ES6</TypeScriptLib>
+    <TypeScriptJSXEmit>None</TypeScriptJSXEmit>
+    <TypeScriptModuleKind>System</TypeScriptModuleKind>
+    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
+    <TypeScriptRemoveComments>True</TypeScriptRemoveComments>
+    <TypeScriptOutFile>test.js</TypeScriptOutFile>
+    <TypeScriptOutDir />
+    <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
+    <TypeScriptNoEmitOnError>False</TypeScriptNoEmitOnError>
+    <TypeScriptSourceMap>True</TypeScriptSourceMap>
+    <TypeScriptMapRoot>C:\dev\Website\Website\wwwroot\js</TypeScriptMapRoot>
+    <TypeScriptSourceRoot>C:\dev\Website\Website\Static\js</TypeScriptSourceRoot>
+  </PropertyGroup>
 
 </Project>

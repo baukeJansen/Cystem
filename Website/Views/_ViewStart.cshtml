@@ -1,29 +1,24 @@
 ﻿@using Website.Common.Viewmodels
 @using Website.Common.Extensions
-@using _Layout = Website.Common.Enums.Layout
+@using Website.Common.Enums
 @model ActionViewModel
 
 @{
-    if (Model is GenericViewModel)
-    {
-        string currentLayout = Model.CurrentLayout.Name();
-        string newLayout = Value.Display((GenericViewModel)Model, "Layout");
+    Layout = Model.Layout.Name();
 
-        if (currentLayout != newLayout && newLayout != null)
-        {
-            Layout = newLayout;
-        }
-    }
-
-    if (String.IsNullOrEmpty(Layout))
+    if (Model.GetType() == typeof(GenericViewModel))
     {
-        if (Model.Layout != _Layout.None)
+        GenericViewModel model = (GenericViewModel)Model;
+
+        switch(model.Options)
         {
-            Layout = Model.Layout.Name();
-        }
-        else
-        {
-            Layout = "CystemLayout";
+            case DisplaySetting.Json:
+                Layout = "DataLayout";
+                break;
+
+            case DisplaySetting.Xml:
+                Layout = "DataLayout";
+                break;
         }
     }
 }

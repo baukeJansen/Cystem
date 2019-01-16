@@ -4,8 +4,11 @@ using Microsoft.Extensions.Primitives;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
+using Website.Common.Enums;
 using Website.Common.Viewmodels;
+using Website.Views.HtmlHelpers;
 
 namespace Website.Controllers
 {
@@ -14,6 +17,13 @@ namespace Website.Controllers
 
     public class JsActionController<TViewModel> : Controller where TViewModel : ActionViewModel
     {
+        private readonly IValueHelper valueHelper;
+
+        public JsActionController(IValueHelper valueHelper)
+        {
+            this.valueHelper = valueHelper;
+        }
+
         public IActionResult Succes()
         {
             return Ok("Succes");
@@ -29,16 +39,58 @@ namespace Website.Controllers
             return base.View(viewName);
         }
 
-        public ViewResult View<T>(T viewModel) where T : ActionViewModel
+        public IActionResult View<T>(T viewModel) where T : ActionViewModel
         {
             SetupView(viewModel);
-            return base.View(viewModel);
+            return LayoutRedirect(viewModel) ?? base.View(viewModel);
         }
 
-        public ViewResult View<T>(string viewName, T viewModel) where T : ActionViewModel
+        public IActionResult View<T>(string viewName, T viewModel) where T : ActionViewModel
         {
             SetupView(viewModel);
-            return base.View(viewName, viewModel);
+            return LayoutRedirect(viewModel) ?? base.View(viewName, viewModel);
+        }
+
+        private IActionResult LayoutRedirect(ActionViewModel model)
+        {
+            if (model == null) return null;
+            Layouts currentLayout = model.CurrentLayout;
+
+            if (model is GenericViewModel)
+            {
+                if (Enum.TryParse(valueHelper.Display((GenericViewModel)model, "Layout"), true, out Layouts newLayout))
+                {
+                    if (newLayout != Layouts.None)
+                    {
+                        if (currentLayout == Layouts.None)
+                        {
+                            currentLayout = newLayout;
+                        }
+
+                        if (newLayout != currentLayout)
+                        {
+                            if (model.Layout == Layouts.AjaxLayout)
+                            {
+                                return StatusCode((int)HttpStatusCode.ResetContent);
+                            }
+
+                            currentLayout = newLayout;
+                        }
+                    }
+                }
+            }
+
+            if (model.Layout == Layouts.None)
+            {
+                model.Layout = currentLayout;
+            }
+
+            if (model.Layout == Layouts.None)
+            {
+                model.Layout = Layouts.CystemLayout;
+            }
+
+            return null;
         }
 
         private void SetupView(ActionViewModel viewModel)

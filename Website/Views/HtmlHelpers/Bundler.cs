@@ -52,7 +52,8 @@ namespace HtmlHelpers
             var inputFiles = bundle.InputFiles.Select(file => file.Substring(VirtualFolder.Length));
 
             var outputString = bundlePath.EndsWith(".js") ?
-                inputFiles.Select(inputFile => $"<script src='{versionProvider.AddFileVersionToPath(new PathString(""), "/js/" + inputFile)}'></script>") :
+                inputFiles.Select(inputFile => $"<script src='{versionProvider.AddFileVersionToPath(new PathString(""), "/src" + inputFile)}'></script>") :
+                //new List<string> { $"<script src='{bundlePath}'></script>" } :
                 inputFiles.Select(inputFile => $"<link rel='stylesheet' href='{versionProvider.AddFileVersionToPath(new PathString(""), "/css/" + inputFile)}' />");
 
             return new HtmlString(string.Join("\n", outputString));

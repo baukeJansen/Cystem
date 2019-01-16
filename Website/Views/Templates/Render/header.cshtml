@@ -1,0 +1,38 @@
+﻿@using Website.Common.Viewmodels
+@using Website.Common.Models.EAV
+@model GenericViewModel
+@inject IValueHelper Value
+
+@{
+    Value mainLink = Value.Get(Model, "Link");
+    List<Value> links = Value.Get(Model, "Links")?.Values ?? new List<Value>();
+}
+
+<nav>
+    <div class="container">
+        <div class="row">
+            <div class="col s12">
+                @Cystem.Link(mainLink, "Overzicht", new { @class = "brand-logo", data_target = ".main-content" })
+                <a href="#" data-target="nav-mobile" class="sidenav-trigger hide-on-large-and-up"><i class="material-icons">menu</i></a>
+
+                <ul class="right hide-on-med-and-down">
+                    @foreach (Value link in links)
+                    {
+                        <li>
+                            @Cystem.Link(link, null, new { data_target = ".main-content" })
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<ul id="nav-mobile" class="sidenav">
+    @foreach (Value link in links)
+    {
+        <li>
+            @Cystem.Link(link, null, new { data_target = ".main-content" })
+        </li>
+    }
+</ul>

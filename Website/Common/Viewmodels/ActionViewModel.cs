@@ -10,9 +10,8 @@ namespace Website.Common.Viewmodels
 {
     public class ActionViewModel : ViewModel
     {
-        public Layout CurrentLayout { get; set; } = Layout.None;
-        public Layout Layout { get; set; } = Layout.None;
-        public bool Overlay { get; set; } = false;
+        public Layouts CurrentLayout { get; set; } = Layouts.None;
+        public Layouts Layout { get; set; } = Layouts.None;
         public string Url { get; set; }
     }
 }

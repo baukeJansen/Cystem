@@ -1,6 +1,27 @@
 ﻿@using Website.Common.Viewmodels
+@using Website.Common.Enums
 @model GenericViewModel
-@{
-    @*await Html.RenderValue(Model, "Template");*@
-    await Value.Render(Model);
+
+
+@switch (Model.Options)
+{
+    case DisplaySetting.Display:
+        <div class="container">
+            <ul class="collection value-collection">
+                @await Render.Value(Model)
+            </ul>
+        </div>
+        break;
+
+    case DisplaySetting.Alter:
+        <div class="container">
+            <ul class="collection value-collection">
+                @await Render.Value(Model)
+            </ul>
+        </div>
+        break;
+
+    default:
+        @await Render.Value(Model);
+        break;
 }

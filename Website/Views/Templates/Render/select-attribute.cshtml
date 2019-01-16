@@ -1,0 +1,18 @@
+﻿@using Website.Common.Viewmodels
+@using Website.Common.Models.EAV
+@using Attribute = Website.Common.Models.EAV.Attribute
+@using ValueType = Website.Common.Enums.ValueType
+@model GenericViewModel
+@inject IAttributeHelper AttributeHelper
+
+@{
+    List<Attribute> attributes = AttributeHelper.GetAttributes();
+}
+<div class="container">
+    <ul class="collection">
+        @foreach (Attribute attribute in attributes)
+        {
+            <li class="collection-item">@attribute.Label</li>
+        }
+    </ul>
+</div>

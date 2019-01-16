@@ -1,0 +1,13 @@
+﻿@using Website.Common.Data
+@model ButtonData
+
+<a href="@Model.Url" @Html.Raw(Model.Attributes)>
+    @if(!String.IsNullOrEmpty(Model.Text))
+    {
+        @Model.Text
+    }
+    @if(!String.IsNullOrEmpty(Model.Icon))
+    {
+        <i class="material-icons right">@Model.Icon</i>
+    }
+</a>

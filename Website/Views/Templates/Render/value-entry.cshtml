@@ -1,0 +1,114 @@
+﻿@using Website.Common.Viewmodels
+@using Website.Common.Models.EAV
+@using Website.Common.Extensions
+@using ValueType = Website.Common.Enums.ValueType
+@using Microsoft.AspNetCore.Html
+@model GenericViewModel
+@inject IValueHelper Value
+
+@{
+    Value settings = Value.Get(Model, "Settings");
+
+    string Expression = settings.String;
+}
+
+@functions {
+IHtmlContent CreateTab(string tabName, ValueType tabType, string valueExpression, ValueType valueType)
+{
+    TagBuilder li = new TagBuilder("li");
+    TagBuilder a = new TagBuilder("a");
+    TagBuilder input = new TagBuilder("input");
+
+    li.AddCssClass("tab col");
+
+    a.MergeAttribute("href", "#" + tabType.ToString());
+    if (tabType == valueType)
+        a.AddCssClass("active");
+
+    input.AddCssClass("hide");
+    input.MergeAttribute("type", "radio");
+    input.MergeAttribute("name", valueExpression + ".Type");
+    input.MergeAttribute("value", tabType.ToString());
+    if (tabType == valueType)
+        input.MergeAttribute("checked", "checked");
+
+    a.InnerHtml.AppendHtml(input);
+    a.InnerHtml.Append(tabName);
+
+    li.InnerHtml.AppendHtml(a);
+
+    return li.Render();
+}
+}
+
+@Html.Hidden(Expression + ".Id")
+
+<div class="row">
+    <div class="col s12">
+        <ul class="tabs formtab">
+            @foreach (ValueType type in Enum.GetValues(ValueType.None.GetType()))
+            {
+                @CreateTab(type.Name(), type, Expression, Model.Value.Type);
+            }
+        </ul>
+
+    </div>
+</div>
+
+<div class="row">
+    <div id="@ValueType.None" class="input-field col s12">
+
+    </div>
+
+    <div id="@ValueType.StringValue" class="input-field col s12">
+        @Html.Editor(Expression + ".String")
+        @Html.Label("String")
+    </div>
+
+    <div id="@ValueType.SerializedStringValue" class="input-field col s12">
+        @Html.Editor(Expression + ".SerializedString")
+        @Html.Label("SerializedString")
+    </div>
+
+    <div id="@ValueType.IntValue" class="input-field col s12">
+        @Html.Editor(Expression + ".Int")
+        @Html.Label("Int")
+    </div>
+
+    <div id="@ValueType.GroupValue" class="input-field col s12">
+
+    </div>
+
+    <div id="@ValueType.RelatedValue" class="input-field col s12">
+        @Html.Editor(Expression + ".Int")
+        @Html.Label("Int")
+    </div>
+
+    <div id="@ValueType.RelatedAttribute" class="input-field col s12">
+        @Html.Editor(Expression + ".Int")
+        @Html.Label("Int")
+    </div>
+
+    <div id="@ValueType.ParamValue" class="input-field col s12">
+    </div>
+</div>
+
+<div class="row">
+    <div class="col s12">
+        @await Render.SelectButton("/cystem/select-attribute/", "Attribute")
+    </div>
+</div>
+
+<div class="row">
+    <div class="col s12 input-field ">
+        @Html.Editor(Expression + ".AttributeId")
+        @Html.Label("Attribute")
+    </div>
+</div>
+
+<div class="row">
+    <div class="col s12 input-field ">
+        @Html.TextBox(Expression + ".GroupId")
+        @Html.Label("Parrent")
+    </div>
+</div>

@@ -32,12 +32,12 @@
             <div class="col s12">
                 @if (Model.Id == 0)
                 {
-                    @Html.SubmitButton("Create", "add")
+                    @await Render.SubmitButton("Create", "add")
                 }
                 else
                 {
-                    @Html.DeleteButton(Url.Action<AttributeController>(c => c.Delete(null), new { Id = Model.Id }), null, "Delete", ElementAction.Close, new { @class = "btn-outline" })
-                    @Html.SubmitButton("Update")
+                    @await Render.DeleteModalButton(Url.Action<AttributeController>(c => c.Delete(null), new { Id = Model.Id }), null, "Delete", "delete", DisplaySetting.Render, ElementAction.Close, new { @class = "btn-outline" });
+                    @await Render.SubmitButton("Update")
                 }
             </div>
         </div>

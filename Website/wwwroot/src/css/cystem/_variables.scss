@@ -1,0 +1,71 @@
+﻿$font: 'Roboto', sans-serif;
+
+// 1. Primary
+// ==========================================================================
+$primary-color: color('blue', 'darken-1') !default;
+$primary-color-light: lighten($primary-color, 15%) !default;
+$primary-color-dark: darken($primary-color, 15%) !default;
+$on-primary-color: color('shades', 'white') !default;
+
+// 2. Secondary
+// ==========================================================================
+$secondary-color: darken($primary-color, 15%), !default;
+$secondary-color-light: lighten($secondary-color, 15%) !default;
+$secondary-color-dark: darken($secondary-color, 15%) !default;
+$on-secondary-color: $on-primary-color !default;
+
+// 3. Background
+// ==========================================================================
+$background-color: color('shades', 'white') !default;
+$background-color-light: color('shades', 'white') !default;
+$background-color-dark: color('shades', 'white') !default;
+$on-background-color: color('shades', 'black') !default;
+
+// 4. Surface
+// ==========================================================================
+$surface-color: $background-color-light !default;
+$surface-color-light: $background-color-light !default;
+$surface-color-dark: $background-color-dark !default;
+$on-surface-color: $on-background-color !default;
+
+// 5. Actions
+// ==========================================================================
+$success-color: color('green', 'base') !default;
+$on-succes-color: color('shades', 'white') !default;
+$error-color: color('red', 'base') !default;
+$on-error-color: color('shades', 'white') !default;
+$link-color: $primary-color !default;
+
+// 6. Cards
+$card-bg-color: $surface-color;
+$card-link-color: $primary-color;
+$card-link-color-light: $primary-color-light;
+$on-card-color: $on-surface-color;
+
+// 6. Other
+// ==========================================================================
+$text-color: $on-background-color !default;
+$tabs-bg-color: $background-color !default;
+$tabs-text-color: $on-background-color !default;
+$table-striped-color: rgba(255, 255, 255, .2) !default;
+$button-flat-color: $surface-color !default;
+
+%primary {
+    background: $primary-color;
+    color: $on-primary-color;
+}
+
+%secondary {
+    background: $secondary-color;
+    color: $on-secondary-color;
+}
+
+%surface {
+    background: $surface-color;
+    color: $on-surface-color;
+}
+
+%background {
+    background: $background-color;
+    color: $on-background-color;
+}

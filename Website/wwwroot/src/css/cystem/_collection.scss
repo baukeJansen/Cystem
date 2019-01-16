@@ -1,0 +1,66 @@
+﻿@import 'variables';
+
+.collection {
+    //border: 1px solid $background-color-light;
+    border: none;
+
+    .collection-item {
+        @extend %background;
+        border-bottom: 1px dashed $background-color-light;
+    }
+}
+
+.value-collection {
+    $header-size: 5px;
+
+    @extend .z-depth-3;
+    border: 0;
+
+    .collection-item {
+        border-bottom: none;
+    }
+
+    .collection-item.int {
+        border-top: $header-size solid color('shades', 'white');
+    }
+
+    .collection-item.string {
+        border-top: $header-size solid color('red', 'darken-1');
+    }
+
+    .collection-item.serialized-string {
+        border-top: $header-size solid color('red', 'lighten-1');
+    }
+
+    .collection-item.group {
+        border-top: $header-size solid color('blue', 'darken-1');
+    }
+
+    .collection-item.related {
+        border-top: $header-size solid color('cyan', 'darken-1');
+    }
+
+    .collection-item.param {
+        border-top: $header-size solid color('teal', 'darken-1');
+    }
+
+    .collection-item.attribute {
+        border-top: $header-size solid color('yellow', 'darken-1');
+    }
+
+    .collection-item.related-attribute {
+        border-top: $header-size solid color('amber', 'darken-1');
+    }
+
+    .collection-item.none {
+        border-top: $header-size solid color('shades', 'black');
+    }
+
+    .collection-item.new {
+        border-top: $header-size solid color('shades', 'white');
+    }
+
+    .collection-item .row:last-of-type {
+        padding-bottom: 0;
+    }
+}

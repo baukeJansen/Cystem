@@ -1,0 +1,11 @@
+﻿@using Website.Common.Viewmodels
+@using Website.Common.Models.EAV
+@model GenericViewModel
+
+<li class="collection-item group">
+    <div class="row">
+        <div class="col s12">@Model.Value.Attribute.Label</div>
+    </div>
+
+    @{ await Cystem.DisplayChilds(Model.Value); }
+</li>

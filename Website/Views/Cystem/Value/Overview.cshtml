@@ -9,7 +9,7 @@
         <div class="col s12">
             <h1>Values overview</h1>
 
-            @Html.LargeButton(Url.Action("create", "value", new { Area = "Cystem" }), ElementAction.Overlay)
+            @Render.FloatingButton(Url.Action("create", "value", new { Area = "Cystem" }), "add")
 
             <table>
                 <tbody>
@@ -29,8 +29,8 @@
                                 case ValueType.RelatedAttribute: @value.Int break;
                             }
                         </td>
-                        <td><a href="@Url.Action("Edit", "Value", new { id = value.Id, Area = "Cystem"})" class="ajax-get" data-on-result="@ElementAction.Overlay"><i class="material-icons">edit</i></a></td>
-                        <td><a href="@Url.Action("Delete", "Value", new { id = value.Id, Area = "Cystem"})" class="ajax-delete" data-on-result="@ElementAction.None"><i class="material-icons">delete</i></a></td>
+                        <td>@await Render.EditButton("/cystem/value/edit/", new { Id = value.Id }, "")</td>
+                        <td>@await Render.DeleteModalButton("/cystem/attribute/delete/", new { Id = value.Id }, "", "delete", DisplaySetting.Render, ElementAction.None)</td>
                     </tr>
                     }
                 </tbody>

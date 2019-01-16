@@ -1,0 +1,15 @@
+﻿@using Website.Common.Viewmodels
+@model GenericViewModel
+
+<div class="modal-content">
+    <div class="content-wrapper">
+        <h3>@await Render.Value(Model, "Title")</h3>
+        <p>@await Render.Value(Model, "Text")</p>
+    </div>
+</div>
+
+
+<div class="modal-footer">
+    <button class="decline-btn modal-close waves-effect btn-flat">@await Render.Value(Model, "Decline")</button>
+    <button class="accept-btn modal-close waves-effect btn-flat">@await Render.Value(Model, "Accept")</button>
+</div>

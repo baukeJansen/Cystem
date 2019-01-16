@@ -7,6 +7,6 @@ namespace Website.Common.Enums
 {
     public enum ElementAction
     {
-        Display, Load, Reload, Overlay, Popup, Close , None
+        Display, Load, Reload, Overlay, Popup, Close , None, Modal
     }
 }

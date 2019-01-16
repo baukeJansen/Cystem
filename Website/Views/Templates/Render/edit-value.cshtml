@@ -1,0 +1,56 @@
+﻿@using Website.Common.Viewmodels
+@using Website.Common.Models.EAV
+@using Website.Common.Enums
+@using Attribute = Website.Common.Models.EAV.Attribute
+@model GenericViewModel
+@inject IValueHelper Value
+
+@{
+    Value source = Value.Get(Model, "Param");
+    Value template = Value.Get(source, "Template");
+    Value settings = Value.Get(source, "Settings");
+    Value sourceValue = source?.RelatedValue;
+
+    if (sourceValue != null)
+    {
+        if (sourceValue.Values == null)
+        {
+            sourceValue.Values = new List<Value>();
+        }
+
+        int templateIndex = sourceValue.Values.FindIndex(v => v.Attribute?.Label == "Template");
+        if (templateIndex != -1)
+        {
+            sourceValue.Values[templateIndex] = template;
+        }
+        else
+        {
+            sourceValue.Values.Add(template);
+        }
+        sourceValue.Values.Add(settings);
+    }
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col s12">
+            <h2>@await Render.Value(Model, "Title")</h2>
+        </div>
+    </div>
+
+    @if (sourceValue != null)
+    {
+        @using (Html.BeginForm(null, null, new { }, FormMethod.Post, true, new { action = "/cystem/edit-page/" }))
+        {
+
+            @await Render.Value(sourceValue, Model.Options);
+
+            <div class="row">
+                <div class="col s12 right-align">
+                    @await Render.DeleteModalButton("/delete/", new { id = sourceValue.Id }, "Delete", "delete", DisplaySetting.Render, ElementAction.Close, new { @class = "btn-outline" })
+                    @await Render.SubmitButton("Update")
+                </div>
+            </div>
+        }
+    }
+</div>

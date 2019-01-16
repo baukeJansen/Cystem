@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Website.Common.Models;
 using Website.Common.Models.EAV;
 using Website.DAL;
+using ValueType = Website.Common.Enums.ValueType;
 
 namespace Website.BL.LL.EavLL
 {
@@ -46,6 +44,52 @@ namespace Website.BL.LL.EavLL
 
             context.Values.AddRange(add);
             context.Values.UpdateRange(update);
+        }
+
+        public void StoreRelated(List<Value> values)
+        {
+            List<Value> relatedValues = GetRelatedValues(values);
+
+            foreach(Value value in relatedValues)
+            {
+                values.Add(value.RelatedValue);
+            }
+
+            Store(values);
+
+            if (relatedValues.Count > 0)
+            {
+                context.SaveChanges();
+
+                foreach (Value value in relatedValues)
+                {
+                    value.Int = value.RelatedValue.Id;
+                }
+            }
+        }
+
+        private List<Value> GetRelatedValues(List<Value> values)
+        {
+            List<Value> relatedValues = new List<Value>();
+
+            foreach(Value value in values)
+            {
+                if (value.Type == ValueType.RelatedValue)
+                {
+                    if ( value.RelatedValue != null && value.Int == null)
+                    {
+                        relatedValues.Add(value);
+                        relatedValues.AddRange(GetRelatedValues(new List<Value> { value.RelatedValue }));
+                    }
+                }
+
+                if (value.Values != null)
+                {
+                    relatedValues.AddRange(GetRelatedValues(value.Values));
+                }
+            }
+
+            return relatedValues;
         }
 
         public void Delete(Value value)

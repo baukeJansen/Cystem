@@ -9,6 +9,7 @@ using Website.Common.Extensions;
 using Website.Common.Models.EAV;
 using Website.Common.Viewmodels;
 using Website.DAL;
+using Website.Views.HtmlHelpers;
 using ValueType = Website.Common.Enums.ValueType;
 
 namespace Website.Controllers.Cystem
@@ -19,7 +20,7 @@ namespace Website.Controllers.Cystem
         private readonly DataContext context;
         private readonly IMapper mapper;
 
-        public ValueController(DataContext context, IMapper mapper)
+        public ValueController(DataContext context, IMapper mapper, IValueHelper valueHelper) : base(valueHelper)
         {
             this.context = context;
             this.mapper = mapper;

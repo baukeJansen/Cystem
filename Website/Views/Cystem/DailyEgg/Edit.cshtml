@@ -79,10 +79,9 @@
             <div class="col s12">
                 @if (Model.Id != 0)
                 {
-                    @Html.DeleteButton(Url.Action<DailyEggController>(c => c.Delete(null), new { Id = Model.Id }))
-                    @*(Html.ActionLink<DailyEggController>("Delete", c => c.Delete(null), new { Id = Model.Id }, new { @class = "ajax-delete right btn-flat waves-effect", data_on_result = ElementAction.Close }))*@
+                    @await Render.DeleteModalButton(Url.Action<DailyEggController>(c => c.Delete(null), new { Id = Model.Id }))
                 }
-                @Html.SubmitButton("Save")
+                @await Render.SubmitButton("Save")
             </div>
         </div>
     }

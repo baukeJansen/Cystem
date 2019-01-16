@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Website.BL.SL.DeadChickenSL;
 using Website.Common.Viewmodels;
+using Website.Views.HtmlHelpers;
 
 namespace Website.Controllers.Cystem
 {
@@ -9,7 +10,7 @@ namespace Website.Controllers.Cystem
     {
         private readonly IDeadChickenService service;
 
-        public DeadChickenController(IDeadChickenService service)
+        public DeadChickenController(IDeadChickenService service, IValueHelper valueHelper) : base(valueHelper)
         {
             this.service = service;
         }

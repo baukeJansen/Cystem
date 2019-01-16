@@ -7,6 +7,7 @@ using Website.BL.LL.PageLL;
 using Website.BL.QL.ValueQL;
 using Website.BL.SL.CystemSL;
 using Website.BL.SL.DailyEggSL;
+using Website.BL.SL.DatatableSL;
 using Website.BL.SL.DeadChickenSL;
 using Website.BL.SL.RouterSL;
 using Website.DAL;
@@ -23,18 +24,26 @@ namespace Website
                 options.UseSqlServer(configuration.GetConnectionString("DataContext"))
             );
 
+            // Query
             services.AddScoped<IValueQuery, ValueQuery>();
 
+            // Logic
             services.AddScoped<IPageLogic, PageLogic>();
             services.AddScoped<IEavLogic, EavLogic>();
             services.AddScoped<IDailyLogic, DailyLogic>();
 
+            // Service
             services.AddScoped<ICystemService, CystemService>();
             services.AddScoped<IRouterService, RouterService>();
+            services.AddScoped<IDatatableService, DatatableService>();
             services.AddScoped<IDailyEggService, DailyEggService>();
             services.AddScoped<IDeadChickenService, DeadChickenService>();
 
+            // Helper
+            services.AddTransient<ICystemHelper, CystemHelper>();
             services.AddTransient<IValueHelper, ValueHelper>();
+            services.AddTransient<IAttributeHelper, AttributeHelper>();
+            services.AddTransient<IRenderHelper, RenderHelper>();
         
             // Singleton - Only one instance is ever created and returned.
             // services.AddSingleton<IExampleService, ExampleService>();

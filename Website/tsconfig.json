@@ -1,0 +1,24 @@
+{
+  "compileOnSave": true,
+  "compilerOptions": {
+    "noImplicitAny": false,
+    "noEmitOnError": true,
+    "removeComments": true,
+    "noImplicitUseStrict": true,
+    "allowSyntheticDefaultImports": true,
+    "experimentalDecorators": true,
+    "sourceMap": true,
+    "target": "es5"
+    //"module": "system",
+    //"outDir": "",
+    //"outFile": "wwwroot/js/cystem.js"
+  },
+
+  "include": [
+    "wwwroot/src/js/**/*.ts"
+  ],
+
+  "exclude": [
+    "node_modules"
+  ]
+}

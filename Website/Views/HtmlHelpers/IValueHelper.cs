@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Website.Common.Enums;
 using Website.Common.Models.EAV;
@@ -28,15 +29,6 @@ namespace Website.Views.HtmlHelpers
         string Display(Value value, string label);
         string Display(GenericViewModel value);
         string Display(Value value);
-
-        Task Render(GenericViewModel vm, string label);
-        Task Render(List<Value> values, string label, RenderOption options = RenderOption.Display);
-        Task Render(Value value, string label, RenderOption options = RenderOption.Display);
-        Task Render(GenericViewModel vm);
-        Task Render(Value value, RenderOption options = RenderOption.Display);
-
-        Task RenderList(GenericViewModel vm);
-        Task RenderList(List<Value> values, RenderOption options = RenderOption.Display);
 
         void MergeEditorValues(Value source, Value target);
     }

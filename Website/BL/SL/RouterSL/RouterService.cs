@@ -28,7 +28,7 @@ namespace Website.BL.SL.RouterSL
             return new GenericViewModel
             {
                 Value = new Value(),
-                Options = RenderOption.Display
+                Options = DisplaySetting.Render
             };
         }
 
@@ -36,7 +36,6 @@ namespace Website.BL.SL.RouterSL
         {
             Value value = await pageLogic.Get(viewModel.Url, viewModel.Id);
             viewModel.Value = value ?? throw new InvalidPageException();
-            viewModel.Options = RenderOption.Display;
             return viewModel;
         }
 
@@ -52,14 +51,22 @@ namespace Website.BL.SL.RouterSL
                 values = viewModel.Value.Values;
             }
 
-            eavLogic.Store(values);
+            eavLogic.StoreRelated(values);
             context.SaveChanges();
         }
 
         public override void Delete(GenericViewModel viewModel)
         {
-            eavLogic.Delete(viewModel.Value);
-            context.SaveChanges();
+            if (viewModel.Id != 0)
+            {
+                Value value = new Value
+                {
+                    Id = viewModel.Id
+                };
+
+                eavLogic.Delete(value);
+                context.SaveChanges();
+            }
         }
     }
 }

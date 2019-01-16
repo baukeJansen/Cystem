@@ -74,36 +74,36 @@
         </div>
 
         <div class="row">
-            <div id="@ValueType.StringValue" class="input-field col l6 s12">
+            <div id="@ValueType.StringValue" class="input-field col s12">
                 @Html.EditorFor(m => m.String)
                 @Html.LabelFor(m => m.String)
             </div>
 
-            <div id="@ValueType.SerializedStringValue" class="input-field col l6 s12">
+            <div id="@ValueType.SerializedStringValue" class="input-field col s12">
                 @Html.EditorFor(m => m.SerializedString)
                 @Html.LabelFor(m => m.SerializedString)
             </div>
 
-            <div id="@ValueType.IntValue" class="input-field col l6 s12">
+            <div id="@ValueType.IntValue" class="input-field col s12">
                 @Html.EditorFor(m => m.Int)
                 @Html.LabelFor(m => m.Int)
             </div>
 
-            <div id="@ValueType.GroupValue" class="input-field col l6 s12">
+            <div id="@ValueType.GroupValue" class="input-field col s12">
 
             </div>
 
-            <div id="@ValueType.RelatedValue" class="input-field col l6 s12">
+            <div id="@ValueType.RelatedValue" class="input-field col s12">
                 @Html.EditorFor(m => m.Int)
                 @Html.LabelFor(m => m.Int)
             </div>
 
-            <div id="@ValueType.RelatedAttribute" class="input-field col l6 s12">
+            <div id="@ValueType.RelatedAttribute" class="input-field col s12">
                 @Html.EditorFor(m => m.Int)
                 @Html.LabelFor(m => m.Int)
             </div>
 
-            <div id="@ValueType.ParamValue" class="input-field col l6 s12">
+            <div id="@ValueType.ParamValue" class="input-field col s12">
             </div>
         </div>
 
@@ -125,12 +125,12 @@
             <div class="col s12 input-field ">
                 @if (Model.Id == 0)
                 {
-                    @Html.SubmitButton("Create", "add")
+                    @await Render.SubmitButton("Create", "add")
                 }
                 else
                 {
-                    @Html.DeleteButton(Url.Action<ValueController>(c => c.Delete(null), new { Id = Model.Id }), null, "Delete", ElementAction.Close, new { @class = "btn-outline" })
-                    @Html.SubmitButton("Update")
+                    @await Render.DeleteModalButton(Url.Action<ValueController>(c => c.Delete(null), new { Id = Model.Id }), null, "Delete", "delete", DisplaySetting.Render, ElementAction.Close, new { @class = "btn-outline" })
+                    @await Render.SubmitButton("Update")
                 }
             </div>
         </div>

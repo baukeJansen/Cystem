@@ -1,0 +1,34 @@
+﻿@using Website.Common.Viewmodels
+@using Website.Common.Models.EAV
+@using ValueType = Website.Common.Enums.ValueType
+@model GenericViewModel
+
+@{ 
+    bool isRelated = Model.Value.Type == ValueType.RelatedValue;
+    Value link;
+
+    if (isRelated)
+    {
+        link = Model.Value.RelatedValue;
+    }
+    else
+    {
+        link = Model.Value;
+    }
+
+    string uri = isRelated ? link.SerializedString : link.String;
+}
+
+@if (link != null)
+{
+    <div class="col l4 m6 s12">
+        <a href="@uri" class="ajax-get card">
+            <div class="card-content">
+                <h3 class="card-title">@await Render.Value(link, "Title", Model.Options)</h3>
+                <p>
+                    @await Render.Value(link, "Description", Model.Options)
+                </p>
+            </div>
+        </a>
+    </div>
+}

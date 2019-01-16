@@ -1,0 +1,21 @@
+﻿@using Website.Common.Viewmodels
+@using Website.Common.Models.EAV
+@model GenericViewModel
+
+<li class="collection-item param">
+    <div class="row">
+        <div class="col s2 l1">Param</div>
+        <div class="col s10 l11">
+            @if (Model.Value.RelatedValue != null)
+            {
+                <div class="row">
+                    <ul class="collection value-collection">
+                        @await Render.Value(Model.Value.RelatedValue, Model.Options)
+                    </ul>
+                </div>
+            }
+        </div>
+    </div>
+
+    @{ await Cystem.DisplayChilds(Model.Value); }
+</li>

@@ -1,0 +1,32 @@
+﻿@using Website.Common.Enums
+@using Website.Common.Viewmodels
+@using Website.Common.Models.EAV
+@model GenericViewModel
+@inject IValueHelper Value
+
+@{
+    Value createPageRef = Value.Get(Model, "Link");
+    Value createPage = createPageRef?.RelatedValue;
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col s12">
+            <h1>@await Render.Value(Model, "Title")</h1>
+        </div>
+    </div>
+
+    @if (createPage != null)
+    {
+        <div class="row">
+            <div class="col s12">
+                @await Render.FloatingButton(createPage.SerializedString, "add", null, Model.Options)
+                @*<a href="/cystem/edit-page/" class="ajax-get right btn-floating waves-effect waves-light btn-large" data-on-result="@ElementAction.Overlay"><i class='material-icons'>add</i></a>*@
+            </div>
+        </div>
+    }
+
+    <ul class="collection z-depth-1">
+        @await Render.Value(Model, "Group")
+    </ul>
+</div>

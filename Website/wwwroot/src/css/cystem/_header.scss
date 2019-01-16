@@ -1,0 +1,43 @@
+﻿@import 'variables';
+
+header {
+    nav {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        z-index: 997;
+    }
+
+    .admin-icons {
+        position: absolute;
+        top: 0;
+        right: 0;
+        padding: 0 10px;
+        font-size: 0;
+    }
+
+    .admin-icons div {
+        line-height: normal;
+    }
+
+    .admin-icons a {
+        display: inline-block;
+    }
+
+    .admin-icons i.material-icons {
+        width: 22px;
+        height: 22px;
+        margin: 0;
+        padding: 4px 2px;
+        font-size: 22px;
+        line-height: 22px;
+    }
+}
+
+.header-space {
+    height: 64px;
+    margin-bottom: 10px;
+    background: $primary-color;
+    box-sizing: content-box;
+}

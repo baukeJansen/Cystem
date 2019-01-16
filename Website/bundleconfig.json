@@ -1,14 +1,20 @@
 [
   {
-    "outputFileName": "wwwroot/css/Cystem.css",
+    "outputFileName": "wwwroot/css/cystem.min.css",
     "inputFiles": [
-      "wwwroot/css/editor/editor.css"
-    ]
+      "wwwroot/css/cystem.css"
+    ],
+    "minify": {
+      "enabled": true,
+      "renameLocals": true
+    },
+    "sourceMap": true
   },
+
   {
-    "outputFileName": "wwwroot/css/Cystem.min.css",
+    "outputFileName": "wwwroot/css/website.min.css",
     "inputFiles": [
-      "wwwroot/css/Editor.css"
+      "wwwroot/css/website.css"
     ],
     "minify": {
       "enabled": true,
@@ -18,52 +24,33 @@
   },
 
   {
-    "outputFileName": "wwwroot/css/Website.css",
+    "outputFileName": "wwwroot/js/cystem.js",
     "inputFiles": [
-      "wwwroot/css/website/website.css"
-    ]
-  },
-  {
-    "outputFileName": "wwwroot/css/Website.min.css",
-    "inputFiles": [
-      "wwwroot/css/Website.css"
+      "wwwroot/src/lib/moment.js",
+      "wwwroot/src/lib/materialize.js",
+      "wwwroot/src/lib/chart.js",
+
+      "wwwroot/src/js/common/actionresult.js",
+      "wwwroot/src/js/common/method.js",
+      "wwwroot/src/js/common/servicename.js",
+      "wwwroot/src/js/action.js",
+      "wwwroot/src/js/cystem.js",
+      "wwwroot/src/js/modalhelper.js",
+      "wwwroot/src/js/navigate.js",
+      "wwwroot/src/js/overlay.js",
+      "wwwroot/src/js/overlayhelper.js",
+      "wwwroot/src/js/materialize.js",
+      "wwwroot/src/js/formtab.js",
+      "wwwroot/src/js/floatingactionbutton.js",
+      "wwwroot/src/js/graph.js",
+      "wwwroot/src/js/service/iservice.js",
+      "wwwroot/src/js/service/iservicemanager.js",
+      "wwwroot/src/js/service/servicemanager.js"
     ],
     "minify": {
       "enabled": true,
       "renameLocals": true
     },
-    "sourceMap": false
-  },
-  {
-    "outputFileName": "wwwroot/js/Website.js",
-    "inputFiles": [
-      "wwwroot/js/lib/materialize.js",
-      "wwwroot/js/lib/moment.js",
-      "wwwroot/js/lib/chart.js",
-
-      "wwwroot/js/common/actionresult.js",
-      "wwwroot/js/common/method.js",
-      "wwwroot/js/jqextensions.js",
-
-      "wwwroot/js/cystem.js",
-      "wwwroot/js/materialize.js",
-      "wwwroot/js/chart.js",
-      "wwwroot/js/navigate.js",
-      "wwwroot/js/overlay.js",
-      "wwwroot/js/formtab.js",
-
-      "wwwroot/js/init.js"
-    ]
-  },
-  {
-    "outputFileName": "wwwroot/js/Website.min.js",
-    "inputFiles": [
-      "wwwroot/js/widget/Website.js"
-    ],
-    "minify": {
-      "enabled": true,
-      "renameLocals": true
-    },
-    "sourceMap": false
+    "sourceMap": true
   }
 ]

@@ -1,0 +1,31 @@
+﻿@using Website.Common.Viewmodels
+@using Website.Common.Models.EAV
+@using ValueType = Website.Common.Enums.ValueType
+@model GenericViewModel
+
+<div class="fixed-action-btn">
+    <a class="btn-floating btn-large waves-effect">
+        <i class="large material-icons">video_label</i>
+    </a>
+
+    <ul>
+        <li>
+            @Cystem.IconLink("?options=render", "view_quilt", new { @class = "btn-floating", data_target = ".main-content" })
+        </li>
+        <li>
+            @Cystem.IconLink("?options=edit", "edit", new { @class = "btn-floating", data_target = ".main-content" })
+        </li>
+        <li>
+            @Cystem.IconLink("?options=display", "view_list", new { @class = "btn-floating", data_target = ".main-content" })
+        </li>
+        <li>
+            @Cystem.IconLink("?options=alter", "extension", new { @class = "btn-floating", data_target = ".main-content" })
+        </li>
+        <li>
+            @Cystem.IconLink("?options=json", "code", new { @class = "btn-floating", data_target = ".main-content" })
+        </li>
+        <li>
+            @Cystem.IconLink("?options=xml", "code", new { @class = "btn-floating", data_target = ".main-content" })
+        </li>
+    </ul>
+</div>

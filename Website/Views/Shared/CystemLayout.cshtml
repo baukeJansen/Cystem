@@ -1,7 +1,6 @@
 ﻿@using HtmlHelpers
 @using Website.Common.Enums
 @using Website.Common.Viewmodels
-@using _Layout = Website.Common.Enums.Layout
 @model ActionViewModel
 @inject Microsoft.AspNetCore.Hosting.IHostingEnvironment HostingEnvironment
 
@@ -16,11 +15,12 @@
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
     <environment names="Development">
-        @Bundler.Unpack(HostingEnvironment.ContentRootPath, "/css/Cystem.css", Context)
+        @*@Bundler.Unpack(HostingEnvironment.ContentRootPath, "/css/cystem.css", Context)*@
+        <link rel="stylesheet" type="text/css" href="~/css/cystem.css" asp-append-version="true" />
     </environment>
 
     <environment names="Staging,Production">
-        <link rel="stylesheet" type="text/css" href="~/css/Website.min.css" asp-append-version="true" />
+        <link rel="stylesheet" type="text/css" href="~/css/cystem.min.css" asp-append-version="true" />
     </environment>
 
     @RenderSection("Style", required: false)
@@ -77,22 +77,21 @@
         <div class="content ajax-load" data-url="/cystem/modal/" data-on-result="@ElementAction.Load"></div>
     </div>
 
+    <div class="content-wrapper z-depth-1">
+        <div class="content ajax-load" data-url="/cystem/floating-action-button/" data-on-result="@ElementAction.Load"></div>
+    </div>
+
     <environment names="Development">
-        <script src="~/lib/jquery/dist/jquery.js"></script>
-        @Bundler.Unpack(HostingEnvironment.ContentRootPath, "/js/Website.js", Context)
+        <script src="~/lib/jquery/jquery.min.js"></script>
+        @Bundler.Unpack(HostingEnvironment.ContentRootPath, "/js/cystem.js", Context)
     </environment>
 
     <environment names="Staging,Production">
-        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
-                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
-                asp-fallback-test="window.jQuery"
-                crossorigin="anonymous"
-                integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
-        </script>
-        <script src="~/js/Website.min.js" async="async" defer="defer" asp-append-version="true"></script>
+        <script src="~/lib/jquery/jquery.min.js"></script>
+        <script src="~/js/cystem.min.js" async="async" defer="defer" asp-append-version="true"></script>
     </environment>
 
     @RenderSection("Scripts", required: false)
-    @Html.Hidden("Layout", _Layout.CystemLayout)
+    @Html.Hidden("Layout", Layouts.CystemLayout)
 </body>
 </html>

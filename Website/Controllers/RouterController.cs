@@ -1,13 +1,12 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using System.Linq;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
+using System.Net;
 using System.Threading.Tasks;
 using Website.BL.SL.RouterSL;
 using Website.Common.Enums;
 using Website.Common.Exceptions;
-using Website.Common.Models;
 using Website.Common.Viewmodels;
-using Website.DAL;
+using Website.Views.HtmlHelpers;
 
 namespace Website.Controllers
 {
@@ -15,7 +14,7 @@ namespace Website.Controllers
     {
         private readonly IRouterService service;
 
-        public RouterController(IRouterService service)
+        public RouterController(IRouterService service, IValueHelper valueHelper) : base(valueHelper)
         {
             this.service = service;
         }
@@ -52,7 +51,7 @@ namespace Website.Controllers
         [ActionName("Route")]
         public IActionResult Delete(GenericViewModel vm)
         {
-            //service.Delete(vm);
+            service.Delete(vm);
 
             return Ok();
         }

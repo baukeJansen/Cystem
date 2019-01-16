@@ -1,0 +1,7 @@
+﻿@using Website.Common.Viewmodels
+@using Website.Common.Models.EAV
+@using Website.Common.Enums
+@using Website.Common.Extensions
+@model GenericViewModel
+<value label="@Model.Value.Attribute.Label" type="@Model.Value.Type.Name()" value="@Model.Value.SerializedString">
+</value>

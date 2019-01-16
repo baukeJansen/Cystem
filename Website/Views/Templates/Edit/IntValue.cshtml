@@ -1,0 +1,8 @@
+﻿@using Website.Common.Viewmodels
+@using Website.Common.Models.EAV
+@using Website.Common.Enums
+@using Attribute = Website.Common.Models.EAV.Attribute
+@using ValueType = Website.Common.Enums.ValueType
+@model GenericViewModel
+
+<a class="ajax-get btn-flat waves-effect" href="/cystem/edit/?id=@Model.Value.Id" data-on-result="@ElementAction.Modal">@Model.Value.Int</a>

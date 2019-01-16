@@ -1,15 +1,9 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using Website.BL.SL.CystemSL;
-using Website.Common.Models.EAV;
 using Website.Common.Viewmodels;
 using Website.DAL;
-using ValueType = Website.Common.Enums.ValueType;
+using Website.Views.HtmlHelpers;
 
 namespace Website.Controllers
 {
@@ -17,7 +11,7 @@ namespace Website.Controllers
     {
         private readonly ICystemService service;
 
-        public CystemController(ICystemService service, DataContext context, IMapper mapper)
+        public CystemController(ICystemService service, DataContext context, IMapper mapper, IValueHelper valueHelper) : base(valueHelper)
         {
             this.service = service;
         }
