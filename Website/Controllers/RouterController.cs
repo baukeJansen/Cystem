@@ -10,7 +10,7 @@ using Website.Views.HtmlHelpers;
 
 namespace Website.Controllers
 {
-    public class RouterController : JsActionController<GenericViewModel>
+    public class RouterController : BaseController<GenericViewModel>
     {
         private readonly IRouterService service;
 

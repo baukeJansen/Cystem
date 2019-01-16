@@ -1,14 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Website.BL.LL.DailyLL;
 using Website.BL.LL.EavLL;
 using Website.BL.LL.PageLL;
 using Website.BL.QL.ValueQL;
 using Website.BL.SL.CystemSL;
-using Website.BL.SL.DailyEggSL;
 using Website.BL.SL.DatatableSL;
-using Website.BL.SL.DeadChickenSL;
 using Website.BL.SL.RouterSL;
 using Website.DAL;
 using Website.Views.HtmlHelpers;
@@ -30,14 +27,11 @@ namespace Website
             // Logic
             services.AddScoped<IPageLogic, PageLogic>();
             services.AddScoped<IEavLogic, EavLogic>();
-            services.AddScoped<IDailyLogic, DailyLogic>();
 
             // Service
             services.AddScoped<ICystemService, CystemService>();
             services.AddScoped<IRouterService, RouterService>();
             services.AddScoped<IDatatableService, DatatableService>();
-            services.AddScoped<IDailyEggService, DailyEggService>();
-            services.AddScoped<IDeadChickenService, DeadChickenService>();
 
             // Helper
             services.AddTransient<ICystemHelper, CystemHelper>();

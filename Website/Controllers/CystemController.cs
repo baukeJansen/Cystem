@@ -7,7 +7,7 @@ using Website.Views.HtmlHelpers;
 
 namespace Website.Controllers
 {
-    public class CystemController : JsActionController<ValueViewModel>
+    public class CystemController : BaseController<ValueViewModel>
     {
         private readonly ICystemService service;
 

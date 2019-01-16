@@ -15,11 +15,11 @@ namespace Website.Controllers
     // Hide function not reachable warnings
     #pragma warning disable 414, CS0114
 
-    public class JsActionController<TViewModel> : Controller where TViewModel : ActionViewModel
+    public class BaseController<TViewModel> : Controller where TViewModel : ActionViewModel
     {
         private readonly IValueHelper valueHelper;
 
-        public JsActionController(IValueHelper valueHelper)
+        public BaseController(IValueHelper valueHelper)
         {
             this.valueHelper = valueHelper;
         }

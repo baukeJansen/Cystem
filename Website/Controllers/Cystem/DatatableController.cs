@@ -10,7 +10,7 @@ using Website.Views.HtmlHelpers;
 
 namespace Website.Controllers.Cystem
 {
-    public class DatatableController : JsActionController<DatatableViewModel>
+    public class DatatableController : BaseController<DatatableViewModel>
     {
         private readonly IDatatableService service;
 

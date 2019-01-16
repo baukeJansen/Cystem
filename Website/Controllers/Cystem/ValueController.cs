@@ -15,7 +15,7 @@ using ValueType = Website.Common.Enums.ValueType;
 namespace Website.Controllers.Cystem
 {
     [Area("Cystem")] 
-    public class ValueController : JsActionController<ValueViewModel>
+    public class ValueController : BaseController<ValueViewModel>
     {
         private readonly DataContext context;
         private readonly IMapper mapper;

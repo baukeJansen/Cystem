@@ -11,7 +11,7 @@ using Website.Views.HtmlHelpers;
 namespace Website.Controllers.Cystem
 {
     [Area("Cystem")]
-    public class AttributeController : JsActionController<AttributeViewModel>
+    public class AttributeController : BaseController<AttributeViewModel>
     {
         private readonly DataContext context;
         private readonly IMapper mapper;
