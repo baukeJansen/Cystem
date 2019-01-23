@@ -8,8 +8,7 @@
 
 @{
     Value settings = Value.Get(Model, "Settings");
-
-    string Expression = settings.String;
+    string Expression = settings?.String;
 }
 
 @functions {
@@ -41,6 +40,8 @@ IHtmlContent CreateTab(string tabName, ValueType tabType, string valueExpression
 }
 }
 
+@if (Expression != null)
+{
 @Html.Hidden(Expression + ".Id")
 
 <div class="row">
@@ -112,3 +113,10 @@ IHtmlContent CreateTab(string tabName, ValueType tabType, string valueExpression
         @Html.Label("Parrent")
     </div>
 </div>
+}
+else
+{
+    <div class="row">
+        <div class="col s12 error">Settings missing</div>
+    </div>
+}

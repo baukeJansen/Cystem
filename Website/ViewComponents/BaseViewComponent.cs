@@ -21,7 +21,7 @@ namespace Website.ViewComponents
         protected const string JsonPath = "Json/";
         protected const string XmlPath = "Xml/";
         protected const string FileType = ".cshtml";
-        protected readonly List<string> TemplateAttributes = new List<string> { "page", "overview", "edit", "group", "overview-entry", "entry" };
+        protected readonly List<string> TemplateAttributes = new List<string> { "page", "card", "overview", "edit", "group", "overview-entry", "modify-entry" };
 
         protected readonly IValueHelper valueHelper;
 

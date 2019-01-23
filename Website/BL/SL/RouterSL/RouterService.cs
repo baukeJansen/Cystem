@@ -1,12 +1,9 @@
 ﻿using AutoMapper;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Website.BL.LL.EavLL;
-using Website.BL.LL.PageLL;
+using Website.BL.LL.ValueLL;
 using Website.Common.Enums;
 using Website.Common.Exceptions;
-using Website.Common.Models;
 using Website.Common.Models.EAV;
 using Website.Common.Viewmodels;
 using Website.DAL;
@@ -15,12 +12,10 @@ namespace Website.BL.SL.RouterSL
 {
     public class RouterService : Service<GenericViewModel>, IRouterService
     {
-        private readonly IPageLogic pageLogic;
-        private readonly IEavLogic eavLogic;
+        private readonly IValueLogic valueLogic;
 
-        public RouterService(DataContext context, IMapper mapper, IPageLogic pageLogic, IEavLogic eavLogic) : base(context, mapper) {
-            this.pageLogic = pageLogic;
-            this.eavLogic = eavLogic;
+        public RouterService(DataContext context, IMapper mapper, IValueLogic valueLogic) : base(context, mapper) {
+            this.valueLogic = valueLogic;
         }
 
         public override GenericViewModel Create(GenericViewModel viewModel)
@@ -34,7 +29,7 @@ namespace Website.BL.SL.RouterSL
 
         public override async Task<GenericViewModel> Get(GenericViewModel viewModel)
         {
-            Value value = await pageLogic.Get(viewModel.Url, viewModel.Id);
+            Value value = await valueLogic.Get(viewModel.Url, viewModel.Id);
             viewModel.Value = value ?? throw new InvalidPageException();
             return viewModel;
         }
@@ -51,11 +46,11 @@ namespace Website.BL.SL.RouterSL
                 values = viewModel.Value.Values;
             }
 
-            eavLogic.StoreRelated(values);
+            valueLogic.StoreRelated(values);
             context.SaveChanges();
         }
 
-        public override void Delete(GenericViewModel viewModel)
+        public override async Task Delete(GenericViewModel viewModel)
         {
             if (viewModel.Id != 0)
             {
@@ -64,7 +59,7 @@ namespace Website.BL.SL.RouterSL
                     Id = viewModel.Id
                 };
 
-                eavLogic.Delete(value);
+                await valueLogic.Delete(value);
                 context.SaveChanges();
             }
         }

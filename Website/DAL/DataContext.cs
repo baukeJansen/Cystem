@@ -24,8 +24,6 @@ namespace Website.DAL
 
             modelBuilder.Entity<Value>()
                 .HasIndex(p => p.SerializedString);
-
-
         }
     }
 }

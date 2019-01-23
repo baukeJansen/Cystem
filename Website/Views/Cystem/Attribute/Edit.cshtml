@@ -36,7 +36,7 @@
                 }
                 else
                 {
-                    @await Render.DeleteModalButton(Url.Action<AttributeController>(c => c.Delete(null), new { Id = Model.Id }), null, "Delete", "delete", DisplaySetting.Render, ElementAction.Close, new { @class = "btn-outline" });
+                    @await Render.Button("/cystem/attribute/delete/", "Delete", "delete", DisplaySetting.Render, new { Id = Model.Id }, ElementAction.Load, new { @class = "btn-outline" })
                     @await Render.SubmitButton("Update")
                 }
             </div>

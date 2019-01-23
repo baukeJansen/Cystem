@@ -21,29 +21,32 @@
         Value settings = Value.Get(Model, "Settings");
     }
 
-    @if (source != null)
+    @if (settings != null)
     {
-        @Html.Hidden(settings.String + ".Id", Model.Value.RelatedValue.Id)
-    }
+        @if (source != null)
+        {
+            @Html.Hidden(settings.String + ".Id", Model.Value.RelatedValue.Id)
+        }
 
-    @Html.Hidden(settings.String + ".AttributeId", attribute.Id)
-    @Html.Hidden(settings.String + ".Type", attribute.Type)
+        @Html.Hidden(settings.String + ".AttributeId", attribute.Id)
+        @Html.Hidden(settings.String + ".Type", attribute.Type)
 
-    @switch (attribute.Type)
-    {
-        case ValueType.IntValue:
-            @Html.TextBox(settings.String + ".Int", source != null ? source.Int : null, new { @type = "number" })
-            @Html.Label(settings.String + ".Int", attribute.Label)
-            break;
+        @switch (attribute.Type)
+        {
+            case ValueType.IntValue:
+                @Html.TextBox(settings.String + ".Int", source != null ? source.Int : null, new { @type = "number" })
+                @Html.Label(settings.String + ".Int", attribute.Label)
+                break;
 
-        case ValueType.StringValue:
-            @Html.TextBox(settings.String + ".String", source != null ? source.String : null)
-            @Html.Label(settings.String + ".String", attribute.Label)
-            break;
+            case ValueType.StringValue:
+                @Html.TextBox(settings.String + ".String", source != null ? source.String : null)
+                @Html.Label(settings.String + ".String", attribute.Label)
+                break;
 
-        case ValueType.SerializedStringValue:
-            @Html.TextBox(settings.String + ".SerializedString", source != null ? source.SerializedString : null)
-            @Html.Label(settings.String + ".SerializedString", attribute.Label)
-            break;
+            case ValueType.SerializedStringValue:
+                @Html.TextBox(settings.String + ".SerializedString", source != null ? source.SerializedString : null)
+                @Html.Label(settings.String + ".SerializedString", attribute.Label)
+                break;
+        }
     }
 </div>

@@ -9,32 +9,84 @@
         <div class="col s12">
             <h1>Values overview</h1>
 
-            @Render.FloatingButton(Url.Action("create", "value", new { Area = "Cystem" }), "add")
+            <div class="row">
+                @await Render.FloatingButton(Url.Action("create", "value", new { Area = "Cystem" }), "add")
+            </div>
 
-            <table>
-                <tbody>
-                    @foreach (Value value in Model.Values)
-                    {
-                    <tr>
-                        <td>@value.Id</td>
-                        <td>@value.Attribute.Label</td>
-
-                        <td>
+            <ul class="collection">
+                @foreach (Value value in Model.Values)
+                {
+                    <li class="collection-item row">
+                        <div class="col s1">
+                            @value.Id
+                        </div>
+                        <div class="col s3">
+                            @value.Attribute.Label
+                        </div>
+                        <div class="col s6">
                             @switch (value.Type)
                             {
-                                case ValueType.StringValue:@value.String break;
-                                case ValueType.SerializedStringValue:@value.SerializedString break;
-                                case ValueType.IntValue: @value.Int break;
-                                case ValueType.RelatedValue: @value.Int break;
-                                case ValueType.RelatedAttribute: @value.Int break;
+                                case ValueType.StringValue:
+                                    @value.String
+                                    break;
+                                case ValueType.SerializedStringValue:
+                                    @value.SerializedString
+                                    break;
+                                case ValueType.IntValue:
+                                    @value.Int
+                                    break;
+                                case ValueType.RelatedValue:
+                                    @value.Int
+                                    break;
+                                case ValueType.RelatedAttribute:
+                                    @value.Int
+                                    break;
                             }
-                        </td>
-                        <td>@await Render.EditButton("/cystem/value/edit/", new { Id = value.Id }, "")</td>
-                        <td>@await Render.DeleteModalButton("/cystem/attribute/delete/", new { Id = value.Id }, "", "delete", DisplaySetting.Render, ElementAction.None)</td>
-                    </tr>
-                    }
-                </tbody>
-            </table>
+                        </div>
+                        <div class="secondary-content">
+                            @await Render.EditButton("/cystem/value/edit/", new { Id = value.Id }, "")
+                            @await Render.DeleteModalButton(value, "", DisplaySetting.Render, ElementAction.None)
+                        </div>
+                    </li>
+                }
+            </ul>
+
+
+            <ul class="pagination">
+                <li class="disabled"><a href="#!"><i class="material-icons">chevron_left</i></a></li>
+                <li class="active"><a href="#!">1</a></li>
+                <li class="waves-effect"><a href="#!">2</a></li>
+                <li class="waves-effect"><a href="#!">3</a></li>
+                <li class="waves-effect"><a href="#!">4</a></li>
+                <li class="waves-effect"><a href="#!">5</a></li>
+                <li class="waves-effect"><a href="#!"><i class="material-icons">chevron_right</i></a></li>
+            </ul>
+
+
+            @*<table>
+                    <tbody>
+                        @foreach (Value value in Model.Values)
+                        {
+                        <tr>
+                            <td>@value.Id</td>
+                            <td>@value.Attribute.Label</td>
+
+                            <td>
+                                @switch (value.Type)
+                                {
+                                    case ValueType.StringValue:@value.String break;
+                                    case ValueType.SerializedStringValue:@value.SerializedString break;
+                                    case ValueType.IntValue: @value.Int break;
+                                    case ValueType.RelatedValue: @value.Int break;
+                                    case ValueType.RelatedAttribute: @value.Int break;
+                                }
+                            </td>
+                            <td>@await Render.EditButton("/cystem/value/edit/", new { Id = value.Id }, "")</td>
+                            <td>@await Render.DeleteModalButton(value, "", DisplaySetting.Render, ElementAction.None)</td>
+                        </tr>
+                        }
+                    </tbody>
+                </table>*@
         </div>
     </div>
 </div>

@@ -5,7 +5,12 @@
 @inject IValueHelper Value
 
 @{
-    Value attributes = Value.Get(Model, "Entry");
+    Value attributes = Value.Get(Model, "Modify entry");
+    Value settings = Value.Get(Model, "Settings");
+    if (attributes != null && attributes.Values == null)
+    {
+        attributes.Values = new List<Value>();
+    }
 }
 
 <div class="container">
@@ -21,20 +26,11 @@
         {
             @Html.Hidden("Value.Type", "RelatedValue")
             @Html.Hidden("Value.AttributeId", 37)
-            @Html.Hidden("Value.GroupId", 76)
+            @Html.Hidden("Value.GroupId", 33)
 
             @Html.Hidden("Value.Values[0].Type", "RelatedValue")
-            @Html.Hidden("Value.Values[0].Int", 64)
+            @Html.Hidden("Value.Values[0].Int", 26)
             @Html.Hidden("Value.Values[0].AttributeId", 25)
-
-            Value settings = new Value
-            {
-                String = "Value.RelatedValue",
-                Attribute = new Attribute
-                {
-                    Label = "Settings"
-                }
-            };
 
             attributes.Values.Add(settings);
 

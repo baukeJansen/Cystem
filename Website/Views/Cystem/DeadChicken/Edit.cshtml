@@ -3,10 +3,10 @@
 @using Website.Common.Extensions
 @using Website.Common.Viewmodels
 @using Website.Controllers.Cystem
-@model DeadChickenViewModel
 
+@*
 <div class="container">
-    @using (Html.BeginForm<DeadChickenController>(c => c.Store(Param<DeadChickenViewModel>.Any), new { }, FormMethod.Post, true, new { }))
+    @using (Html.BeginForm<>(, new { }, FormMethod.Post, true, new { }))
     {
         @Html.HiddenFor(m => m.Id)
 
@@ -56,3 +56,4 @@
         </div>
     }
 </div>
+*@

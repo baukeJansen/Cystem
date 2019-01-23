@@ -5,93 +5,93 @@
 @inject Microsoft.AspNetCore.Hosting.IHostingEnvironment HostingEnvironment
 
 <!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Website</title>
+<html ng-app="cystem">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>@ViewData["Title"] - Website</title>
 
-    <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,400i,700" rel="stylesheet">
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,400i,700" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 
-    <environment names="Development">
-        @*@Bundler.Unpack(HostingEnvironment.ContentRootPath, "/css/cystem.css", Context)*@
-        <link rel="stylesheet" type="text/css" href="~/css/cystem.css" asp-append-version="true" />
-    </environment>
+        <environment names="Development">
+            @*@Bundler.Unpack(HostingEnvironment.ContentRootPath, "/css/cystem.css", Context)*@
+            <link rel="stylesheet" type="text/css" href="~/css/cystem.css" asp-append-version="true" />
+        </environment>
 
-    <environment names="Staging,Production">
-        <link rel="stylesheet" type="text/css" href="~/css/cystem.min.css" asp-append-version="true" />
-    </environment>
+        <environment names="Staging,Production">
+            <link rel="stylesheet" type="text/css" href="~/css/cystem.min.css" asp-append-version="true" />
+        </environment>
 
-    @RenderSection("Style", required: false)
-</head>
+        @RenderSection("Style", required: false)
+    </head>
 
-<body>
-    <div class="header-space"></div>
+    <body>
+        <div class="header-space"></div>
 
-    <div class="content-wrapper main-content">
-        <div class="content" data-url="@Model.Url" data-on-result="@ElementAction.Reload">
-            @RenderBody()
+        <div ng-controller="Component" class="content-wrapper main-content">
+            <div class="content" data-url="@Model.Url" data-on-result="@ElementAction.Reload">
+                @RenderBody()
+            </div>
         </div>
-    </div>
 
-    <div class="footer-space"></div>
+        <div class="footer-space"></div>
 
-    @*<header>
-            <div class="content-wrapper load z-depth-1">
-                <div class="content" data-url="@(Url.Action<CommonController>(c => c.Load(null), new { Actions = new []{ "_Header" }}))" data-on-result="@ElementAction.Load">
-                    @await Html.PartialAsync("_Header")
+        @*<header>
+                <div class="content-wrapper load z-depth-1">
+                    <div class="content" data-url="@(Url.Action<CommonController>(c => c.Load(null), new { Actions = new []{ "_Header" }}))" data-on-result="@ElementAction.Load">
+                        @await Html.PartialAsync("_Header")
+                    </div>
+                </div>
+            </header>
+
+            <footer>
+                <div class="content-wrapper load z-depth-1">
+                    <div class="content" data-url="@(Url.Action<CommonController>(c => c.Load(null), new { Actions = new []{ "_Footer" }}))" data-on-result="@ElementAction.Load">
+                        @await Html.PartialAsync("_Footer")
+                    </div>
+                </div>
+            </footer>*@
+
+        <header>
+            <div ng-controller="Component" class="content-wrapper z-depth-1">
+                <div class="content ajax-load" data-url="/cystem/header/" data-on-result="@ElementAction.Load">
+
                 </div>
             </div>
         </header>
 
         <footer>
-            <div class="content-wrapper load z-depth-1">
-                <div class="content" data-url="@(Url.Action<CommonController>(c => c.Load(null), new { Actions = new []{ "_Footer" }}))" data-on-result="@ElementAction.Load">
-                    @await Html.PartialAsync("_Footer")
+            <div ng-controller="Component" class="content-wrapper z-depth-1">
+                <div class="content ajax-load" data-url="/cystem/footer/" data-on-result="@ElementAction.Load">
+
                 </div>
             </div>
-        </footer>*@
+        </footer>
 
-    <header>
         <div class="content-wrapper z-depth-1">
-            <div class="content ajax-load" data-url="/cystem/header/" data-on-result="@ElementAction.Load">
-
-            </div>
+            <div class="content ajax-load" data-url="/cystem/overlay/" data-on-result="@ElementAction.Load"></div>
         </div>
-    </header>
 
-    <footer>
         <div class="content-wrapper z-depth-1">
-            <div class="content ajax-load" data-url="/cystem/footer/" data-on-result="@ElementAction.Load">
-
-            </div>
+            <div class="content ajax-load" data-url="/cystem/modal/" data-on-result="@ElementAction.Load"></div>
         </div>
-    </footer>
 
-    <div class="content-wrapper z-depth-1">
-        <div class="content ajax-load" data-url="/cystem/overlay/" data-on-result="@ElementAction.Load"></div>
-    </div>
+        <div class="content-wrapper z-depth-1">
+            <div class="content ajax-load" data-url="/cystem/floating-action-button/" data-on-result="@ElementAction.Load"></div>
+        </div>
 
-    <div class="content-wrapper z-depth-1">
-        <div class="content ajax-load" data-url="/cystem/modal/" data-on-result="@ElementAction.Load"></div>
-    </div>
+        <environment names="Development">
+            <script src="~/lib/jquery/jquery.min.js"></script>
+            @Bundler.Unpack(HostingEnvironment.ContentRootPath, "/js/cystem.js", Context)
+        </environment>
 
-    <div class="content-wrapper z-depth-1">
-        <div class="content ajax-load" data-url="/cystem/floating-action-button/" data-on-result="@ElementAction.Load"></div>
-    </div>
+        <environment names="Staging,Production">
+            <script src="~/lib/jquery/jquery.min.js"></script>
+            <script src="~/js/cystem.min.js" async="async" defer="defer" asp-append-version="true"></script>
+        </environment>
 
-    <environment names="Development">
-        <script src="~/lib/jquery/jquery.min.js"></script>
-        @Bundler.Unpack(HostingEnvironment.ContentRootPath, "/js/cystem.js", Context)
-    </environment>
-
-    <environment names="Staging,Production">
-        <script src="~/lib/jquery/jquery.min.js"></script>
-        <script src="~/js/cystem.min.js" async="async" defer="defer" asp-append-version="true"></script>
-    </environment>
-
-    @RenderSection("Scripts", required: false)
-    @Html.Hidden("Layout", Layouts.CystemLayout)
-</body>
+        @RenderSection("Scripts", required: false)
+        @Html.Hidden("Layout", Layouts.CystemLayout)
+    </body>
 </html>

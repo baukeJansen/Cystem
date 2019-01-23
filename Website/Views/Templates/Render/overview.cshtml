@@ -5,8 +5,7 @@
 @inject IValueHelper Value
 
 @{
-    Value createPageRef = Value.Get(Model, "Link");
-    Value createPage = createPageRef?.RelatedValue;
+    Value createPage = Value.Get(Model, "Link")?.RelatedValue;
 }
 
 <div class="container">

@@ -87,3 +87,9 @@ input[type=number] {
 .button-row {
     text-align: right;
 }
+
+.error {
+    @extend .red;
+    @extend .white-text;
+    border-radius: 2px;
+}

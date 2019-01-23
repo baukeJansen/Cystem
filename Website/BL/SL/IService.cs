@@ -15,6 +15,6 @@ namespace Website.BL.SL
         
         void Store(TViewModel viewModel);
 
-        void Delete(TViewModel viewModel);
+        Task Delete(TViewModel viewModel);
     }
 }

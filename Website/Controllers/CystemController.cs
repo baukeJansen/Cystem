@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
+using System.Threading.Tasks;
 using Website.BL.SL.CystemSL;
 using Website.Common.Viewmodels;
 using Website.DAL;
@@ -16,11 +17,23 @@ namespace Website.Controllers
             this.service = service;
         }
 
+        [ActionName("delete-details")]
+        public async Task<IActionResult> ConfirmDelete(GenericViewModel viewModel)
+        {
+            return await HandleErrors(viewModel, async (GenericViewModel vm) =>
+            {
+                vm.Url = HttpContext.Request.Path;
+                vm = await service.PreviewDelete(vm);
+
+                return View("/Views/Router/Route.cshtml", vm);
+            });
+        }
+
         [HttpGet]
         public IActionResult Debug()
         {
             //service.Test();
-            return View("Overview");
+            return View();
         }
     }
 }

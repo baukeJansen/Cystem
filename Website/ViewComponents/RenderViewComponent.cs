@@ -20,12 +20,12 @@ namespace Website.ViewComponents
             
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(GenericViewModel vm)
+        public Task<IViewComponentResult> InvokeAsync(GenericViewModel vm)
         {
-            if (vm == null || vm.Value == null) return Content("");
+            if (vm == null || vm.Value == null) return Task.FromResult((IViewComponentResult)Content(""));
 
             string viewLocation = GetViewLocation(vm);
-            return View(viewLocation, vm);
+            return Task.FromResult((IViewComponentResult)View(viewLocation, vm));
         }
 
         //IViewComponentResult result = await Render(value, options);

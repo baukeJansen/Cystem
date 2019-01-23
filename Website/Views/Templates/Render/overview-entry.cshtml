@@ -18,7 +18,7 @@
         <a class="ajax-get btn-flat waves-effect" href="@target.SerializedString">@await Render.Value(target, "Title", Model.Options)</a>
         <div class="secondary-content">
             @await Render.EditButton(uri, new { Id = target.Id }, "")
-            @await Render.DeleteModalButton("/delete/", new { Id = target.Id }, "", "delete", Model.Options, ElementAction.None)
+            @await Render.DeleteModalButton(target, "", Model.Options, ElementAction.None)
         </div>
     </li>
 }

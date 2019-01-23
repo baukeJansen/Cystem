@@ -1,0 +1,19 @@
+﻿@using Website.Common.Viewmodels
+@using Website.Common.Models.EAV
+@using Website.Common.Enums
+@using ValueType = Website.Common.Enums.ValueType
+@inject IValueHelper Value
+@model GenericViewModel
+
+@{ 
+    Value details = Value.Get(Model, ValueType.RelatedValue)?.RelatedValue;
+}
+
+<div class="container">
+    <ul class="collection value-collection">
+        @if (details != null)
+        {
+            @await Render.Value(details, DisplaySetting.Render)
+        }
+    </ul>
+</div>

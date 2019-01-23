@@ -154,7 +154,7 @@ namespace Website
                 }
             });
             //app.UseCookiePolicy();
-
+            app.UseHttpMethodOverride(new HttpMethodOverrideOptions { FormFieldName = "_method"});
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

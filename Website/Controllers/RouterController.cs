@@ -18,42 +18,38 @@ namespace Website.Controllers
         {
             this.service = service;
         }
-        
-        [HttpGet]
-        public async Task<IActionResult> Route(GenericViewModel vm)
-        {
-            vm.Url = HttpContext.Request.Path;
 
-            try { 
+        [HttpGet]
+        public async Task<IActionResult> Route(GenericViewModel viewModel)
+        {
+            return await HandleErrors(viewModel, async (GenericViewModel vm) =>
+            {
+                vm.Url = HttpContext.Request.Path;
                 vm = await service.Get(vm);
                 return View(vm);
-            }
-            catch (InvalidPageException)
-            {
-                return View("Error", vm);
-            }
-            catch (InvalidTemplateException)
-            {
-                return View("Error", vm);
-            }
+            });
         }
 
         [HttpPost]
         [ActionName("Route")]
-        public IActionResult Store(GenericViewModel vm)
+        public async Task<IActionResult> Store(GenericViewModel viewModel)
         {
-            service.Store(vm);
-
-            return Ok();
+            return await HandleErrors(viewModel, async (GenericViewModel vm) =>
+            {
+                service.Store(vm);
+                return Ok();
+            });
         }
 
         [HttpDelete]
         [ActionName("Route")]
-        public IActionResult Delete(GenericViewModel vm)
+        public async Task<IActionResult> Delete(GenericViewModel viewModel)
         {
-            service.Delete(vm);
-
-            return Ok();
+            return await HandleErrors(viewModel, async (GenericViewModel vm) =>
+            {
+                await service.Delete(vm);
+                return Ok();
+            });
         }
     }
 }

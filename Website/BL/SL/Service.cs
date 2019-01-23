@@ -22,6 +22,6 @@ namespace Website.BL.SL
         public abstract Task<TViewModel> Get(TViewModel viewModel);
         public abstract TViewModel Create(TViewModel viewModel);
         public abstract void Store(TViewModel viewModel);
-        public abstract void Delete(TViewModel viewModel);
+        public abstract Task Delete(TViewModel viewModel);
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
 using System;
@@ -7,6 +8,7 @@ using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
 using Website.Common.Enums;
+using Website.Common.Exceptions;
 using Website.Common.Viewmodels;
 using Website.Views.HtmlHelpers;
 
@@ -49,6 +51,28 @@ namespace Website.Controllers
         {
             SetupView(viewModel);
             return LayoutRedirect(viewModel) ?? base.View(viewName, viewModel);
+        }
+
+        public async Task<IActionResult> HandleErrors<T>(T viewModel, Func<T, Task<IActionResult>> action) where T : ActionViewModel
+        {
+            try
+            {
+                return await action(viewModel);
+            }
+            catch (InvalidPageException exception)
+            {
+                IMapper mapper = (IMapper)HttpContext.RequestServices.GetService(typeof(IMapper));
+                ExceptionViewModel vm = new ExceptionViewModel { Exception = exception };
+                mapper.Map(viewModel, vm);
+                return View("/Views/Router/Error.cshtml", vm);
+            }
+            catch (InvalidTemplateException exception)
+            {
+                IMapper mapper = (IMapper)HttpContext.RequestServices.GetService(typeof(IMapper));
+                ExceptionViewModel vm = new ExceptionViewModel { Exception = exception };
+                mapper.Map(viewModel, vm);
+                return View("/Views/Router/Error.cshtml", vm);
+            }
         }
 
         private IActionResult LayoutRedirect(ActionViewModel model)

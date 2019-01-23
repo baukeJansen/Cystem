@@ -8,9 +8,12 @@
 @{
     Value template = Value.Get(Model, "Template");
     Value newValue = Value.Get(Model, "New");
-    newValue.Id = 0;
-    newValue.AttributeId = 0;
-    newValue.GroupId = Model.Id;
+    if (newValue != null)
+    {
+        newValue.Id = 0;
+        newValue.AttributeId = 0;
+        newValue.GroupId = Model.Id;
+    }
 }
 
 <div class="container">
@@ -20,14 +23,16 @@
         </div>
     </div>
 
-    @using (Html.BeginForm(null, null, new { }, FormMethod.Post, true, new { action = "/cystem/edit-page/" }))
-    {
-        @await Render.Value(newValue, Model.Options);
+    @if (newValue != null) {
+        @using (Html.BeginForm(null, null, new { }, FormMethod.Post, true, new { action = "/cystem/edit-page/" }))
+        {
+            @await Render.Value(newValue, Model.Options);
 
-        <div class="row">
-            <div class="col s12 right-align">
-                @await Render.SubmitButton("Create", "add")
+            <div class="row">
+                <div class="col s12 right-align">
+                    @await Render.SubmitButton("Create", "add")
+                </div>
             </div>
-        </div>
+        }
     }
 </div>

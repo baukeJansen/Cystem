@@ -1,8 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Website.BL.LL.EavLL;
-using Website.BL.LL.PageLL;
+using Website.BL.LL.ValueLL;
 using Website.BL.QL.ValueQL;
 using Website.BL.SL.CystemSL;
 using Website.BL.SL.DatatableSL;
@@ -25,8 +24,7 @@ namespace Website
             services.AddScoped<IValueQuery, ValueQuery>();
 
             // Logic
-            services.AddScoped<IPageLogic, PageLogic>();
-            services.AddScoped<IEavLogic, EavLogic>();
+            services.AddScoped<IValueLogic, ValueLogic>();
 
             // Service
             services.AddScoped<ICystemService, CystemService>();

@@ -19,7 +19,7 @@ namespace Website.BL.SL.DatatableSL
             throw new NotImplementedException();
         }
 
-        public override void Delete(DatatableViewModel viewModel)
+        public override Task Delete(DatatableViewModel viewModel)
         {
             throw new NotImplementedException();
         }

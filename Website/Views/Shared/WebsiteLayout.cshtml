@@ -29,7 +29,7 @@
 <body>
     <div class="header-space"></div>
 
-    <div class="content-wrapper main-content">
+    <div data-component-wrapper class="content-wrapper" data-main-component="true">
         <div class="content" data-url="@Model.Url" data-on-result="@ElementAction.Reload">
             @RenderBody()
         </div>
@@ -54,16 +54,16 @@
         </footer>*@
 
     <header>
-        <div class="content-wrapper z-depth-1">
-            <div class="content ajax-load" data-url="/cystem/header/" data-on-result="@ElementAction.Load">
+        <div data-component-wrapper class="content-wrapper z-depth-1">
+            <div data-load class="content ajax-load" data-url="/cystem/header/" data-on-result="@ElementAction.Load">
 
             </div>
         </div>
     </header>
 
     <footer>
-        <div class="content-wrapper z-depth-1">
-            <div class="content ajax-load" data-url="/cystem/footer/" data-on-result="@ElementAction.Load">
+        <div data-component-wrapper class="content-wrapper z-depth-1">
+            <div data-load class="content" data-url="/cystem/footer/" data-on-result="@ElementAction.Load">
 
             </div>
         </div>
