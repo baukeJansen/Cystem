@@ -1,4 +1,4 @@
-﻿class FloatingActionButton {
+﻿/*class FloatingActionButton {
     Name: ServiceName = ServiceName.FloatingActionButton;
 
     private _serviceManager: IServiceManager;
@@ -18,4 +18,4 @@
             $(fab).floatingActionButton();
         });
     }
-}
+}*/

@@ -30,22 +30,34 @@
       "wwwroot/src/lib/materialize.js",
       "wwwroot/src/lib/chart.js",
 
+      "wwwroot/src/js/common/map.js",
       "wwwroot/src/js/common/actionresult.js",
       "wwwroot/src/js/common/method.js",
-      "wwwroot/src/js/common/servicename.js",
-      "wwwroot/src/js/action.js",
+      "wwwroot/src/js/common/service.js",
+      "wwwroot/src/js/common/jqueryextensions.js",
+
+      "wwwroot/src/js/service/iservice.js",
+      "wwwroot/src/js/service/servicemanager.js",
+      "wwwroot/src/js/parser/iparser.js",
+      "wwwroot/src/js/parser/parsermanager.js",
+
+      "wwwroot/src/js/parsers/load.js",
+      "wwwroot/src/js/parsers/materialize.js",
+
+      "wwwroot/src/js/services/ajax.js",
+
       "wwwroot/src/js/cystem.js",
-      "wwwroot/src/js/modalhelper.js",
+      "wwwroot/src/js/component.js",
+      "wwwroot/src/js/action.js",
       "wwwroot/src/js/navigate.js",
       "wwwroot/src/js/overlay.js",
       "wwwroot/src/js/overlayhelper.js",
-      "wwwroot/src/js/materialize.js",
+      "wwwroot/src/js/modalhelper.js",
+      "wwwroot/src/js/pagination.js",
       "wwwroot/src/js/formtab.js",
       "wwwroot/src/js/floatingactionbutton.js",
       "wwwroot/src/js/graph.js",
-      "wwwroot/src/js/service/iservice.js",
-      "wwwroot/src/js/service/iservicemanager.js",
-      "wwwroot/src/js/service/servicemanager.js"
+      "wwwroot/src/js/init.js"
     ],
     "minify": {
       "enabled": true,

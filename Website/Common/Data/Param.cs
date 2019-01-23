@@ -11,5 +11,5 @@ namespace Website.Common.Data
     public static class Param<TValue>
     {
         public static TValue Any { get => default(TValue); }
-}
+    }
 }

@@ -7,7 +7,6 @@ namespace Website.Common.Viewmodels
 {
     public class DatatableViewModel : ActionViewModel
     {
-        public int ValueId { get; set; }
         public int Page { get; set; }
         public string SearchString { get; set; }
     }

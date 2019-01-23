@@ -1,7 +1,6 @@
-﻿class ModalHelper implements IService{
+﻿/*class ModalHelper{
     Name: ServiceName = ServiceName.ModalHelper;
     private $modal: JQuery;
-    private $button: JQuery;
 
     private _serviceManager: IServiceManager;
 
@@ -18,37 +17,31 @@
         if (!(this.$modal && this.$modal.length)) {
             this.$modal = $(el).find('#modal');
             this.$modal.modal({
+                inDuration: 100,
+                outDuration: 100,
                 onCloseEnd: function () { self.onClose(); }
             });
         }
     }
 
-    open($button: JQuery): ModalHelper {
-        this.$button = $button;
+    open(): ModalHelper {
         this.$modal.modal('open');
         return this;
     }
 
     setContent(content: string): void {
         var $content = $(content);
+        this.setJqueryContent($content);
+    }
 
-        // accept button after delete button as html doesnt allow nested anchors
-        var $onAccept: JQuery = this.$button.parent().find('.modal-accept');
-        if ($onAccept.length) {
-            var $acceptButton: JQuery = $content.find('.accept-btn');
-            $acceptButton.click(function () { $onAccept.click(); });
-        }
-
-        var $onDecline: JQuery = this.$button.parent().find('.modal-decline');
-        if ($onDecline.length) {
-            var $declineButton: JQuery = $content.find('.decline-btn');
-            $declineButton.click(function () { $onDecline.click(); });
-        }
-
+    setJqueryContent($content: JQuery): void {
         this.$modal.append($content);
+
+        var cystem: Cystem = this._serviceManager.get(Cystem);
+        cystem.bindNew($content[0]);
     }
 
     onClose(): void {
         this.$modal.children().remove();
     };
-}
+}*/

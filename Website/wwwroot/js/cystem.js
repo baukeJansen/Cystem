@@ -31356,6 +31356,29 @@ module.exports = function() {
 },{"1":1,"26":26,"33":33,"34":34,"46":46}]},{},[7])(7)
 });
 
+var Map = (function () {
+    function Map() {
+        this.items = {};
+    }
+    Map.prototype.add = function (key, value) {
+        this.items[key] = value;
+    };
+    Map.prototype.has = function (key) {
+        return key in this.items;
+    };
+    Map.prototype.get = function (key) {
+        return this.items[key];
+    };
+    Map.prototype.getValues = function () {
+        var items = [];
+        for (var item in this.items) {
+            items.push(this.items[item]);
+        }
+        return items;
+    };
+    return Map;
+}());
+//# sourceMappingURL=map.js.map
 var ActionResult;
 (function (ActionResult) {
     ActionResult["DISPLAY"] = "display";
@@ -31376,55 +31399,195 @@ var Method;
     Method["POPSTATE"] = "popstate";
 })(Method || (Method = {}));
 //# sourceMappingURL=method.js.map
-var ServiceName;
-(function (ServiceName) {
-    ServiceName[ServiceName["Cystem"] = 0] = "Cystem";
-    ServiceName[ServiceName["Navigate"] = 1] = "Navigate";
-    ServiceName[ServiceName["OverlayHelper"] = 2] = "OverlayHelper";
-    ServiceName[ServiceName["ModalHelper"] = 3] = "ModalHelper";
-    ServiceName[ServiceName["Materialize"] = 4] = "Materialize";
-    ServiceName[ServiceName["Graph"] = 5] = "Graph";
-    ServiceName[ServiceName["Formtab"] = 6] = "Formtab";
-    ServiceName[ServiceName["FloatingActionButton"] = 7] = "FloatingActionButton";
-})(ServiceName || (ServiceName = {}));
-//# sourceMappingURL=servicename.js.map
+var Service;
+(function (Service) {
+    Service["Cystem"] = "cystem";
+    Service["Load"] = "load";
+    Service["Ajax"] = "ajax";
+    Service["Navigate"] = "navigate";
+    Service["OverlayHelper"] = "overlayhelper";
+    Service["ModalHelper"] = "modalhelper";
+    Service["Materialize"] = "materialize";
+    Service["Graph"] = "graph";
+    Service["Formtab"] = "formtab";
+    Service["FloatingActionButton"] = "floatingactionbutton";
+    Service["Pagination"] = "pagination";
+})(Service || (Service = {}));
+//# sourceMappingURL=service.js.map
+jQuery.fn.extend({
+    component: function (parent) {
+        return new Component(parent, this);
+    },
+    iterate: function (component) {
+        return this.each(function (_, el) {
+            var $el = $(el);
+            if (el.hasAttribute('data-component-wrapper')) {
+                component.addChild(new Component(component, $el));
+            }
+            else {
+                component.parse(el);
+                $el.children().iterate(component);
+            }
+        });
+    }
+});
+//# sourceMappingURL=jqueryextensions.js.map
+//# sourceMappingURL=iservice.js.map
+var ServiceManager;
+(function (ServiceManager) {
+    var services = new Map();
+    function get(key) {
+        return services.get(key.toString());
+    }
+    ServiceManager.get = get;
+    function getAll() {
+        return services.getValues();
+    }
+    ServiceManager.getAll = getAll;
+    function register(key) {
+        return function (ctor) {
+            services.add(key.toString(), new ctor());
+        };
+    }
+    ServiceManager.register = register;
+})(ServiceManager || (ServiceManager = {}));
+//# sourceMappingURL=servicemanager.js.map
+//# sourceMappingURL=iparser.js.map
+var ParserManager;
+(function (ParserManager) {
+    var parser = new Map();
+    function get(key) {
+        return parser.get(key.toString());
+    }
+    ParserManager.get = get;
+    function getAll() {
+        return parser.getValues();
+    }
+    ParserManager.getAll = getAll;
+    function register(key) {
+        return function (ctor) {
+            parser.add(key.toString(), ServiceManager.get(key));
+        };
+    }
+    ParserManager.register = register;
+})(ParserManager || (ParserManager = {}));
+//# sourceMappingURL=parsermanager.js.map
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var Load = (function () {
+    function Load() {
+    }
+    Load.prototype.parse = function (component, el) {
+        if (el.hasAttribute('data-load')) {
+            this.load(component, el);
+        }
+    };
+    Load.prototype.load = function (component, el) {
+        var ajax = ServiceManager.get(Service.Ajax);
+        var action = new Action(component, $(el), Method.GET);
+        ajax.send(component, action);
+    };
+    Load = __decorate([
+        ParserManager.register(Service.Load),
+        ServiceManager.register(Service.Load)
+    ], Load);
+    return Load;
+}());
+//# sourceMappingURL=load.js.map
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var Ajax = (function () {
+    function Ajax() {
+    }
+    Ajax.prototype.send = function (component, action) {
+        $.ajax({
+            method: action.method,
+            url: action.url,
+            data: action.data,
+            mimeType: 'text/html'
+        }).done(function (response, status, xhr) {
+            switch (xhr.status) {
+                case 200:
+                    component.setContent(response);
+                    break;
+                case 205:
+                    break;
+                default:
+                    console.log('unknown status: ', xhr.status);
+                    break;
+            }
+        }).fail(function (error) {
+            var $content = $('<div class="content error-modal"></div>');
+            var $iframe = $('<iframe>');
+            setTimeout(function () {
+                var iframe = $iframe[0];
+                var $iframeContent = $('body', iframe.contentWindow.document);
+                $iframeContent.html(error.responseText);
+            }, 1);
+        });
+    };
+    Ajax = __decorate([
+        ServiceManager.register(Service.Ajax)
+    ], Ajax);
+    return Ajax;
+}());
+//# sourceMappingURL=ajax.js.map
+var Cystem = (function () {
+    function Cystem() {
+        var page = new Component(null, $('body'));
+    }
+    return Cystem;
+}());
+//# sourceMappingURL=cystem.js.map
+var Component = (function () {
+    function Component(parent, $component) {
+        this.parent = parent;
+        this.$component = $component;
+        this.children = [];
+        $component.children().iterate(this);
+    }
+    Component.prototype.addChild = function (child) {
+        this.children.push(child);
+    };
+    Component.prototype.parse = function (el) {
+        var parsers = ParserManager.getAll();
+        for (var i = 0; i < parsers.length; i++) {
+            var parser = parsers[i];
+            parser.parse(this, el);
+        }
+    };
+    Component.prototype.setContent = function (content) {
+        var $content = $(content);
+        this.$component.empty();
+        this.$component.append($content);
+        this.parse($content[0]);
+    };
+    return Component;
+}());
+//# sourceMappingURL=component.js.map
 var Action = (function () {
-    function Action(method, url, data, $source, actionResult) {
-        this._readyStack = [];
+    function Action(component, $source, method) {
+        this.component = component;
+        this.$source = $source;
         this.method = method;
-        this.url = url;
-        this.data = data;
-        this.actionResult = actionResult || ActionResult.DISPLAY;
-        this.setSource($source);
+        this._readyStack = [];
+        this.actionResult = this._getActionResult($source);
+        this.url = this._getUrl($source);
+        this.data = this._getData($source, this.actionResult);
     }
     Action.prototype.setSource = function ($source) {
         this.$source = $source || undefined;
-        var $target;
-        if (this.hasSource()) {
-            var target = this.$source.data('target');
-            $target = target ? $(target) : undefined;
-            if (!($target && $target.length)) {
-                $target = this.$source.closest('.content-wrapper');
-            }
-            if (!($target && $target.length)) {
-                $target = undefined;
-            }
-        }
-        this.$target = $target || $('.content-wrapper.main-content');
-        this.$oldContent = this.$target.find('.content');
-        this.$newContent = undefined;
     };
     Action.prototype.hasSource = function () {
         return !!(this.$source && this.$source.length);
-    };
-    Action.prototype.hasTarget = function () {
-        return !!(this.$target && this.$target.length);
-    };
-    Action.prototype.hasOldContent = function () {
-        return !!(this.$oldContent && this.$oldContent.length);
-    };
-    Action.prototype.hasNewContent = function () {
-        return !!(this.$newContent && this.$newContent.length);
     };
     Action.prototype.onReady = function (fn) {
         this._readyStack.push(fn);
@@ -31435,89 +31598,149 @@ var Action = (function () {
         };
         this._readyStack.forEach(function (fn) { fn(); });
     };
+    Action.prototype._getUrl = function ($el, keepParams) {
+        if (keepParams === void 0) { keepParams = false; }
+        var url;
+        if ($el[0].hasAttribute('href')) {
+            url = $el.attr('href');
+        }
+        else {
+            url = $el.data('url');
+        }
+        if (keepParams) {
+            return url;
+        }
+        else {
+            return url.split('?')[0];
+        }
+    };
+    Action.prototype._getData = function ($el, actionResult) {
+        var url = this._getUrl($el, true).split('?');
+        var data = $el ? $el.data('params') : {};
+        data = data || {};
+        if (url.length > 1) {
+            var paramString = url[1];
+            var params = paramString.split('&');
+            $.each(params, function (_, param) {
+                var keyValuePair = param.split('=');
+                if (keyValuePair.length === 2) {
+                    data[keyValuePair[0]] = keyValuePair[1];
+                }
+            });
+        }
+        data.CurrentLayout = $("#Layout").val();
+        data.Layout = "AjaxLayout";
+        return data;
+    };
+    Action.prototype._getActionResult = function ($el) {
+        var actionResult = ActionResult.DISPLAY;
+        if ($el.length) {
+            var result = $el.data('on-result');
+            if (result) {
+                var resultKey = result.toUpperCase();
+                actionResult = ActionResult[resultKey];
+            }
+        }
+        return actionResult;
+    };
+    ;
     return Action;
 }());
 //# sourceMappingURL=action.js.map
-var Cystem = (function () {
-    function Cystem() {
-        this.Name = ServiceName.Cystem;
-    }
-    Cystem.prototype.construct = function (serviceManager) {
-        this._serviceManager = serviceManager;
-    };
-    Cystem.prototype.bindNew = function (el) {
-        var services = this._serviceManager.getServices();
-        for (var _i = 0, services_1 = services; _i < services_1.length; _i++) {
-            var service = services_1[_i];
-            service.bind(el);
+jQuery.fn.extend({
+    link: function (method) {
+        return this.click(function () {
+        });
+    },
+    load: function (method) {
+        return this.each(function (_, el) {
+        });
+    },
+    ajax: function (action) {
+        return this.each(function () {
+            $.ajax({
+                method: action.method,
+                url: action.url,
+                data: action.data,
+                mimeType: 'text/html'
+            }).done(function (response, status, xhr) {
+                switch (xhr.status) {
+                    case 200:
+                        action.response = response;
+                        break;
+                    case 205:
+                        action.data.Layout = "None";
+                        window.location.href = action.url;
+                        break;
+                    default:
+                        console.log('unknown status: ', xhr.status);
+                        break;
+                }
+            }).fail(function (error) {
+                var $content = $('<div class="content error-modal"></div>');
+                var $iframe = $('<iframe>');
+                setTimeout(function () {
+                    var iframe = $iframe[0];
+                    var $iframeContent = $('body', iframe.contentWindow.document);
+                    $iframeContent.html(error.responseText);
+                }, 1);
+            });
+        });
+    },
+    getUrl: function (keepParams) {
+        if (keepParams === void 0) { keepParams = false; }
+        var url;
+        if (this[0].hasAttribute('href')) {
+            url = this.attr('href');
         }
-    };
-    Cystem.prototype.bind = function (el) {
-    };
-    return Cystem;
-}());
-//# sourceMappingURL=cystem.js.map
-var ModalHelper = (function () {
-    function ModalHelper() {
-        this.Name = ServiceName.ModalHelper;
-    }
-    ModalHelper.prototype.construct = function (serviceManager) {
-        this._serviceManager = serviceManager;
-    };
-    ModalHelper.prototype.bind = function (el) {
-        var self = this;
-        if (!(this.$modal && this.$modal.length)) {
-            this.$modal = $(el).find('#modal');
-            this.$modal.modal({
-                onCloseEnd: function () { self.onClose(); }
+        else {
+            url = this.data('url');
+        }
+        if (keepParams) {
+            return url;
+        }
+        else {
+            return url.split('?')[0];
+        }
+    },
+    getData: function () {
+        var url = this.getUrl(true).split('?');
+        var data = this.data('params');
+        data = data || {};
+        if (url.length > 1) {
+            var paramString = url[1];
+            var params = paramString.split('&');
+            $.each(params, function (_, param) {
+                var keyValuePair = param.split('=');
+                if (keyValuePair.length === 2) {
+                    data[keyValuePair[0]] = keyValuePair[1];
+                }
             });
         }
-    };
-    ModalHelper.prototype.open = function ($button) {
-        this.$button = $button;
-        this.$modal.modal('open');
-        return this;
-    };
-    ModalHelper.prototype.setContent = function (content) {
-        var $content = $(content);
-        var $onAccept = this.$button.parent().find('.modal-accept');
-        if ($onAccept.length) {
-            var $acceptButton = $content.find('.accept-btn');
-            $acceptButton.click(function () { $onAccept.click(); });
+        data.CurrentLayout = $("#Layout").val();
+        data.Layout = "AjaxLayout";
+        return data;
+    },
+    getActionResult: function () {
+        var actionResult = ActionResult.LOAD;
+        if (this.length) {
+            var result = this.data('on-result');
+            if (result) {
+                var resultKey = result.toUpperCase();
+                actionResult = ActionResult[resultKey];
+            }
         }
-        var $onDecline = this.$button.parent().find('.modal-decline');
-        if ($onDecline.length) {
-            var $declineButton = $content.find('.decline-btn');
-            $declineButton.click(function () { $onDecline.click(); });
-        }
-        this.$modal.append($content);
-    };
-    ModalHelper.prototype.onClose = function () {
-        this.$modal.children().remove();
-    };
-    ;
-    return ModalHelper;
-}());
-//# sourceMappingURL=modalhelper.js.map
+        return actionResult;
+    }
+});
 var Navigate = (function () {
     function Navigate() {
-        this.Name = ServiceName.Navigate;
+        this.Name = Service.Navigate;
         this._currentUrl = '';
         var self = this;
         window.onpopstate = function (e) { self.onPopState.call(self, e); };
     }
-    Navigate.prototype.construct = function (serviceManager) {
-        this._serviceManager = serviceManager;
-    };
-    Navigate.prototype.bind = function (el) {
-        var self = this;
-        var $el = $(el);
-        $el.find('.ajax-get').click(function (e) { return self._action.call(self, e, Method.GET, $(this)); });
-        $el.find('.ajax-post').click(function (e) { return self._action.call(self, e, Method.POST, $(this)); });
-        $el.find('.ajax-put').click(function (e) { return self._action.call(self, e, Method.PUT, $(this)); });
-        $el.find('.ajax-delete').click(function (e) { return self._action.call(self, e, Method.DELETE, $(this)); });
-        $el.find('.ajax-submit').click(function (e) { return self._submit.call(self, e, $(this)); });
-        $el.find('.ajax-load').each(function (i, el) { self._action.call(self, null, Method.GET, $(el)); });
+    Navigate.prototype.bind = function () {
     };
     ;
     Navigate.prototype.reload = function ($content) {
@@ -31528,20 +31751,25 @@ var Navigate = (function () {
         var actionResult = this._getActionResult($el);
         var url = this._getUrl($el);
         var data = this._getData($el, actionResult);
-        var action = new Action(method, url, data, $el, actionResult);
-        this._exec(action);
         return false;
     };
     ;
     Navigate.prototype._submit = function (event, $el) {
         var self = this;
         var $form = $el.closest('form');
-        var method = $form.attr('method').toLowerCase();
+        var $method = $('form').find('#zmethod');
+        var method;
+        console.log($method);
+        if ($method.length) {
+            method = $method.attr('value').toLowerCase();
+        }
+        else {
+            method = $form.attr('method').toLowerCase();
+        }
+        console.log(method);
         var url = $form.attr('action');
         var data = $form.serialize();
         var actionResult = this._getActionResult($el);
-        var action = new Action(method, url, data, $el, actionResult);
-        this._exec(action);
         return false;
     };
     ;
@@ -31553,13 +31781,10 @@ var Navigate = (function () {
             Layout: "AjaxLayout"
         };
         console.log(this._currentUrl, url);
-        var action = new Action(Method.POPSTATE, url, data, undefined, state.actionResult || ActionResult.DISPLAY);
-        this._exec(action);
     };
     ;
     Navigate.prototype._exec = function (action) {
         var self = this;
-        this._beforeSend(action);
         $.ajax({
             method: action.method,
             url: action.url,
@@ -31580,62 +31805,14 @@ var Navigate = (function () {
                     break;
             }
         }).fail(function (error) {
-            var $popup = $('<div class="popup error"></div>');
-            var $wrapper = $('<div class="wrapper"></div>');
-            var $closeButton = $('<div class="close">x</div>');
+            var $content = $('<div class="content error-modal"></div>');
             var $iframe = $('<iframe>');
-            $wrapper.append($closeButton);
-            $wrapper.append($iframe);
-            $popup.append($wrapper);
-            $('body').append($popup);
             setTimeout(function () {
                 var iframe = $iframe[0];
-                var doc = iframe.contentWindow.document;
-                var $iframeBody = $('body', doc);
-                $iframeBody.html(error.responseText);
-                $closeButton.click(function () { $popup.remove(); });
+                var $iframeContent = $('body', iframe.contentWindow.document);
+                $iframeContent.html(error.responseText);
             }, 1);
         });
-    };
-    ;
-    Navigate.prototype._beforeSend = function (action) {
-        var $target = action.$target;
-        var $oldContent = action.$oldContent;
-        var state;
-        if (action.method === Method.GET && action.actionResult === ActionResult.DISPLAY) {
-            state = state || {};
-            history.pushState(state, "", action.url);
-            this._currentUrl = action.url;
-        }
-        if (action.method === Method.POPSTATE) {
-            action.method = Method.GET;
-        }
-        switch (action.actionResult) {
-            case ActionResult.DISPLAY:
-            case ActionResult.LOAD:
-            case ActionResult.RELOAD:
-                if (action.hasOldContent()) {
-                    $target.css({ height: action.$oldContent.outerHeight() });
-                    $oldContent.addClass('fade-out');
-                }
-                setTimeout(function () {
-                    $oldContent.remove();
-                    action.ready();
-                }, 50);
-                break;
-            case ActionResult.OVERLAY:
-                var _overlayHelper = this._serviceManager.get(OverlayHelper);
-                action.overlay = _overlayHelper.open();
-                break;
-            case ActionResult.MODAL:
-                var _modalHelper = this._serviceManager.get(ModalHelper);
-                action.modal = _modalHelper.open(action.$source);
-                break;
-            case ActionResult.CLOSE:
-                break;
-            case ActionResult.NONE:
-                break;
-        }
     };
     ;
     Navigate.prototype._done = function (action) {
@@ -31643,7 +31820,6 @@ var Navigate = (function () {
             case ActionResult.DISPLAY:
             case ActionResult.LOAD:
             case ActionResult.RELOAD:
-                this._display(action);
                 break;
             case ActionResult.OVERLAY:
                 this._setOverlay(action);
@@ -31659,35 +31835,13 @@ var Navigate = (function () {
         }
     };
     ;
-    Navigate.prototype._display = function (action) {
-        var self = this;
-        var $target = action.$target;
-        var $newContent = $(action.response);
-        action.$newContent = $newContent;
-        $newContent.addClass('fade-in');
-        action.onReady(function () {
-            $target.append($newContent);
-            var cystem = self._serviceManager.get(Cystem);
-            cystem.bindNew($newContent[0]);
-            $target.css({ height: $newContent.outerHeight() });
-            setTimeout(function () {
-                $newContent.removeClass('fade-in');
-                $target.css({ height: 'auto' });
-            }, 30);
-        });
-    };
-    ;
     Navigate.prototype._setOverlay = function (action) {
-        action.overlay.setContent(action.response);
     };
     ;
     Navigate.prototype._setModal = function (action) {
-        action.modal.setContent(action.response);
     };
     ;
     Navigate.prototype._close = function (action) {
-        var _overlayHelper = this._serviceManager.get(OverlayHelper);
-        _overlayHelper.close();
     };
     ;
     Navigate.prototype._getActionResult = function ($el) {
@@ -31750,348 +31904,12 @@ var Navigate = (function () {
     return Navigate;
 }());
 //# sourceMappingURL=navigate.js.map
-var Overlay = (function () {
-    function Overlay(serviceManager, helper) {
-        var self = this;
-        this._serviceManager = serviceManager;
-        this._helper = helper;
-        this.$overlay = helper.$overlayTemplate.clone();
-        var $closeButton = this.$overlay.find('.close');
-        $closeButton.click(function () { self.close(); });
-        this.$overlay.click(function (e) {
-            var $target = $(e.target);
-            if ($target.hasClass('overlay-wrapper')) {
-                self.close();
-            }
-        });
-        this.open();
-    }
-    Overlay.prototype.open = function () {
-        var self = this;
-        this._helper.moveParents(this, 'left');
-        this.$overlay.removeClass('hide');
-        this.$overlay.addClass('fade');
-        this._helper.$body.append(this.$overlay);
-        setTimeout(function () {
-            self.$overlay.removeClass('fade');
-        }, 50);
-        return this;
-    };
-    Overlay.prototype.setContent = function (overlayContent) {
-        var $overlayContent = $(overlayContent);
-        var $contentWrapper = this.$overlay.find('.content-wrapper');
-        $contentWrapper.append($overlayContent);
-        var cystem = this._serviceManager.get(Cystem);
-        cystem.bindNew(this.$overlay[0]);
-    };
-    Overlay.prototype.close = function () {
-        var self = this;
-        if (this.$overlay.hasClass('fade'))
-            return;
-        this.$overlay.addClass('fade');
-        this._helper.moveParents(this, 'right');
-        this._helper.reloadParent(this);
-        setTimeout(function () {
-            self.$overlay.remove();
-        }, 400);
-    };
-    return Overlay;
-}());
 //# sourceMappingURL=overlay.js.map
-var OverlayHelper = (function () {
-    function OverlayHelper() {
-        this.Name = ServiceName.OverlayHelper;
-        this._overlays = [];
-    }
-    OverlayHelper.prototype.construct = function (serviceManager) {
-        this._serviceManager = serviceManager;
-        this.$window = $(window);
-        this.$body = $('body');
-    };
-    OverlayHelper.prototype.bind = function (el) {
-        var $template = this.$body.find('.overlay-template');
-        if ($template.length) {
-            this.$overlayTemplate = $template;
-            this.$overlayTemplate.removeClass('overlay-template');
-            this.$overlayTemplate.detach();
-        }
-    };
-    OverlayHelper.prototype.open = function () {
-        var overlay = new Overlay(this._serviceManager, this);
-        this._overlays.push(overlay);
-        return overlay;
-    };
-    OverlayHelper.prototype.setContent = function (content) {
-    };
-    OverlayHelper.prototype.close = function () {
-        if (this._overlays.length) {
-            var overlay = this._overlays.pop();
-            overlay.close();
-        }
-    };
-    OverlayHelper.prototype.moveParents = function (overlay, direction) {
-        var self = this;
-        $('.overlay-wrapper .content').not(overlay.$overlay).each(function (_, el) {
-            var leftOffset = parseInt($(el).css('margin-left'));
-            if (direction === 'left') {
-                leftOffset -= self.$window.width() / 40;
-            }
-            else {
-                leftOffset += self.$window.width() / 40;
-            }
-            $(el).css('margin-left', leftOffset);
-        });
-    };
-    OverlayHelper.prototype.reloadParent = function (overlay) {
-        var $overlayWrappers = $('.overlay-wrapper');
-        var $content;
-        if ($overlayWrappers.length > 1) {
-            $content = $overlayWrappers.eq(-2).find('.content');
-        }
-        else {
-            $content = $('.main-content .content');
-        }
-        var navigate = this._serviceManager.get(Navigate);
-        navigate.reload($content);
-    };
-    return OverlayHelper;
-}());
 //# sourceMappingURL=overlayhelper.js.map
-var Materialize = (function () {
-    function Materialize() {
-        this.Name = ServiceName.Materialize;
-    }
-    Materialize.prototype.construct = function (serviceManager) {
-        this._serviceManager = serviceManager;
-    };
-    Materialize.prototype.bind = function (root) {
-        var registry = {
-            Autocomplete: {
-                el: root.querySelectorAll('.autocomplete:not(.no-autoinit)'), config: {}
-            },
-            Carousel: {
-                el: root.querySelectorAll('.carousel:not(.no-autoinit)'), config: {}
-            },
-            Chips: {
-                el: root.querySelectorAll('.chips:not(.no-autoinit)'), config: {}
-            },
-            Collapsible: {
-                el: root.querySelectorAll('.collapsible:not(.no-autoinit)'), config: {}
-            },
-            Datepicker: {
-                el: root.querySelectorAll('.datepicker:not(.no-autoinit)'), config: { format: "dd-mm-yyyy", autoClose: true }
-            },
-            Dropdown: {
-                el: root.querySelectorAll('.dropdown-trigger:not(.no-autoinit)'), config: {}
-            },
-            Materialbox: {
-                el: root.querySelectorAll('.materialboxed:not(.no-autoinit)'), config: {}
-            },
-            Parallax: {
-                el: root.querySelectorAll('.parallax:not(.no-autoinit)'), config: {}
-            },
-            Pushpin: {
-                el: root.querySelectorAll('.pushpin:not(.no-autoinit)'), config: {}
-            },
-            ScrollSpy: {
-                el: root.querySelectorAll('.scrollspy:not(.no-autoinit)'), config: {}
-            },
-            FormSelect: {
-                el: root.querySelectorAll('select:not(.no-autoinit)'), config: {}
-            },
-            Sidenav: {
-                el: root.querySelectorAll('.sidenav:not(.no-autoinit)'), config: {}
-            },
-            Tabs: {
-                el: root.querySelectorAll('.tabs:not(.no-autoinit)'), config: {}
-            },
-            TapTarget: {
-                el: root.querySelectorAll('.tap-target:not(.no-autoinit)'), config: {}
-            },
-            Timepicker: {
-                el: root.querySelectorAll('.timepicker:not(.no-autoinit)'), config: {}
-            },
-            Tooltip: {
-                el: root.querySelectorAll('.tooltipped:not(.no-autoinit)'), config: {}
-            }
-        };
-        for (var pluginName in registry) {
-            var plugin = M[pluginName];
-            plugin.init(registry[pluginName].el, registry[pluginName].config);
-        }
-        M.updateTextFields();
-        $(root).find('#nav-mobile a').click(function () {
-            $('#nav-mobile').sidenav('close');
-        });
-    };
-    return Materialize;
-}());
-//# sourceMappingURL=materialize.js.map
-var Formtab = (function () {
-    function Formtab() {
-        this.Name = ServiceName.Formtab;
-    }
-    Formtab.prototype.construct = function (serviceManager) {
-        this._serviceManager = serviceManager;
-    };
-    Formtab.prototype.bind = function (el) {
-        var self = this;
-        var $formtabs = $(el).find('.tabs.formtab');
-        $formtabs.each(function (_, tabWrapper) {
-            var $tabs = $(tabWrapper).find('.tab');
-            self.targetInputs($tabs);
-            $tabs.click(function () {
-                var $tab = $(this);
-                $tab.find('input[type="radio"]').prop('checked', true);
-                self.targetInputs($tabs);
-            });
-        });
-    };
-    Formtab.prototype.targetInputs = function ($tabs) {
-        setTimeout(function () {
-            var $selectedTab = $tabs.has('a.active');
-            $tabs.not($selectedTab).each(function (index, tab) {
-                var target = $(tab).find('a').attr('href');
-                var $inputs = $(target).find('input');
-                $inputs.prop('disabled', 'disabled');
-            });
-            var target = $selectedTab.find('a').attr('href');
-            var $inputs = $(target).find('input');
-            $inputs.removeAttr('disabled');
-        }, 1);
-    };
-    ;
-    return Formtab;
-}());
+//# sourceMappingURL=modalhelper.js.map
+//# sourceMappingURL=pagination.js.map
 //# sourceMappingURL=formtab.js.map
-var FloatingActionButton = (function () {
-    function FloatingActionButton() {
-        this.Name = ServiceName.FloatingActionButton;
-    }
-    FloatingActionButton.prototype.construct = function (serviceManager) {
-        this._serviceManager = serviceManager;
-    };
-    FloatingActionButton.prototype.bind = function (el) {
-        var $fabs = $(el).find('.fixed-action-btn');
-        $fabs.each(function (_, fab) {
-            $(fab).floatingActionButton();
-        });
-    };
-    return FloatingActionButton;
-}());
 //# sourceMappingURL=floatingactionbutton.js.map
-var Graph = (function () {
-    function Graph() {
-        this.Name = ServiceName.Graph;
-    }
-    Graph.prototype.construct = function (serviceManager) {
-        this._serviceManager = serviceManager;
-    };
-    Graph.prototype.bind = function (el) {
-        var $graphs = $(el).find('.graph');
-        var timeFormat = 'DD MMM YYYY';
-        var shortTimeFormat = 'DD MMM';
-        if ($graphs.length) {
-            $graphs.each(function (_, graph) {
-                var $graph = $(graph);
-                var $data = $graph.next();
-                var jsonData = $data.html().trim();
-                jsonData = jsonData || "{}";
-                var data = JSON.parse(jsonData);
-                var myChart = new Chart(graph, {
-                    type: 'line',
-                    data: data,
-                    options: {
-                        maintainAspectRatio: false,
-                        aspectRation: 2,
-                        legend: {
-                            labels: {
-                                fontColor: '#eee'
-                            }
-                        },
-                        scales: {
-                            xAxes: [{
-                                    type: "time",
-                                    time: {
-                                        parser: timeFormat,
-                                        tooltipFormat: timeFormat,
-                                        displayFormats: {
-                                            year: shortTimeFormat,
-                                            quarter: shortTimeFormat,
-                                            month: shortTimeFormat,
-                                            week: shortTimeFormat,
-                                            day: shortTimeFormat,
-                                            hour: shortTimeFormat
-                                        }
-                                    },
-                                    scaleLabel: {
-                                        display: true,
-                                        labelString: 'Datum',
-                                        fontColor: '#eee'
-                                    },
-                                    ticks: {
-                                        fontColor: '#eee',
-                                        autoSkip: true,
-                                        maxTicksLimit: 6,
-                                        rotation: 30
-                                    }
-                                }],
-                            yAxes: [{
-                                    type: 'linear',
-                                    scaleLabel: {
-                                        display: true,
-                                        labelString: 'Eieren',
-                                        fontColor: '#eee'
-                                    },
-                                    ticks: {
-                                        fontColor: '#eee'
-                                    }
-                                }]
-                        }
-                    }
-                });
-            });
-        }
-    };
-    return Graph;
-}());
 //# sourceMappingURL=graph.js.map
-//# sourceMappingURL=iservice.js.map
-//# sourceMappingURL=iservicemanager.js.map
-var ServiceManager = (function () {
-    function ServiceManager() {
-        this._services = [];
-    }
-    ServiceManager.prototype.register = function (r) {
-        var registerable = new r(this);
-        this._services[registerable.Name] = registerable;
-    };
-    ServiceManager.prototype.get = function (r) {
-        var registerable = new r();
-        var o = this._services[registerable.Name];
-        return o;
-    };
-    ServiceManager.prototype.getServices = function () {
-        return this._services;
-    };
-    ServiceManager.prototype.init = function () {
-        for (var _i = 0, _a = this._services; _i < _a.length; _i++) {
-            var service = _a[_i];
-            service.construct(this);
-        }
-    };
-    return ServiceManager;
-}());
-var serviceManager = new ServiceManager();
-serviceManager.register(Cystem);
-serviceManager.register(Navigate);
-serviceManager.register(OverlayHelper);
-serviceManager.register(ModalHelper);
-serviceManager.register(Materialize);
-serviceManager.register(Graph);
-serviceManager.register(Formtab);
-serviceManager.register(FloatingActionButton);
-serviceManager.init();
-var cystem = serviceManager.get(Cystem);
-cystem.bindNew(document.body);
-//# sourceMappingURL=servicemanager.js.map
+var cystem = new Cystem();
+//# sourceMappingURL=init.js.map

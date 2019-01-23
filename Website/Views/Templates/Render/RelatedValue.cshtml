@@ -1,0 +1,7 @@
+﻿@using Website.Common.Viewmodels
+@model GenericViewModel
+
+@if (Model.Value.RelatedValue != null)
+{
+    @await Render.Values(Model.Value.RelatedValue, Model.Options)
+}

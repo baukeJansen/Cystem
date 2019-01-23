@@ -1,4 +1,4 @@
-﻿class Overlay {
+﻿/*class Overlay {
     private _serviceManager: IServiceManager;
     private _helper: OverlayHelper
     private $overlay: JQuery;
@@ -60,4 +60,4 @@
             self.$overlay.remove();
         }, 400);
     }
-}
+}*/

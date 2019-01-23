@@ -13,17 +13,19 @@
     <Compile Remove="Migrations\20181122132234_test.Designer.cs" />
     <Compile Remove="Migrations\20181208141554_eav-test5.cs" />
     <Compile Remove="Migrations\20181208141554_eav-test5.Designer.cs" />
+    <Compile Remove="Migrations\20190116113028_cascade.cs" />
+    <Compile Remove="Migrations\20190116113028_cascade.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\src\tmp\common\actionresult.ts" />
-    <Content Remove="wwwroot\src\tmp\common\method.ts" />
+    <Content Remove="wwwroot\src\js\init.ts" />
+    <Content Remove="wwwroot\src\js\parser\parsermanager.ts" />
+    <Content Remove="wwwroot\src\js\map.ts" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="wwwroot\src\js\common\actionresult.ts" />
     <None Remove="wwwroot\src\js\common\method.ts" />
-    <None Remove="wwwroot\src\js\service\iservicemanager.ts" />
     <None Remove="wwwroot\src\js\overlayhelper.ts" />
     <None Remove="wwwroot\src\js\servicemanager.ts" />
   </ItemGroup>
@@ -36,7 +38,7 @@
     <PackageReference Include="FastMember.NetCore" Version="1.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.0">
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="2.2.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers</IncludeAssets>
     </PackageReference>
@@ -45,6 +47,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="BL\LL\PageLL\" />
     <Folder Include="Common\Interfaces\" />
     <Folder Include="wwwroot\src\img\" />
     <Folder Include="Views\Shared\DisplayTemplates\" />
@@ -110,9 +113,7 @@
     <None Include="wwwroot\src\js\common\actionresult.js.map" />
     <None Include="wwwroot\src\js\common\method.js" />
     <None Include="wwwroot\src\js\common\method.js.map" />
-    <None Include="wwwroot\src\js\common\servicename.js" />
-    <None Include="wwwroot\src\js\common\servicename.js.map" />
-    <None Include="wwwroot\src\js\common\servicename.ts" />
+    <None Include="wwwroot\src\js\common\service.ts" />
     <None Include="wwwroot\src\js\cystem.js" />
     <None Include="wwwroot\src\js\cystem.js.map" />
     <None Include="wwwroot\src\js\cystem.ts" />
@@ -130,64 +131,19 @@
     <None Include="wwwroot\src\js\service\iservice.js" />
     <None Include="wwwroot\src\js\service\iservice.js.map" />
     <None Include="wwwroot\src\js\service\iservice.ts" />
-    <None Include="wwwroot\src\js\service\iservicemanager.js" />
-    <None Include="wwwroot\src\js\service\iservicemanager.js.map" />
-    <None Include="wwwroot\src\js\service\servicemanager.js" />
-    <None Include="wwwroot\src\js\service\servicemanager.js.map" />
-    <None Include="wwwroot\src\js\service\servicemanager.ts" />
     <None Include="wwwroot\src\lib\chart.js" />
     <None Include="wwwroot\src\lib\materialize.js" />
     <None Include="wwwroot\src\lib\moment.js" />
-    <None Include="wwwroot\src\tmp\chart.js" />
-    <None Include="wwwroot\src\tmp\chart.ts" />
-    <None Include="wwwroot\src\tmp\common\actionresult.js" />
-    <None Include="wwwroot\src\tmp\common\actionresult.ts" />
-    <None Include="wwwroot\src\tmp\common\method.js" />
-    <None Include="wwwroot\src\tmp\common\method.ts" />
-    <None Include="wwwroot\src\tmp\config\ioc_config.js" />
-    <None Include="wwwroot\src\tmp\config\ioc_config.ts" />
-    <None Include="wwwroot\src\tmp\constants\identifiers.js" />
-    <None Include="wwwroot\src\tmp\constants\identifiers.ts" />
-    <None Include="wwwroot\src\tmp\constants\tags.js" />
-    <None Include="wwwroot\src\tmp\constants\tags.ts" />
-    <None Include="wwwroot\src\tmp\cystem.js" />
-    <None Include="wwwroot\src\tmp\cystem.ts" />
-    <None Include="wwwroot\src\tmp\entities\index.js" />
-    <None Include="wwwroot\src\tmp\entities\index.ts" />
-    <None Include="wwwroot\src\tmp\entities\modal.js" />
-    <None Include="wwwroot\src\tmp\entities\modal.ts" />
-    <None Include="wwwroot\src\tmp\formtab.js" />
-    <None Include="wwwroot\src\tmp\formtab.ts" />
-    <None Include="wwwroot\src\tmp\init.js" />
-    <None Include="wwwroot\src\tmp\init.ts" />
-    <None Include="wwwroot\src\tmp\interfaces\imodal.js" />
-    <None Include="wwwroot\src\tmp\interfaces\imodal.ts" />
-    <None Include="wwwroot\src\tmp\interfaces\index.js" />
-    <None Include="wwwroot\src\tmp\interfaces\index.ts" />
-    <None Include="wwwroot\src\tmp\materialize.js" />
-    <None Include="wwwroot\src\tmp\materialize.ts" />
-    <None Include="wwwroot\src\tmp\navigate.js" />
-    <None Include="wwwroot\src\tmp\navigate.ts" />
-    <None Include="wwwroot\src\tmp\overlay.js" />
-    <None Include="wwwroot\src\tmp\overlay.ts" />
   </ItemGroup>
 
   <ItemGroup>
     <TypeScriptCompile Include="wwwroot\src\js\common\actionresult.ts" />
     <TypeScriptCompile Include="wwwroot\src\js\common\method.ts" />
+    <TypeScriptCompile Include="wwwroot\src\js\common\map.ts" />
+    <TypeScriptCompile Include="wwwroot\src\js\init.ts" />
+    <TypeScriptCompile Include="wwwroot\src\js\parser\parsermanager.ts" />
     <TypeScriptCompile Include="wwwroot\src\js\service\servicemanager.ts" />
-    <TypeScriptCompile Include="wwwroot\src\js\service\iservicemanager.ts" />
     <TypeScriptCompile Include="wwwroot\src\js\overlayhelper.ts" />
-    <TypeScriptCompile Include="wwwroot\src\tmp\chart.ts" />
-    <TypeScriptCompile Include="wwwroot\src\tmp\common\actionresult.ts" />
-    <TypeScriptCompile Include="wwwroot\src\tmp\common\method.ts" />
-    <TypeScriptCompile Include="wwwroot\src\tmp\cystem.ts" />
-    <TypeScriptCompile Include="wwwroot\src\tmp\formtab.ts" />
-    <TypeScriptCompile Include="wwwroot\src\tmp\init.ts" />
-    <TypeScriptCompile Include="wwwroot\src\tmp\materialize.ts" />
-    <TypeScriptCompile Include="wwwroot\src\tmp\entities\modal.ts" />
-    <TypeScriptCompile Include="wwwroot\src\tmp\navigate.ts" />
-    <TypeScriptCompile Include="wwwroot\src\tmp\overlay.ts" />
   </ItemGroup>
 
   <ItemGroup>

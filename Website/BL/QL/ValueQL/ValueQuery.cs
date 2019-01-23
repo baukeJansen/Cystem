@@ -1,14 +1,14 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Threading.Tasks;
+using Website.Common.Data;
+using Website.Common.Extensions;
 using Website.Common.Models.EAV;
 using Website.DAL;
-using Website.Common.Enums;
 using Attribute = Website.Common.Models.EAV.Attribute;
 using ValueType = Website.Common.Enums.ValueType;
 
@@ -18,80 +18,184 @@ namespace Website.BL.QL.ValueQL
     {
         public ValueQuery(DataContext context) : base(context) { }
 
-        public async Task<Value> GetValues(DbCommand command)
+        public async Task<QueryResult> GetValues(int id, int param = 0)
         {
-            List<Value> values = new List<Value>();
-            List<Attribute> attributes = new List<Attribute>();
-
-            command.Connection = context.Database.GetDbConnection();
-
-            await context.Database.OpenConnectionAsync();
-            using (SqlDataReader reader = (SqlDataReader)await command.ExecuteReaderAsync(CommandBehavior.CloseConnection)){
-
-                while (reader.HasRows && await reader.ReadAsync())
+            List<SqlParameter> parameters = new List<SqlParameter>
+            {
+                new SqlParameter("@id", SqlDbType.Int)
                 {
-                    Value value = new Value();
-                    reader.MapDataToObject(value);
-                    values.Add(value);
+                    Value = id
+                },
+                new SqlParameter("@url", SqlDbType.NVarChar)
+                {
+                    Value = null
+                },
+                new SqlParameter("@recursionDepth", SqlDbType.Int){
+                    Value = 20
+                },
+                new SqlParameter("@relatedRecursionDepth", SqlDbType.Int) {
+                    Value = 2
+                },
+                new SqlParameter("@param", SqlDbType.Int)
+                {
+                    Value = param
                 }
+            };
 
-                if (await reader.NextResultAsync())
+            return await GetValues(parameters);
+        }
+
+        public async Task<QueryResult> GetValues(string url, int param = 0)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>
+            {
+                new SqlParameter("@id", SqlDbType.Int)
+                {
+                    Value = 0
+                },
+                new SqlParameter("@url", SqlDbType.NVarChar)
+                {
+                    Value = url
+                },
+                new SqlParameter("@recursionDepth", SqlDbType.Int){
+                    Value = 20
+                },
+                new SqlParameter("@relatedRecursionDepth", SqlDbType.Int) {
+                    Value = 2
+                },
+                new SqlParameter("@param", SqlDbType.Int)
+                {
+                    Value = param
+                }
+            };
+
+            return await GetValues(parameters);
+        }
+
+        public async Task<QueryResult> GetValues(List<SqlParameter> parameters)
+        {
+            QueryResult result = new QueryResult();
+
+            using (SqlCommand command = new SqlCommand())
+            {
+                command.CommandText = "GetValues";
+                AddParameters(command, parameters);
+
+                command.Connection = (SqlConnection)context.Database.GetDbConnection();
+
+                await command.Connection.OpenAsync();
+                using (SqlDataReader reader = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection))
                 {
                     while (reader.HasRows && await reader.ReadAsync())
                     {
-                        Attribute attribute = new Attribute();
-                        reader.MapDataToObject(attribute);
-                        attributes.Add(attribute);
+                        Value value = new Value();
+                        reader.MapDataToObject(value);
+                        result.Values.Add(value);
                     }
+
+                    if (await reader.NextResultAsync())
+                    {
+                        while (reader.HasRows && await reader.ReadAsync())
+                        {
+                            Attribute attribute = new Attribute();
+                            reader.MapDataToObject(attribute);
+                            result.Attributes.Add(attribute);
+                        }
+                    }
+
                 }
             }
 
-            if (values.Count == 0) return null;
-
-            int param = 0;
-            if (command.Parameters.Contains("@paramPAR"))
-            {
-                param = (int)command.Parameters["@paramPAR"].Value;
-            }
-
-            return SortValues(values, attributes, param);
+            return result;
         }
 
-        public Value SortValues(List<Value> values, List<Attribute> attributes, int param = 0)
+        public async Task<QueryResult> PreviewDeleteCascade(int id)
         {
-            foreach (Value value in values)
+            QueryResult result = new QueryResult();
+
+            List<SqlParameter> parameters = new List<SqlParameter>
             {
-                value.Attribute = attributes.Find(a => a.Id == value.AttributeId);
-
-                if (value.GroupId.HasValue)
+                new SqlParameter("@id", SqlDbType.Int)
                 {
-                    Value group = values.Find(v => v.Id == value.GroupId);
+                    Value = id
+                },
+                new SqlParameter("@preview", SqlDbType.Bit)
+                {
+                    Value = true
+                }
+            };
 
-                    if (group != null)
+            using (SqlCommand command = new SqlCommand())
+            {
+                command.CommandText = "DeleteValues";
+                AddParameters(command, parameters);
+
+
+                command.Connection = (SqlConnection)context.Database.GetDbConnection();
+                await command.Connection.OpenAsync();
+                using (SqlDataReader reader = await command.ExecuteReaderAsync(CommandBehavior.CloseConnection))
+                {
+                    while (reader.HasRows && await reader.ReadAsync())
                     {
-                        value.Group = group;
-                        if (group.Values == null) group.Values = new List<Value>();
-                        group.Values.Add(value);
+                        Value value = new Value();
+                        reader.MapDataToObject(value);
+                        result.Values.Add(value);
                     }
-                }
 
-                if (value.Type == ValueType.RelatedValue)
-                {
-                    value.RelatedValue = values.Find(v => v.Id == value.Int);
-                }
+                    if (await reader.NextResultAsync())
+                    {
+                        while (reader.HasRows && await reader.ReadAsync())
+                        {
+                            Attribute attribute = new Attribute();
+                            reader.MapDataToObject(attribute);
+                            result.Attributes.Add(attribute);
+                        }
+                    }
 
-                if (value.Type == ValueType.RelatedAttribute)
-                {
-                    value.RelatedAttribute = attributes.Find(a => a.Id == value.Int);
-                }
-
-                if (value.Type == ValueType.ParamValue)
-                {
-                    value.RelatedValue = values.Find(v => v.Id == param);
                 }
             }
 
-            return values.First();
+            return result;
+        }
+
+        public async Task DeleteValueCascade(int id)
+        {
+            List<SqlParameter> parameters = new List<SqlParameter>
+            {
+                new SqlParameter("@id", SqlDbType.Int)
+                {
+                    Value = id
+                },
+                new SqlParameter("@preview", SqlDbType.Bit)
+                {
+                    Value = false
+                }
+            };
+
+            using (SqlCommand command = new SqlCommand())
+            {
+                command.CommandText = "DeleteValues";
+                AddParameters(command, parameters);
+                
+
+                command.Connection = (SqlConnection)context.Database.GetDbConnection();
+                await command.Connection.OpenAsync();
+                await command.ExecuteNonQueryAsync();
+            }
+        }
+
+        private void AddParameters(SqlCommand command, List<SqlParameter> parameters)
+        {
+            string commandParameters = "";
+            foreach (SqlParameter parameter in parameters)
+            {
+                commandParameters += commandParameters == "" ? " " : ", ";
+                commandParameters += parameter.ParameterName + " = " + parameter.ParameterName + "PARAM";
+                parameter.ParameterName += "PARAM";
+                command.Parameters.Add(parameter);
+            }
+
+            command.CommandText += commandParameters;
         }
     }
 }

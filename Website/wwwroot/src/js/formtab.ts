@@ -1,4 +1,4 @@
-﻿class Formtab {
+﻿/*class Formtab {
     Name: ServiceName = ServiceName.Formtab;
     private $modal: JQuery;
 
@@ -45,4 +45,4 @@
             $inputs.removeAttr('disabled');
         }, 1);
     };
-}
+}*/

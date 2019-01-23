@@ -1,0 +1,29 @@
+﻿@using Website.Common.Models.EAV
+@using Website.Common.Viewmodels
+@using ValueType = Website.Common.Enums.ValueType
+@inject IValueHelper Value
+@model GenericViewModel
+
+@{
+    Value link = Model.Value.Type == ValueType.RelatedValue ? Model.Value.RelatedValue : Model.Value;
+    string iconAlign = "";
+}
+
+@if (link != null)
+{
+    Value text = Value.Get(link, "Text");
+    Value icon = Value.Get(link, "Icon");
+    Value attributes = Value.Get(link, "Attributes");
+
+    <a href="@link.String" @Html.Raw(attributes?.String)>
+        @if (text != null && !String.IsNullOrEmpty(text.String))
+        {
+            @text.String
+            iconAlign = "right";
+        }
+        @if (icon != null && !String.IsNullOrEmpty(icon.String))
+        {
+            <i class="material-icons @iconAlign">@icon.String</i>
+        }
+    </a>
+}

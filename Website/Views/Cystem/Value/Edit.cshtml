@@ -4,6 +4,7 @@
 @using Website.Controllers.Cystem
 @using Website.Common.Viewmodels
 @using Website.Common.Enums
+@using Website.Common.Models.EAV
 @using ValueType = Website.Common.Enums.ValueType
 @model ValueViewModel
 
@@ -129,7 +130,7 @@
                 }
                 else
                 {
-                    @await Render.DeleteModalButton(Url.Action<ValueController>(c => c.Delete(null), new { Id = Model.Id }), null, "Delete", "delete", DisplaySetting.Render, ElementAction.Close, new { @class = "btn-outline" })
+                    @await Render.DeleteModalButton(new Value{Id = Model.Id}, "Delete", DisplaySetting.Render, ElementAction.Close, new { @class = "btn-outline" })
                     @await Render.SubmitButton("Update")
                 }
             </div>

@@ -1,4 +1,5 @@
-﻿/// <binding Clean='clean' BeforeBuild='build' AfterBuild='test' ProjectOpened='watch'/>
+﻿/// <binding Clean='rebuild' AfterBuild='test' ProjectOpened='watch'/>
+//BeforeBuild='build'
 "use strict";
 
 const gulp = require("gulp"),
@@ -68,6 +69,7 @@ const Task = Object.freeze({
     LintCss: 'lint-css',
     Build: 'build',
     BuildCss: 'build-css',
+    Rebuild: 'rebuild',
     Test: 'test',
     Watch: 'watch',
     WatchCss: 'watch-css',
@@ -174,7 +176,9 @@ gulp.task(Task.Clean, gulp.parallel([Task.CleanJs, Task.CleanCss]));
 
 gulp.task(Task.Lint, gulp.series([Task.LintCss]));
 
-//gulp.task(Task.Build, null gulp.series([Task.BuildCss]));
+gulp.task(Task.Build, gulp.series([Task.BuildCss]));
+
+gulp.task(Task.Rebuild, gulp.series([Task.Clean, Task.Build]));
 
 //gulp.task(Task.Test, gulp.series());
 

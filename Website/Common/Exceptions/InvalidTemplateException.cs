@@ -7,5 +7,9 @@ namespace Website.Common.Exceptions
 {
     public class InvalidTemplateException : Exception
     {
+        public InvalidTemplateException() : base("Template was not found")
+        {
+
+        }
     }
 }

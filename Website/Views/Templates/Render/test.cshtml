@@ -1,4 +1,5 @@
 ﻿@using Website.Common.Viewmodels
+@inject IValueHelper Value
 @model GenericViewModel
 
 <div class="container">
@@ -12,3 +13,10 @@
         </div>
     </div>
 </div>
+
+@Cystem.Test(
+@<div class="container">
+    <div class="row">
+        <div class="col s12">@item.String</div>
+    </div>
+</div>)

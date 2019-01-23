@@ -1,1 +1,0 @@
-Cystem.init(document.body);

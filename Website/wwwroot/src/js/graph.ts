@@ -1,4 +1,4 @@
-﻿declare var Chart: any;
+﻿/*declare var Chart: any;
 
 class Graph implements IService{
     Name: ServiceName = ServiceName.Graph;
@@ -50,7 +50,7 @@ class Graph implements IService{
                             other.push({ x: item.date, y: item.date });
                             break;
                     }
-                });*/
+                });*
 
                 var myChart = new Chart(graph, {
                     type: 'line',
@@ -96,7 +96,7 @@ class Graph implements IService{
                             borderWidth: 1
                         }
                     ]
-                },*/
+                },*
                     options: {
                         maintainAspectRatio: false,
                         aspectRation: 2,
@@ -150,4 +150,4 @@ class Graph implements IService{
             });
         }
     }
-}
+}*/

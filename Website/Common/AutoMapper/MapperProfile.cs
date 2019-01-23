@@ -1,9 +1,4 @@
 ﻿using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Website.Common.Models;
 using Website.Common.Models.EAV;
 using Website.Common.Viewmodels;
 using Attribute = Website.Common.Models.EAV.Attribute;
@@ -14,12 +9,6 @@ namespace Website.Common.AutoMapper
     {
         public MapperProfile()
         {
-            CreateMap<Daily, DailyEggViewModel>(MemberList.None);
-            CreateMap<DailyEggViewModel, Daily>(MemberList.None); 
-
-            CreateMap<Daily, DeadChickenViewModel>(MemberList.None);
-            CreateMap<DeadChickenViewModel, Daily>(MemberList.None);
-
             CreateMap<Value, ValueViewModel>(MemberList.None);
             CreateMap<ValueViewModel, Value>(MemberList.None)
                 .AfterMap((s, d) => { d.SerializedString = s.SerializedString; });
@@ -29,6 +18,9 @@ namespace Website.Common.AutoMapper
 
             CreateMap<Value, GenericViewModel>(MemberList.None);
             CreateMap<GenericViewModel, Value>(MemberList.None);
+
+            CreateMap<GenericViewModel, ExceptionViewModel>(MemberList.None);
+            CreateMap<ExceptionViewModel, GenericViewModel>(MemberList.None);
         }
     }
 }

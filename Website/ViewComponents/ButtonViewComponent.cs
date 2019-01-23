@@ -9,10 +9,20 @@ namespace Website.ViewComponents
     {
         public ButtonViewComponent(IValueHelper valueHelper) : base(valueHelper) { }
 
-        public async Task<IViewComponentResult> InvokeAsync(ButtonData data)
+        public Task<IViewComponentResult> InvokeAsync(ButtonData data)
         {
-            string viewLocation = TemplateLocation + RenderPath + "button" + FileType;
-            return View(viewLocation, data);
+            string viewLocation;
+
+            if (data.Link)
+            {
+                viewLocation = TemplateLocation + RenderPath + "link" + FileType;
+            }
+            else
+            {
+                viewLocation = TemplateLocation + RenderPath + "button" + FileType;
+            }
+
+            return Task.FromResult((IViewComponentResult)View(viewLocation, data));
         }
     }
 }

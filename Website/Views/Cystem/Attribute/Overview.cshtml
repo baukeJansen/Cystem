@@ -8,7 +8,7 @@
         <div class="col s12">
             <h1>Attributes overview</h1>
 
-            @Render.FloatingButton(Url.Action("create", "attribute", new { Area = "Cystem" }), "add")
+            @await Render.FloatingButton(Url.Action("create", "attribute", new { Area = "Cystem" }), "add")
 
             <table>
                 <tbody>
@@ -18,7 +18,7 @@
                         <td>@attribute.Id</td>
                         <td>@attribute.Label</td>
                         <td>@await Render.EditButton("/cystem/attribute/edit/", new { Id = attribute.Id }, "")</td>
-                        <td>@await Render.DeleteModalButton("/cystem/attribute/delete/", new { Id = attribute.Id }, "", "delete", DisplaySetting.Render, ElementAction.None)</td>
+                        <td>@await Render.Button("/cystem/attribute/delete/", "", "delete", DisplaySetting.Render, new { Id = attribute.Id }, ElementAction.None)</td>
                     </tr>
                     }
                 </tbody>

@@ -1,0 +1,46 @@
+﻿@using Website.Common.Viewmodels
+@using Website.Common.Models.EAV
+@using System.Net.Http;
+@using Website.Common.Enums
+@inject IValueHelper Value
+@model GenericViewModel
+
+@{
+    Value target = Value.Get(Model, "Param")?.RelatedValue;
+}
+
+<div class="container">
+    @if (target != null)
+    {
+        @using (Html.BeginForm(null, null, new { }, FormMethod.Post, true, new { action = "/cystem/edit-page/?Id=" + target.Id }))
+        {
+            @Html.Hidden("_method", HttpMethod.Delete);
+
+            <div class="modal-content">
+                <h3>@await Render.Value(Model, "Title")</h3>
+                <p>@await Render.Value(Model, "Text")</p>
+
+                <div class="content-wrapper">
+                    <div class="content ajax-load" data-url="/cystem/delete-details/?id=@target.Id" data-on-result="@ElementAction.Load">
+
+                    </div>
+                </div>
+                <!--<ul class="collection z-depth-1">
+                    <li class="collection-item">@await Render.Value(target, "Title")</li>
+                </ul>-->
+            </div>
+
+
+            <div class="modal-footer">
+                @await Render.Button(null, "Cancel", null, Model.Options, null, ElementAction.None, cssClasses: "btn-flat modal-close waves-effect", link: false)
+                @await Render.SubmitButton("Delete", "delete")
+            </div>
+        }
+    }
+    else
+    {
+        <div class="modal-content">
+            <h3>Invalid value</h3>
+        </div>
+    }
+</div>

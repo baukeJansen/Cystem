@@ -7,5 +7,9 @@ namespace Website.Common.Exceptions
 {
     public class InvalidPageException : Exception
     {
+        public InvalidPageException() : base("Page was not found")
+        {
+
+        }
     }
 }

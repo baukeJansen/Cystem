@@ -1,12 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Website.Common.Models.EAV;
+using Website.Common.Viewmodels;
 
 namespace Website.BL.SL.CystemSL
 {
     public interface ICystemService
     {
-        void Test();
+        Task<GenericViewModel> PreviewDelete(GenericViewModel vm);
     }
 }

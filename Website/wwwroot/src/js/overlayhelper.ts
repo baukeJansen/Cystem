@@ -1,4 +1,4 @@
-﻿class OverlayHelper implements IService {
+﻿/*class OverlayHelper implements IService {
     Name: ServiceName = ServiceName.OverlayHelper;
     private $window: JQuery<Window>;
     private _overlays: Overlay[] = [];
@@ -70,4 +70,4 @@
         var navigate: Navigate = this._serviceManager.get(Navigate);
         navigate.reload($content);
     }
-}
+}*/
