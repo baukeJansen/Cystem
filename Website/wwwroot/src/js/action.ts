@@ -30,7 +30,7 @@
             $target = target ? $(target) : undefined;
 
             if (!($target && $target.length)) {
-                $target = this.$source.closest('.content-wrapper');
+                $target = this.$source.closest('.component-wrapper');
             }
 
             if (!($target && $target.length)) {
@@ -38,8 +38,8 @@
             }
         }
 
-        this.$target = $target || $('.content-wrapper.main-content');
-        this.$oldContent = this.$target.find('.content');
+        this.$target = $target || $('.component-wrapper.main-component');
+        this.$oldContent = this.$target.find('.component');
         this.$newContent = undefined;
     }
 

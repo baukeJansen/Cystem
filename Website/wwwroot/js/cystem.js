@@ -31387,7 +31387,53 @@ var ServiceName;
     ServiceName[ServiceName["Formtab"] = 6] = "Formtab";
     ServiceName[ServiceName["FloatingActionButton"] = 7] = "FloatingActionButton";
 })(ServiceName || (ServiceName = {}));
-//# sourceMappingURL=servicename.js.map
+//# sourceMappingURL=service.js.map
+//# sourceMappingURL=iservice.js.map
+//# sourceMappingURL=iservicemanager.js.map
+var ServiceManager = (function () {
+    function ServiceManager() {
+        this._services = [];
+    }
+    ServiceManager.prototype.register = function (r) {
+        var registerable = new r(this);
+        this._services[registerable.Name] = registerable;
+    };
+    ServiceManager.prototype.get = function (r) {
+        var registerable = new r();
+        var o = this._services[registerable.Name];
+        return o;
+    };
+    ServiceManager.prototype.getServices = function () {
+        return this._services;
+    };
+    ServiceManager.prototype.init = function () {
+        for (var _i = 0, _a = this._services; _i < _a.length; _i++) {
+            var service = _a[_i];
+            service.construct(this);
+        }
+    };
+    return ServiceManager;
+}());
+//# sourceMappingURL=servicemanager.js.map
+var Cystem = (function () {
+    function Cystem() {
+        this.Name = ServiceName.Cystem;
+    }
+    Cystem.prototype.construct = function (serviceManager) {
+        this._serviceManager = serviceManager;
+    };
+    Cystem.prototype.bindNew = function (el) {
+        var services = this._serviceManager.getServices();
+        for (var _i = 0, services_1 = services; _i < services_1.length; _i++) {
+            var service = services_1[_i];
+            service.bind(el);
+        }
+    };
+    Cystem.prototype.bind = function (el) {
+    };
+    return Cystem;
+}());
+//# sourceMappingURL=cystem.js.map
 var Action = (function () {
     function Action(method, url, data, $source, actionResult) {
         this._readyStack = [];
@@ -31404,14 +31450,14 @@ var Action = (function () {
             var target = this.$source.data('target');
             $target = target ? $(target) : undefined;
             if (!($target && $target.length)) {
-                $target = this.$source.closest('.content-wrapper');
+                $target = this.$source.closest('.component-wrapper');
             }
             if (!($target && $target.length)) {
                 $target = undefined;
             }
         }
-        this.$target = $target || $('.content-wrapper.main-content');
-        this.$oldContent = this.$target.find('.content');
+        this.$target = $target || $('.component-wrapper.main-component');
+        this.$oldContent = this.$target.find('.component');
         this.$newContent = undefined;
     };
     Action.prototype.hasSource = function () {
@@ -31438,67 +31484,6 @@ var Action = (function () {
     return Action;
 }());
 //# sourceMappingURL=action.js.map
-var Cystem = (function () {
-    function Cystem() {
-        this.Name = ServiceName.Cystem;
-    }
-    Cystem.prototype.construct = function (serviceManager) {
-        this._serviceManager = serviceManager;
-    };
-    Cystem.prototype.bindNew = function (el) {
-        var services = this._serviceManager.getServices();
-        for (var _i = 0, services_1 = services; _i < services_1.length; _i++) {
-            var service = services_1[_i];
-            service.bind(el);
-        }
-    };
-    Cystem.prototype.bind = function (el) {
-    };
-    return Cystem;
-}());
-//# sourceMappingURL=cystem.js.map
-var ModalHelper = (function () {
-    function ModalHelper() {
-        this.Name = ServiceName.ModalHelper;
-    }
-    ModalHelper.prototype.construct = function (serviceManager) {
-        this._serviceManager = serviceManager;
-    };
-    ModalHelper.prototype.bind = function (el) {
-        var self = this;
-        if (!(this.$modal && this.$modal.length)) {
-            this.$modal = $(el).find('#modal');
-            this.$modal.modal({
-                onCloseEnd: function () { self.onClose(); }
-            });
-        }
-    };
-    ModalHelper.prototype.open = function ($button) {
-        this.$button = $button;
-        this.$modal.modal('open');
-        return this;
-    };
-    ModalHelper.prototype.setContent = function (content) {
-        var $content = $(content);
-        var $onAccept = this.$button.parent().find('.modal-accept');
-        if ($onAccept.length) {
-            var $acceptButton = $content.find('.accept-btn');
-            $acceptButton.click(function () { $onAccept.click(); });
-        }
-        var $onDecline = this.$button.parent().find('.modal-decline');
-        if ($onDecline.length) {
-            var $declineButton = $content.find('.decline-btn');
-            $declineButton.click(function () { $onDecline.click(); });
-        }
-        this.$modal.append($content);
-    };
-    ModalHelper.prototype.onClose = function () {
-        this.$modal.children().remove();
-    };
-    ;
-    return ModalHelper;
-}());
-//# sourceMappingURL=modalhelper.js.map
 var Navigate = (function () {
     function Navigate() {
         this.Name = ServiceName.Navigate;
@@ -31750,6 +31735,76 @@ var Navigate = (function () {
     return Navigate;
 }());
 //# sourceMappingURL=navigate.js.map
+var Materialize = (function () {
+    function Materialize() {
+        this.Name = ServiceName.Materialize;
+    }
+    Materialize.prototype.construct = function (serviceManager) {
+        this._serviceManager = serviceManager;
+    };
+    Materialize.prototype.bind = function (root) {
+        var registry = {
+            Autocomplete: {
+                el: root.querySelectorAll('.autocomplete:not(.no-autoinit)'), config: {}
+            },
+            Carousel: {
+                el: root.querySelectorAll('.carousel:not(.no-autoinit)'), config: {}
+            },
+            Chips: {
+                el: root.querySelectorAll('.chips:not(.no-autoinit)'), config: {}
+            },
+            Collapsible: {
+                el: root.querySelectorAll('.collapsible:not(.no-autoinit)'), config: {}
+            },
+            Datepicker: {
+                el: root.querySelectorAll('.datepicker:not(.no-autoinit)'), config: { format: "dd-mm-yyyy", autoClose: true }
+            },
+            Dropdown: {
+                el: root.querySelectorAll('.dropdown-trigger:not(.no-autoinit)'), config: {}
+            },
+            Materialbox: {
+                el: root.querySelectorAll('.materialboxed:not(.no-autoinit)'), config: {}
+            },
+            Parallax: {
+                el: root.querySelectorAll('.parallax:not(.no-autoinit)'), config: {}
+            },
+            Pushpin: {
+                el: root.querySelectorAll('.pushpin:not(.no-autoinit)'), config: {}
+            },
+            ScrollSpy: {
+                el: root.querySelectorAll('.scrollspy:not(.no-autoinit)'), config: {}
+            },
+            FormSelect: {
+                el: root.querySelectorAll('select:not(.no-autoinit)'), config: {}
+            },
+            Sidenav: {
+                el: root.querySelectorAll('.sidenav:not(.no-autoinit)'), config: {}
+            },
+            Tabs: {
+                el: root.querySelectorAll('.tabs:not(.no-autoinit)'), config: {}
+            },
+            TapTarget: {
+                el: root.querySelectorAll('.tap-target:not(.no-autoinit)'), config: {}
+            },
+            Timepicker: {
+                el: root.querySelectorAll('.timepicker:not(.no-autoinit)'), config: {}
+            },
+            Tooltip: {
+                el: root.querySelectorAll('.tooltipped:not(.no-autoinit)'), config: {}
+            }
+        };
+        for (var pluginName in registry) {
+            var plugin = M[pluginName];
+            plugin.init(registry[pluginName].el, registry[pluginName].config);
+        }
+        M.updateTextFields();
+        $(root).find('#nav-mobile a').click(function () {
+            $('#nav-mobile').sidenav('close');
+        });
+    };
+    return Materialize;
+}());
+//# sourceMappingURL=materialize.js.map
 var Overlay = (function () {
     function Overlay(serviceManager, helper) {
         var self = this;
@@ -31857,76 +31912,48 @@ var OverlayHelper = (function () {
     return OverlayHelper;
 }());
 //# sourceMappingURL=overlayhelper.js.map
-var Materialize = (function () {
-    function Materialize() {
-        this.Name = ServiceName.Materialize;
+var ModalHelper = (function () {
+    function ModalHelper() {
+        this.Name = ServiceName.ModalHelper;
     }
-    Materialize.prototype.construct = function (serviceManager) {
+    ModalHelper.prototype.construct = function (serviceManager) {
         this._serviceManager = serviceManager;
     };
-    Materialize.prototype.bind = function (root) {
-        var registry = {
-            Autocomplete: {
-                el: root.querySelectorAll('.autocomplete:not(.no-autoinit)'), config: {}
-            },
-            Carousel: {
-                el: root.querySelectorAll('.carousel:not(.no-autoinit)'), config: {}
-            },
-            Chips: {
-                el: root.querySelectorAll('.chips:not(.no-autoinit)'), config: {}
-            },
-            Collapsible: {
-                el: root.querySelectorAll('.collapsible:not(.no-autoinit)'), config: {}
-            },
-            Datepicker: {
-                el: root.querySelectorAll('.datepicker:not(.no-autoinit)'), config: { format: "dd-mm-yyyy", autoClose: true }
-            },
-            Dropdown: {
-                el: root.querySelectorAll('.dropdown-trigger:not(.no-autoinit)'), config: {}
-            },
-            Materialbox: {
-                el: root.querySelectorAll('.materialboxed:not(.no-autoinit)'), config: {}
-            },
-            Parallax: {
-                el: root.querySelectorAll('.parallax:not(.no-autoinit)'), config: {}
-            },
-            Pushpin: {
-                el: root.querySelectorAll('.pushpin:not(.no-autoinit)'), config: {}
-            },
-            ScrollSpy: {
-                el: root.querySelectorAll('.scrollspy:not(.no-autoinit)'), config: {}
-            },
-            FormSelect: {
-                el: root.querySelectorAll('select:not(.no-autoinit)'), config: {}
-            },
-            Sidenav: {
-                el: root.querySelectorAll('.sidenav:not(.no-autoinit)'), config: {}
-            },
-            Tabs: {
-                el: root.querySelectorAll('.tabs:not(.no-autoinit)'), config: {}
-            },
-            TapTarget: {
-                el: root.querySelectorAll('.tap-target:not(.no-autoinit)'), config: {}
-            },
-            Timepicker: {
-                el: root.querySelectorAll('.timepicker:not(.no-autoinit)'), config: {}
-            },
-            Tooltip: {
-                el: root.querySelectorAll('.tooltipped:not(.no-autoinit)'), config: {}
-            }
-        };
-        for (var pluginName in registry) {
-            var plugin = M[pluginName];
-            plugin.init(registry[pluginName].el, registry[pluginName].config);
+    ModalHelper.prototype.bind = function (el) {
+        var self = this;
+        if (!(this.$modal && this.$modal.length)) {
+            this.$modal = $(el).find('#modal');
+            this.$modal.modal({
+                onCloseEnd: function () { self.onClose(); }
+            });
         }
-        M.updateTextFields();
-        $(root).find('#nav-mobile a').click(function () {
-            $('#nav-mobile').sidenav('close');
-        });
     };
-    return Materialize;
+    ModalHelper.prototype.open = function ($button) {
+        this.$button = $button;
+        this.$modal.modal('open');
+        return this;
+    };
+    ModalHelper.prototype.setContent = function (content) {
+        var $content = $(content);
+        var $onAccept = this.$button.parent().find('.modal-accept');
+        if ($onAccept.length) {
+            var $acceptButton = $content.find('.accept-btn');
+            $acceptButton.click(function () { $onAccept.click(); });
+        }
+        var $onDecline = this.$button.parent().find('.modal-decline');
+        if ($onDecline.length) {
+            var $declineButton = $content.find('.decline-btn');
+            $declineButton.click(function () { $onDecline.click(); });
+        }
+        this.$modal.append($content);
+    };
+    ModalHelper.prototype.onClose = function () {
+        this.$modal.children().remove();
+    };
+    ;
+    return ModalHelper;
 }());
-//# sourceMappingURL=materialize.js.map
+//# sourceMappingURL=modalhelper.js.map
 var Formtab = (function () {
     function Formtab() {
         this.Name = ServiceName.Formtab;
@@ -32056,32 +32083,6 @@ var Graph = (function () {
     return Graph;
 }());
 //# sourceMappingURL=graph.js.map
-//# sourceMappingURL=iservice.js.map
-//# sourceMappingURL=iservicemanager.js.map
-var ServiceManager = (function () {
-    function ServiceManager() {
-        this._services = [];
-    }
-    ServiceManager.prototype.register = function (r) {
-        var registerable = new r(this);
-        this._services[registerable.Name] = registerable;
-    };
-    ServiceManager.prototype.get = function (r) {
-        var registerable = new r();
-        var o = this._services[registerable.Name];
-        return o;
-    };
-    ServiceManager.prototype.getServices = function () {
-        return this._services;
-    };
-    ServiceManager.prototype.init = function () {
-        for (var _i = 0, _a = this._services; _i < _a.length; _i++) {
-            var service = _a[_i];
-            service.construct(this);
-        }
-    };
-    return ServiceManager;
-}());
 var serviceManager = new ServiceManager();
 serviceManager.register(Cystem);
 serviceManager.register(Navigate);
@@ -32094,4 +32095,4 @@ serviceManager.register(FloatingActionButton);
 serviceManager.init();
 var cystem = serviceManager.get(Cystem);
 cystem.bindNew(document.body);
-//# sourceMappingURL=servicemanager.js.map
+//# sourceMappingURL=init.js.map

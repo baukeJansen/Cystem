@@ -9,4 +9,4 @@ var ServiceName;
     ServiceName[ServiceName["Formtab"] = 6] = "Formtab";
     ServiceName[ServiceName["FloatingActionButton"] = 7] = "FloatingActionButton";
 })(ServiceName || (ServiceName = {}));
-//# sourceMappingURL=servicename.js.map
+//# sourceMappingURL=service.js.map
