@@ -130,7 +130,7 @@
                 }
                 else
                 {
-                    @await Render.DeleteModalButton(new Value{Id = Model.Id}, "Delete", DisplaySetting.Render, ElementAction.Close, new { @class = "btn-outline" })
+                    @await Render.DeleteModalButton(new Value{Id = Model.Id}, "Delete", DisplaySetting.Render, ComponentAction.Close, new { @class = "btn-outline" })
                     @await Render.SubmitButton("Update")
                 }
             </div>

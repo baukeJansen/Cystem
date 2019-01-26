@@ -50,7 +50,7 @@
 
                 @if (Model.Id > 0)
                 {
-                @(Html.ActionLink<DeadChickenController>("Delete", c => c.Delete(null), new { Id = Model.Id }, new { @class = "ajax-delete right btn-flat waves-effect", data_on_result = ElementAction.Close }))
+                @(Html.ActionLink<DeadChickenController>("Delete", c => c.Delete(null), new { Id = Model.Id }, new { @class = "ajax-delete right btn-flat waves-effect", data_on_result = ComponentAction.Close }))
                 }
                 </div>
         </div>

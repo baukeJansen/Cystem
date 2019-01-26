@@ -45,7 +45,7 @@
                         </div>
                         <div class="secondary-content">
                             @await Render.EditButton("/cystem/value/edit/", new { Id = value.Id }, "")
-                            @await Render.DeleteModalButton(value, "", DisplaySetting.Render, ElementAction.None)
+                            @await Render.DeleteModalButton(value, "", DisplaySetting.Render, ComponentAction.None)
                         </div>
                     </li>
                 }
@@ -82,7 +82,7 @@
                                 }
                             </td>
                             <td>@await Render.EditButton("/cystem/value/edit/", new { Id = value.Id }, "")</td>
-                            <td>@await Render.DeleteModalButton(value, "", DisplaySetting.Render, ElementAction.None)</td>
+                            <td>@await Render.DeleteModalButton(value, "", DisplaySetting.Render, ComponentAction.None)</td>
                         </tr>
                         }
                     </tbody>

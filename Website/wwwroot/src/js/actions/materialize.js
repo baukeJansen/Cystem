@@ -1,17 +1,7 @@
-﻿class Materialize {
-    Name: ServiceName = ServiceName.Materialize;
-
-    private _serviceManager: IServiceManager;
-
-    constructor() {
-
+var Materialize = (function () {
+    function Materialize() {
     }
-
-    construct(serviceManager: IServiceManager) {
-        this._serviceManager = serviceManager;
-    }
-
-    bind(root: HTMLElement) {
+    Materialize.prototype.bind = function (root) {
         var registry = {
             Autocomplete: {
                 el: root.querySelectorAll('.autocomplete:not(.no-autoinit)'), config: {}
@@ -34,9 +24,6 @@
             Materialbox: {
                 el: root.querySelectorAll('.materialboxed:not(.no-autoinit)'), config: {}
             },
-            /*Modal: {
-                el: root.querySelectorAll('.modal:not(.no-autoinit)'), config: {}
-            },*/
             Parallax: {
                 el: root.querySelectorAll('.parallax:not(.no-autoinit)'), config: {}
             },
@@ -63,24 +50,17 @@
             },
             Tooltip: {
                 el: root.querySelectorAll('.tooltipped:not(.no-autoinit)'), config: {}
-            }/*,
-            FloatingActionButton: {
-                el: root.querySelectorAll('.fixed-action-btn:not(.no-autoinit)'), config: {}
-            }*/
+            }
         };
-
         for (var pluginName in registry) {
             var plugin = M[pluginName];
             plugin.init(registry[pluginName].el, registry[pluginName].config);
         }
-
-        // Update textfields
         M.updateTextFields();
-
-        // Close menu on link click
         $(root).find('#nav-mobile a').click(function () {
-            // @ts-ignore
             $('#nav-mobile').sidenav('close');
         });
-    }
-}
+    };
+    return Materialize;
+}());
+//# sourceMappingURL=materialize.js.map

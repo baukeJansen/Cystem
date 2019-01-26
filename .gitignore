@@ -42,3 +42,5 @@ Website/wwwroot/js/
 
 Website/wwwroot/src/js/*.js
 Website/wwwroot/src/js/*.map
+
+Website/wwwroot/css/

@@ -30,7 +30,7 @@
     <div class="header-space"></div>
 
     <div class="component-wrapper main-component">
-        <div class="component" data-url="@Model.Url" data-on-result="@ElementAction.Reload">
+        <div class="component" data-url="@Model.Url" data-on-result="@ComponentAction.Reload">
             @RenderBody()
         </div>
     </div>
@@ -38,31 +38,31 @@
     <div class="footer-space"></div>
 
     <header>
-        <div class="component-wrapper z-depth-1">
-            <div class="component load" data-url="/cystem/header/" data-on-result="@ElementAction.Load">
+        <div class="component-wrapper z-depth-1" data-target="@TargetComponent.Main">
+            <div class="component load" data-url="/cystem/header/" data-on-result="@ComponentAction.Load">
 
             </div>
         </div>
     </header>
 
     <footer>
-        <div class="component-wrapper z-depth-1">
-            <div class="component load" data-url="/cystem/footer/" data-on-result="@ElementAction.Load">
+        <div class="component-wrapper z-depth-1" data-target="@TargetComponent.Main">
+            <div class="component load" data-url="/cystem/footer/" data-on-result="@ComponentAction.Load">
 
             </div>
         </div>
     </footer>
 
     <div class="component-wrapper z-depth-1">
-        <div class="component load" data-url="/cystem/overlay/" data-on-result="@ElementAction.Load"></div>
+        <div class="component load" data-url="/cystem/overlay/" data-on-result="@ComponentAction.Load"></div>
     </div>
 
     <div class="component-wrapper z-depth-1">
-        <div class="component load" data-url="/cystem/modal/" data-on-result="@ElementAction.Load"></div>
+        <div class="component load" data-url="/cystem/modal/" data-on-result="@ComponentAction.Load"></div>
     </div>
 
     <div class="component-wrapper z-depth-1">
-        <div class="component load" data-url="/cystem/floating-action-button/" data-on-result="@ElementAction.Load"></div>
+        <div class="component load" data-url="/cystem/floating-action-button/" data-on-result="@ComponentAction.Load"></div>
     </div>
 
     <environment names="Development">

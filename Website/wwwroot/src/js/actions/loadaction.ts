@@ -1,5 +1,9 @@
 ﻿class LoadAction implements IAction {
+    private component: Component;
     constructor(private $el: JQuery, method: Method = Method.GET) {
+        this.component = new Component($el.closest('.component-wrapper'));
+        this.component.unloadContent();
+
         var actionResult: ActionResult = this.getActionResult($el);
         var url = this.getUrl($el);
         var data = this.getData($el, actionResult);
@@ -10,8 +14,7 @@
 
     onResult(response) {
         var $response = $(response);
-        var component: Component = new Component(this.$el.closest('.component-wrapper'));
-        component.replace($response);
+        this.component.loadContent($response);
 
         cystem.bindActions($response);
     }

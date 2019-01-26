@@ -43,12 +43,13 @@
       "wwwroot/src/js/components/overlaycomponent.js",
 
       "wwwroot/src/js/actions/loadaction.js",
+      "wwwroot/src/js/actions/linkaction.js",
       "wwwroot/src/js/actions/ajaxaction.js",
+      "wwwroot/src/js/actions/materialize.js",
 
       "wwwroot/src/js/cystem.js",
       //"wwwroot/src/js/action.js",
       //"wwwroot/src/js/navigate.js",
-      //"wwwroot/src/js/materialize.js",
       //"wwwroot/src/js/overlay.js",
       //"wwwroot/src/js/overlayhelper.js",
       //"wwwroot/src/js/modalhelper.js",

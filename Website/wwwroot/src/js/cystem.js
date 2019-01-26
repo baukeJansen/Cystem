@@ -7,6 +7,11 @@ var Cystem = (function () {
         $el.find('.load').each(function (_, el) {
             var action = new LoadAction($(el));
         });
+        $el.find('.ajax-get, .ajax-post, .ajax-delete, .link').each(function (_, el) {
+            var action = new LinkAction($(el));
+        });
+        var materialize = new Materialize();
+        materialize.bind($el[0]);
     };
     Cystem.prototype.getComponent = function ($component) {
         return new Component($component);

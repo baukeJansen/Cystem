@@ -9,6 +9,13 @@
         $el.find('.load').each(function (_, el) {
             var action: LoadAction = new LoadAction($(el));
         });
+
+        $el.find('.ajax-get, .ajax-post, .ajax-delete, .link').each(function (_, el){
+            var action: LinkAction = new LinkAction($(el));
+        });
+
+        var materialize = new Materialize();
+        materialize.bind($el[0]);
     }
 
     getComponent($component: JQuery): Component {

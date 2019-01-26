@@ -31416,11 +31416,48 @@ var ServiceManager = (function () {
 }());
 //# sourceMappingURL=servicemanager.js.map
 var Component = (function () {
-    function Component($component) {
+    function Component($component, target) {
+        if (target === void 0) { target = null; }
         this.$component = $component;
+        this.ready = true;
+        this.fnReady = [];
+        if (target == null) {
+            target = this.getTarget($component);
+        }
+        this.target = target;
     }
-    Component.prototype.replace = function ($replace) {
-        this.$component.children().replaceWith($replace);
+    Component.prototype.unloadContent = function () {
+        if (this.target != null)
+            return this.target.unloadContent();
+        var self = this;
+        this.ready = false;
+        var $children = this.$component.children();
+        this.$component.css({ height: $children.outerHeight() });
+        $children.addClass('fade-out');
+        setTimeout(function () {
+            $children.remove();
+            self.ready = true;
+            $.each(self.fnReady, function (_, fn) {
+                fn();
+            });
+        }, 50);
+    };
+    Component.prototype.loadContent = function ($replace) {
+        if (this.target != null)
+            return this.target.loadContent($replace);
+        var self = this;
+        $replace.addClass('fade-in');
+        if (!this.ready) {
+            this.fnReady.push(function () { self.loadContent($replace); });
+        }
+        else {
+            this.$component.append($replace);
+            this.$component.css({ height: $replace.outerHeight() });
+            setTimeout(function () {
+                $replace.removeClass('fade-in');
+                self.$component.css({ height: 'auto' });
+            }, 300);
+        }
     };
     Component.prototype.getParent = function () {
         var $parent = this.$component.closest('.component-wrapper');
@@ -31429,6 +31466,13 @@ var Component = (function () {
     Component.prototype.getMain = function () {
         var $main = this.$component.closest('.main-component');
         return new Component($main);
+    };
+    Component.prototype.getTarget = function ($component) {
+        switch ($component.data('target').toLower()) {
+            case 'main': return this.getMain();
+            case 'parent': return this.getParent();
+            default: return null;
+        }
     };
     return Component;
 }());
@@ -31459,6 +31503,8 @@ var LoadAction = (function () {
     function LoadAction($el, method) {
         if (method === void 0) { method = Method.GET; }
         this.$el = $el;
+        this.component = new Component($el.closest('.component-wrapper'));
+        this.component.unloadContent();
         var actionResult = this.getActionResult($el);
         var url = this.getUrl($el);
         var data = this.getData($el, actionResult);
@@ -31466,8 +31512,9 @@ var LoadAction = (function () {
         ajax.send(this.onResult, this);
     }
     LoadAction.prototype.onResult = function (response) {
-        var component = new Component(this.$el.closest('.component-wrapper'));
-        component.replace($(response));
+        var $response = $(response);
+        this.component.loadContent($response);
+        cystem.bindActions($response);
     };
     LoadAction.prototype.getActionResult = function ($el) {
         var actionResult = ActionResult.DISPLAY;
@@ -31520,6 +31567,22 @@ var LoadAction = (function () {
     return LoadAction;
 }());
 //# sourceMappingURL=loadaction.js.map
+var LinkAction = (function () {
+    function LinkAction($el) {
+        this.$el = $el;
+        var self = this;
+        $el.click(function () {
+            var method = self.getMethod($el);
+            var loadAction = new LoadAction($el, method);
+            return false;
+        });
+    }
+    LinkAction.prototype.getMethod = function ($el) {
+        return Method.GET;
+    };
+    return LinkAction;
+}());
+//# sourceMappingURL=linkaction.js.map
 var AjaxAction = (function () {
     function AjaxAction(method, url, data, actionResult) {
         if (actionResult === void 0) { actionResult = ActionResult.DISPLAY; }
@@ -31568,6 +31631,72 @@ var AjaxAction = (function () {
     return AjaxAction;
 }());
 //# sourceMappingURL=ajaxaction.js.map
+var Materialize = (function () {
+    function Materialize() {
+    }
+    Materialize.prototype.bind = function (root) {
+        var registry = {
+            Autocomplete: {
+                el: root.querySelectorAll('.autocomplete:not(.no-autoinit)'), config: {}
+            },
+            Carousel: {
+                el: root.querySelectorAll('.carousel:not(.no-autoinit)'), config: {}
+            },
+            Chips: {
+                el: root.querySelectorAll('.chips:not(.no-autoinit)'), config: {}
+            },
+            Collapsible: {
+                el: root.querySelectorAll('.collapsible:not(.no-autoinit)'), config: {}
+            },
+            Datepicker: {
+                el: root.querySelectorAll('.datepicker:not(.no-autoinit)'), config: { format: "dd-mm-yyyy", autoClose: true }
+            },
+            Dropdown: {
+                el: root.querySelectorAll('.dropdown-trigger:not(.no-autoinit)'), config: {}
+            },
+            Materialbox: {
+                el: root.querySelectorAll('.materialboxed:not(.no-autoinit)'), config: {}
+            },
+            Parallax: {
+                el: root.querySelectorAll('.parallax:not(.no-autoinit)'), config: {}
+            },
+            Pushpin: {
+                el: root.querySelectorAll('.pushpin:not(.no-autoinit)'), config: {}
+            },
+            ScrollSpy: {
+                el: root.querySelectorAll('.scrollspy:not(.no-autoinit)'), config: {}
+            },
+            FormSelect: {
+                el: root.querySelectorAll('select:not(.no-autoinit)'), config: {}
+            },
+            Sidenav: {
+                el: root.querySelectorAll('.sidenav:not(.no-autoinit)'), config: {}
+            },
+            Tabs: {
+                el: root.querySelectorAll('.tabs:not(.no-autoinit)'), config: {}
+            },
+            TapTarget: {
+                el: root.querySelectorAll('.tap-target:not(.no-autoinit)'), config: {}
+            },
+            Timepicker: {
+                el: root.querySelectorAll('.timepicker:not(.no-autoinit)'), config: {}
+            },
+            Tooltip: {
+                el: root.querySelectorAll('.tooltipped:not(.no-autoinit)'), config: {}
+            }
+        };
+        for (var pluginName in registry) {
+            var plugin = M[pluginName];
+            plugin.init(registry[pluginName].el, registry[pluginName].config);
+        }
+        M.updateTextFields();
+        $(root).find('#nav-mobile a').click(function () {
+            $('#nav-mobile').sidenav('close');
+        });
+    };
+    return Materialize;
+}());
+//# sourceMappingURL=materialize.js.map
 var Cystem = (function () {
     function Cystem() {
         this.parsers = [];
@@ -31577,6 +31706,11 @@ var Cystem = (function () {
         $el.find('.load').each(function (_, el) {
             var action = new LoadAction($(el));
         });
+        $el.find('.ajax-get, .ajax-post, .ajax-delete, .link').each(function (_, el) {
+            var action = new LinkAction($(el));
+        });
+        var materialize = new Materialize();
+        materialize.bind($el[0]);
     };
     Cystem.prototype.getComponent = function ($component) {
         return new Component($component);

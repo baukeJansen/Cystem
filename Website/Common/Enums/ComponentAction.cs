@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Website.Common.Enums
 {
-    public enum ElementAction
+    public enum ComponentAction
     {
         Display, Load, Reload, Overlay, Popup, Close , None, Modal
     }

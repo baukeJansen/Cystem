@@ -2,6 +2,8 @@ var LoadAction = (function () {
     function LoadAction($el, method) {
         if (method === void 0) { method = Method.GET; }
         this.$el = $el;
+        this.component = new Component($el.closest('.component-wrapper'));
+        this.component.unloadContent();
         var actionResult = this.getActionResult($el);
         var url = this.getUrl($el);
         var data = this.getData($el, actionResult);
@@ -10,8 +12,7 @@ var LoadAction = (function () {
     }
     LoadAction.prototype.onResult = function (response) {
         var $response = $(response);
-        var component = new Component(this.$el.closest('.component-wrapper'));
-        component.replace($response);
+        this.component.loadContent($response);
         cystem.bindActions($response);
     };
     LoadAction.prototype.getActionResult = function ($el) {

@@ -36,7 +36,7 @@
                 }
                 else
                 {
-                    @await Render.Button("/cystem/attribute/delete/", "Delete", "delete", DisplaySetting.Render, new { Id = Model.Id }, ElementAction.Load, new { @class = "btn-outline" })
+                    @await Render.Button("/cystem/attribute/delete/", "Delete", "delete", DisplaySetting.Render, new { Id = Model.Id }, ComponentAction.Load, new { @class = "btn-outline" })
                     @await Render.SubmitButton("Update")
                 }
             </div>
