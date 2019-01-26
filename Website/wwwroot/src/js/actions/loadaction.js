@@ -9,8 +9,10 @@ var LoadAction = (function () {
         ajax.send(this.onResult, this);
     }
     LoadAction.prototype.onResult = function (response) {
+        var $response = $(response);
         var component = new Component(this.$el.closest('.component-wrapper'));
-        component.replace($(response));
+        component.replace($response);
+        cystem.bindActions($response);
     };
     LoadAction.prototype.getActionResult = function ($el) {
         var actionResult = ActionResult.DISPLAY;

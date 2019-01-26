@@ -9,8 +9,11 @@
     }
 
     onResult(response) {
+        var $response = $(response);
         var component: Component = new Component(this.$el.closest('.component-wrapper'));
-        component.replace($(response));
+        component.replace($response);
+
+        cystem.bindActions($response);
     }
 
     getActionResult($el: JQuery): ActionResult {
