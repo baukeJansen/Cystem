@@ -18,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\src\js\actions\ajaxaction.ts" />
     <Content Remove="wwwroot\src\js\map.ts" />
   </ItemGroup>
 
@@ -134,6 +135,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <TypeScriptCompile Include="wwwroot\src\js\actions\ajaxaction.ts" />
     <TypeScriptCompile Include="wwwroot\src\js\common\actionresult.ts" />
     <TypeScriptCompile Include="wwwroot\src\js\common\method.ts" />
     <TypeScriptCompile Include="wwwroot\src\js\service\servicemanager.ts" />

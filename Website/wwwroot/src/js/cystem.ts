@@ -1,22 +1,17 @@
-﻿class Cystem implements IService {
-    Name: ServiceName = ServiceName.Cystem;
-    private _serviceManager: IServiceManager;
+﻿class Cystem {
+    parsers: IAction[] = [];
 
     constructor() {
+        this.bindActions($('body'));
     }
 
-    construct(serviceManager: IServiceManager) {
-        this._serviceManager = serviceManager;
+    bindActions($el: JQuery) {
+        $el.find('.load').each(function (_, el) {
+            var action: LoadAction = new LoadAction($(el));
+        });
     }
 
-    bindNew(el: HTMLElement): void {
-        var services: IService[] = this._serviceManager.getServices();
-
-        for (var service of services) {
-            service.bind(el);
-        }
-    }
-
-    bind(el: HTMLElement): void {
+    getComponent($component: JQuery): Component {
+        return new Component($component);
     }
 }

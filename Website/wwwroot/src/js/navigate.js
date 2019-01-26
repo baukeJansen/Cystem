@@ -166,8 +166,6 @@ var Navigate = (function () {
         $newContent.addClass('fade-in');
         action.onReady(function () {
             $target.append($newContent);
-            var cystem = self._serviceManager.get(Cystem);
-            cystem.bindNew($newContent[0]);
             $target.css({ height: $newContent.outerHeight() });
             setTimeout(function () {
                 $newContent.removeClass('fade-in');

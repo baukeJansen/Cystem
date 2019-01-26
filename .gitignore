@@ -38,3 +38,4 @@ package-lock.json
 
 #Temp
 TestApplication/*
+Website/wwwroot/js/

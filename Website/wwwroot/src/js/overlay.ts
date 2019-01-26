@@ -44,8 +44,8 @@
         var $contentWrapper = this.$overlay.find('.content-wrapper');
         $contentWrapper.append($overlayContent);
 
-        var cystem: Cystem = this._serviceManager.get(Cystem);
-        cystem.bindNew(this.$overlay[0]);
+        //var cystem: Cystem = this._serviceManager.get(Cystem);
+        //cystem.bindNew(this.$overlay[0]);
     }
 
     close() {

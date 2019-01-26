@@ -15,7 +15,7 @@
   },
 
   "include": [
-    "wwwroot/src/js/**/*.ts", "wwwroot/src/js/service/servicemanager.js", "wwwroot/src/js/scope", "wwwroot/src/js/parser"
+    "wwwroot/src/js/**/*.ts"
   ],
 
   "exclude": [

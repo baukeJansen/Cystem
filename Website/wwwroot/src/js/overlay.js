@@ -29,8 +29,6 @@ var Overlay = (function () {
         var $overlayContent = $(overlayContent);
         var $contentWrapper = this.$overlay.find('.content-wrapper');
         $contentWrapper.append($overlayContent);
-        var cystem = this._serviceManager.get(Cystem);
-        cystem.bindNew(this.$overlay[0]);
     };
     Overlay.prototype.close = function () {
         var self = this;

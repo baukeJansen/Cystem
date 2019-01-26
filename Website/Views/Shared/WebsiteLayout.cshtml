@@ -38,8 +38,8 @@
     <div class="footer-space"></div>
 
     <header>
-        <div wrapper class="component-wrapper z-depth-1">
-            <div data-load class="component ajax-load" data-url="/cystem/header/" data-on-result="@ElementAction.Load">
+        <div class="component-wrapper z-depth-1">
+            <div class="component load" data-url="/cystem/header/" data-on-result="@ElementAction.Load">
 
             </div>
         </div>
@@ -47,28 +47,28 @@
 
     <footer>
         <div class="component-wrapper z-depth-1">
-            <div data-load class="component" data-url="/cystem/footer/" data-on-result="@ElementAction.Load">
+            <div class="component load" data-url="/cystem/footer/" data-on-result="@ElementAction.Load">
 
             </div>
         </div>
     </footer>
 
     <div class="component-wrapper z-depth-1">
-        <div class="component ajax-load" data-url="/cystem/overlay/" data-on-result="@ElementAction.Load"></div>
+        <div class="component load" data-url="/cystem/overlay/" data-on-result="@ElementAction.Load"></div>
     </div>
 
     <div class="component-wrapper z-depth-1">
-        <div class="component ajax-load" data-url="/cystem/modal/" data-on-result="@ElementAction.Load"></div>
+        <div class="component load" data-url="/cystem/modal/" data-on-result="@ElementAction.Load"></div>
     </div>
 
     <div class="component-wrapper z-depth-1">
-        <div class="component ajax-load" data-url="/cystem/floating-action-button/" data-on-result="@ElementAction.Load"></div>
+        <div class="component load" data-url="/cystem/floating-action-button/" data-on-result="@ElementAction.Load"></div>
     </div>
 
     <environment names="Development">
         <script src="~/lib/jquery/jquery.min.js"></script>
         @Bundler.Unpack(HostingEnvironment.ContentRootPath, "/js/cystem.js", Context)
-        @*<script src="~/js/cystem.js" async="async" defer="defer" asp-append-version="true"></script>*@
+        @*<script src="~/js/cystem.min.js" async="async" defer="defer" asp-append-version="true"></script>*@
     </environment>
 
     <environment names="Staging,Production">
