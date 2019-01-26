@@ -2,7 +2,9 @@
     constructor(private method: string, private url: string, private data: any, private actionResult: ActionResult = ActionResult.DISPLAY) {
     }
 
-    send(fnSucces: Function, self: any) {
+    send(fnSucces: Function, caller: any) {
+        var self = this;
+
         $.ajax({
             method: this.method,
             url: this.url,
@@ -11,11 +13,10 @@
         }).done(function (response, status, xhr) {
             switch (xhr.status) {
                 case 200:
-                    fnSucces.call(self, response);
+                    fnSucces.call(caller, response);
                     break;
                 case 205:
-                    this.data.Layout = "None";
-                    window.location.href = this.url; // self._createUrl(action.url, action.data);
+                    window.location.href = self.url;
                     break;
                 default:
                     console.log('unknown status: ', xhr.status);

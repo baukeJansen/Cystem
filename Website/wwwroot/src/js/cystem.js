@@ -12,6 +12,7 @@ var Cystem = (function () {
         });
         var materialize = new Materialize();
         materialize.bind($el[0]);
+        var popstateAction = new PopstateAction();
     };
     Cystem.prototype.getComponent = function ($component) {
         return new Component($component);

@@ -3,12 +3,8 @@
     private fnReady: Function[] = [];
     private target: Component;
 
-    constructor(public $component: JQuery, target: Component = null) {
-        if (target == null) {
-            target = this.getTarget($component);
-        }
-
-        this.target = target;
+    constructor(public $component: JQuery, actionTarget: string = null) {
+        this.target = this.getTarget($component, actionTarget);
     }
 
     unloadContent(): void {
@@ -56,14 +52,18 @@
         return new Component($parent);
     }
 
-    getMain(): Component {
-        var $main: JQuery = this.$component.closest('.main-component');
+    static getMain(): Component {
+        var $main: JQuery = $('.main-component');
         return new Component($main);
     }
 
-    getTarget($component: JQuery): Component {
-        switch ($component.data('target').toLower()) {
-            case 'main': return this.getMain();
+    getTarget($component: JQuery, actionTarget: string): Component {
+        var target: string = actionTarget ? actionTarget : $component.data('target')
+        if (target) target = target.toLowerCase();
+
+        switch (target) {
+            case 'self': return null;
+            case 'main': return Component.getMain();
             case 'parent': return this.getParent();
             default: return null;
         }

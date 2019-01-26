@@ -1,13 +1,10 @@
 var Component = (function () {
-    function Component($component, target) {
-        if (target === void 0) { target = null; }
+    function Component($component, actionTarget) {
+        if (actionTarget === void 0) { actionTarget = null; }
         this.$component = $component;
         this.ready = true;
         this.fnReady = [];
-        if (target == null) {
-            target = this.getTarget($component);
-        }
-        this.target = target;
+        this.target = this.getTarget($component, actionTarget);
     }
     Component.prototype.unloadContent = function () {
         if (this.target != null)
@@ -46,13 +43,17 @@ var Component = (function () {
         var $parent = this.$component.closest('.component-wrapper');
         return new Component($parent);
     };
-    Component.prototype.getMain = function () {
-        var $main = this.$component.closest('.main-component');
+    Component.getMain = function () {
+        var $main = $('.main-component');
         return new Component($main);
     };
-    Component.prototype.getTarget = function ($component) {
-        switch ($component.data('target').toLower()) {
-            case 'main': return this.getMain();
+    Component.prototype.getTarget = function ($component, actionTarget) {
+        var target = actionTarget ? actionTarget : $component.data('target');
+        if (target)
+            target = target.toLowerCase();
+        switch (target) {
+            case 'self': return null;
+            case 'main': return Component.getMain();
             case 'parent': return this.getParent();
             default: return null;
         }

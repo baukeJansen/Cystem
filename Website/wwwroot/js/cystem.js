@@ -31416,15 +31416,12 @@ var ServiceManager = (function () {
 }());
 //# sourceMappingURL=servicemanager.js.map
 var Component = (function () {
-    function Component($component, target) {
-        if (target === void 0) { target = null; }
+    function Component($component, actionTarget) {
+        if (actionTarget === void 0) { actionTarget = null; }
         this.$component = $component;
         this.ready = true;
         this.fnReady = [];
-        if (target == null) {
-            target = this.getTarget($component);
-        }
-        this.target = target;
+        this.target = this.getTarget($component, actionTarget);
     }
     Component.prototype.unloadContent = function () {
         if (this.target != null)
@@ -31463,13 +31460,17 @@ var Component = (function () {
         var $parent = this.$component.closest('.component-wrapper');
         return new Component($parent);
     };
-    Component.prototype.getMain = function () {
-        var $main = this.$component.closest('.main-component');
+    Component.getMain = function () {
+        var $main = $('.main-component');
         return new Component($main);
     };
-    Component.prototype.getTarget = function ($component) {
-        switch ($component.data('target').toLower()) {
-            case 'main': return this.getMain();
+    Component.prototype.getTarget = function ($component, actionTarget) {
+        var target = actionTarget ? actionTarget : $component.data('target');
+        if (target)
+            target = target.toLowerCase();
+        switch (target) {
+            case 'self': return null;
+            case 'main': return Component.getMain();
             case 'parent': return this.getParent();
             default: return null;
         }
@@ -31503,13 +31504,18 @@ var LoadAction = (function () {
     function LoadAction($el, method) {
         if (method === void 0) { method = Method.GET; }
         this.$el = $el;
-        this.component = new Component($el.closest('.component-wrapper'));
+        var target = $el.data('target');
+        this.component = new Component($el.closest('.component-wrapper'), target);
         this.component.unloadContent();
         var actionResult = this.getActionResult($el);
         var url = this.getUrl($el);
         var data = this.getData($el, actionResult);
         var ajax = new AjaxAction(method, url, data, actionResult);
         ajax.send(this.onResult, this);
+        if (method === Method.GET && actionResult === ActionResult.DISPLAY) {
+            var state = {};
+            history.pushState(state, "", url);
+        }
     }
     LoadAction.prototype.onResult = function (response) {
         var $response = $(response);
@@ -31591,20 +31597,21 @@ var AjaxAction = (function () {
         this.data = data;
         this.actionResult = actionResult;
     }
-    AjaxAction.prototype.send = function (fnSucces, self) {
+    AjaxAction.prototype.send = function (fnSucces, caller) {
+        var self = this;
         $.ajax({
             method: this.method,
             url: this.url,
             data: this.data,
             mimeType: 'text/html'
         }).done(function (response, status, xhr) {
+            console.log(xhr.status);
             switch (xhr.status) {
                 case 200:
-                    fnSucces.call(self, response);
+                    fnSucces.call(caller, response);
                     break;
                 case 205:
-                    this.data.Layout = "None";
-                    window.location.href = this.url;
+                    window.location.href = self.url;
                     break;
                 default:
                     console.log('unknown status: ', xhr.status);

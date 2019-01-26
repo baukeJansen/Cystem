@@ -2,13 +2,18 @@ var LoadAction = (function () {
     function LoadAction($el, method) {
         if (method === void 0) { method = Method.GET; }
         this.$el = $el;
-        this.component = new Component($el.closest('.component-wrapper'));
+        var target = $el.data('target');
+        this.component = new Component($el.closest('.component-wrapper'), target);
         this.component.unloadContent();
         var actionResult = this.getActionResult($el);
         var url = this.getUrl($el);
         var data = this.getData($el, actionResult);
         var ajax = new AjaxAction(method, url, data, actionResult);
         ajax.send(this.onResult, this);
+        if (method === Method.GET && actionResult === ActionResult.DISPLAY) {
+            var state = {};
+            history.pushState(state, "", url);
+        }
     }
     LoadAction.prototype.onResult = function (response) {
         var $response = $(response);

@@ -6,7 +6,8 @@ var AjaxAction = (function () {
         this.data = data;
         this.actionResult = actionResult;
     }
-    AjaxAction.prototype.send = function (fnSucces, self) {
+    AjaxAction.prototype.send = function (fnSucces, caller) {
+        var self = this;
         $.ajax({
             method: this.method,
             url: this.url,
@@ -15,11 +16,10 @@ var AjaxAction = (function () {
         }).done(function (response, status, xhr) {
             switch (xhr.status) {
                 case 200:
-                    fnSucces.call(self, response);
+                    fnSucces.call(caller, response);
                     break;
                 case 205:
-                    this.data.Layout = "None";
-                    window.location.href = this.url;
+                    window.location.href = self.url;
                     break;
                 default:
                     console.log('unknown status: ', xhr.status);

@@ -16,6 +16,8 @@
 
         var materialize = new Materialize();
         materialize.bind($el[0]);
+
+        var popstateAction = new PopstateAction();
     }
 
     getComponent($component: JQuery): Component {

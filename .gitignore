@@ -36,11 +36,14 @@ msbuild.wrn
 node_modules/
 package-lock.json
 
-#Temp
-TestApplication/*
-Website/wwwroot/js/
+#compiled css
+Website/wwwroot/css/
 
+#compiled js
+Website/wwwroot/js/
 Website/wwwroot/src/js/*.js
 Website/wwwroot/src/js/*.map
 
-Website/wwwroot/css/
+
+
+
