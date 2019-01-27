@@ -12,7 +12,7 @@
 @{
     RenderValue = @<div class="block-row">
         <div class="block v-id">@item.Id</div>
-        <div class="block v-label"><a class="ajax-get" href="/cystem/attribute/edit?id=@item.Attribute.Id" data-on-result="@ComponentAction.Overlay"><span class="v-attribute">@item.Attribute.Label</span></a></div>
+        <div class="block v-label"><a class="ajax-get" href="/cystem/attribute/edit?id=@item.Attribute.Id" data-target="@ComponentTarget.Overlay"><span class="v-attribute">@item.Attribute.Label</span></a></div>
 
         <div class="block v-item">
             @switch (item.Type)
@@ -24,10 +24,10 @@
                     @: {group}
                     break;
                 case ValueType.RelatedValue: 
-                    <a class="ajax-get" href="/cystem/value/edit?id=@item.Int" data-on-result="@ComponentAction.Overlay"><span class="v-related-value">@item.Int</span></a>
+                    <a class="ajax-get" href="/cystem/value/edit?id=@item.Int" data-target="@ComponentTarget.Overlay"><span class="v-related-value">@item.Int</span></a>
                     break;
                 case ValueType.RelatedAttribute: 
-                    <a class="ajax-get" href="/cystem/attribute/edit?id=@item.Int" data-on-result="@ComponentAction.Overlay"><span class="v-related-attribute">@item.Int</span></a>
+                    <a class="ajax-get" href="/cystem/attribute/edit?id=@item.Int" data-target="@ComponentTarget.Overlay"><span class="v-related-attribute">@item.Int</span></a>
                     break;
                 case ValueType.ParamValue:
                     @:{param}

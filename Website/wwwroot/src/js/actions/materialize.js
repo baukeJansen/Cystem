@@ -1,7 +1,5 @@
 var Materialize = (function () {
-    function Materialize() {
-    }
-    Materialize.prototype.bind = function (root) {
+    function Materialize(root) {
         var registry = {
             Autocomplete: {
                 el: root.querySelectorAll('.autocomplete:not(.no-autoinit)'), config: {}
@@ -60,7 +58,7 @@ var Materialize = (function () {
         $(root).find('#nav-mobile a').click(function () {
             $('#nav-mobile').sidenav('close');
         });
-    };
+    }
     return Materialize;
 }());
 //# sourceMappingURL=materialize.js.map

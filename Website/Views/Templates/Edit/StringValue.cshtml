@@ -5,4 +5,4 @@
 @using ValueType = Website.Common.Enums.ValueType
 @model GenericViewModel
 
-<button class="ajax-get btn-flat waves-effect" href="/cystem/edit/?id=@Model.Value.Id" data-on-result="@ComponentAction.Modal">@Model.Value.String</button>
+<button class="ajax-get btn-flat waves-effect" href="/cystem/edit/?id=@Model.Value.Id" data-target="@ComponentTarget.Modal">@Model.Value.String</button>

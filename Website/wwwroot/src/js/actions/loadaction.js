@@ -2,8 +2,7 @@ var LoadAction = (function () {
     function LoadAction($el, method) {
         if (method === void 0) { method = Method.GET; }
         this.$el = $el;
-        var target = $el.data('target');
-        this.component = new Component($el.closest('.component-wrapper'), target);
+        this.component = $el.getComponent();
         this.component.unloadContent();
         var actionResult = this.getActionResult($el);
         var url = this.getUrl($el);

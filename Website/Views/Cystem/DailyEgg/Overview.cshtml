@@ -16,7 +16,7 @@
 
     <div class="row">
         <div class="col s12">
-            <a href="@(Url.Action<DailyEggController>(c => c.Create(null)))" class="ajax-get right btn-floating waves-effect waves-light btn-large" data-on-result="@ComponentAction.Overlay"><i class='material-icons'>add</i></a>
+            <a href="@(Url.Action<DailyEggController>(c => c.Create(null)))" class="ajax-get right btn-floating waves-effect waves-light btn-large" data-action="@ComponentAction.Overlay"><i class='material-icons'>add</i></a>
         </div>
     </div>
 
@@ -64,7 +64,7 @@
                             <td>@exportType</td>
                             <td>@item.Eggs</td>
                             <td>
-                                <a href="@(Url.Action<DailyEggController>(c => c.Edit(null), new { Id = item.Id, ExportType = item.ExportType }))" class="ajax-get" data-on-result="@ComponentAction.Overlay"><i class="material-icons">edit</i></a>
+                                <a href="@(Url.Action<DailyEggController>(c => c.Edit(null), new { Id = item.Id, ExportType = item.ExportType }))" class="ajax-get" data-action="@ComponentAction.Overlay"><i class="material-icons">edit</i></a>
                             </td>
                         </tr>
                     }

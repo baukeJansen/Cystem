@@ -1,23 +1,4 @@
-﻿@*@using Website.Common.Data
-    @model ButtonData
-
-    @{
-        string iconAlign = "";
-    }
-
-    <a href="@Model.Url" @Html.Raw(Model.Attributes)>
-        @if(!String.IsNullOrEmpty(Model.Text))
-        {
-            @Model.Text
-            iconAlign = "right";
-        }
-        @if(!String.IsNullOrEmpty(Model.Icon))
-        {
-            <i class="material-icons @iconAlign">@Model.Icon</i>
-        }
-    </a>*@
-
-@using Website.Common.Models.EAV
+﻿@using Website.Common.Models.EAV
 @using Website.Common.Viewmodels
 @using ValueType = Website.Common.Enums.ValueType
 @inject IValueHelper Value

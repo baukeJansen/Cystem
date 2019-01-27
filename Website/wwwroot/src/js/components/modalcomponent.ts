@@ -1,1 +1,3 @@
-﻿
+﻿class ModalComponent extends Component {
+
+}

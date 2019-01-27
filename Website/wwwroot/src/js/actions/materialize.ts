@@ -1,5 +1,5 @@
 ﻿class Materialize implements IAction {
-    bind(root: HTMLElement) {
+    constructor(root: HTMLElement) {
         var registry = {
             Autocomplete: {
                 el: root.querySelectorAll('.autocomplete:not(.no-autoinit)'), config: {}

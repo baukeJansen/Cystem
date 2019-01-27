@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace Website.Common.Enums
 {
-    public enum ComponentAction
+    public enum ComponentTarget
     {
-        Display, Load, Reload, Close , None
+        Self, Parent, Main, Overlay, Modal
     }
 }

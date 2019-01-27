@@ -15,7 +15,7 @@ namespace Website.Views.HtmlHelpers
 {
     public partial class RenderHelper
     {
-        public async Task<IHtmlContent> Button(string url, string buttonText, string icon, DisplaySetting options, object routeValues = null, ComponentAction action = ComponentAction.Load, object htmlAttributes = null, string cssClasses = "", bool link = true)
+        public async Task<IHtmlContent> Button(string url, string buttonText, string icon, DisplaySetting options, object routeValues = null, ComponentAction action = ComponentAction.Load, ComponentTarget target = ComponentTarget.Self, object htmlAttributes = null, string cssClasses = "", bool link = true)
         {
             IDictionary<string, object> attributes = ParseHtmlAttributes(htmlAttributes);
 
@@ -25,7 +25,8 @@ namespace Website.Views.HtmlHelpers
             }
 
             attributes["class"] = cssClasses;
-            attributes["data-on-result"] =  action.ToString();
+            attributes["data-action"] =  action.ToString();
+            attributes["data-target"] = target.ToString();
             url = url == null ? null : url + ParseRouteValues(routeValues);
 
             GenericViewModel viewModel = new GenericViewModel
@@ -74,60 +75,60 @@ namespace Website.Views.HtmlHelpers
             return await componentHelper.InvokeAsync(typeof(RenderViewComponent), viewModel);
         }
 
-        public async Task<IHtmlContent> SimpleButton(string url, string buttonText, DisplaySetting options, object routeValues = null, ComponentAction action = ComponentAction.Display, object htmlAttributes = null)
+        public async Task<IHtmlContent> SimpleButton(string url, string buttonText, DisplaySetting options, object routeValues = null, ComponentAction action = ComponentAction.Load, ComponentTarget target = ComponentTarget.Self, object htmlAttributes = null)
         {
-            return await Button(url, buttonText, null, options, routeValues, action, htmlAttributes, "ajax-get btn-simple waves-effect");
+            return await Button(url, buttonText, null, options, routeValues, action, target, htmlAttributes, "ajax-get btn-simple waves-effect");
         }
 
-        public async Task<IHtmlContent> IconButton(string url, string icon, object routeValues = null, DisplaySetting options = DisplaySetting.Render, ComponentAction action = ComponentAction.Display, object htmlAttributes = null)
+        public async Task<IHtmlContent> IconButton(string url, string icon, object routeValues = null, DisplaySetting options = DisplaySetting.Render, ComponentAction action = ComponentAction.Load, ComponentTarget target = ComponentTarget.Self, object htmlAttributes = null)
         {
-            return await Button(url, null, icon, options, routeValues, action, htmlAttributes, "ajax-get btn-flat waves-effect");
+            return await Button(url, null, icon, options, routeValues, action, target, htmlAttributes, "ajax-get btn-flat waves-effect");
         }
 
-        public async Task<IHtmlContent> FloatingButton(string url, string icon, object routeValues = null, DisplaySetting options = DisplaySetting.Render, ComponentAction action = ComponentAction.Overlay, object htmlAttributes = null)
+        public async Task<IHtmlContent> FloatingButton(string url, string icon, object routeValues = null, DisplaySetting options = DisplaySetting.Render, ComponentAction action = ComponentAction.Load, ComponentTarget target = ComponentTarget.Overlay, object htmlAttributes = null)
         {
-            return await Button(url, null, icon, options, routeValues, action, htmlAttributes, "ajax-get right btn-floating waves-effect waves-light btn-large");
+            return await Button(url, null, icon, options, routeValues, action, target, htmlAttributes, "ajax-get right btn-floating waves-effect waves-light btn-large");
         }
 
-        public async Task<IHtmlContent> CreateButton(string url, object routeValues = null, string buttonText = "New", string icon = "add", DisplaySetting options = DisplaySetting.Render, ComponentAction action = ComponentAction.Overlay, object htmlAttributes = null)
-        {
-            string buttonClass = string.IsNullOrEmpty(buttonText) ? "btn-simple" : "btn-flat";
-            return await Button(url, null, icon, options, routeValues, action, htmlAttributes, "ajax-get waves-effect" + buttonClass);
-        }
-
-        public async Task<IHtmlContent> EditButton(string url, object routeValues = null, string buttonText = "Edit", string icon = "edit", DisplaySetting options = DisplaySetting.Render, ComponentAction action = ComponentAction.Overlay, object htmlAttributes = null)
+        public async Task<IHtmlContent> CreateButton(string url, object routeValues = null, string buttonText = "New", string icon = "add", DisplaySetting options = DisplaySetting.Render, ComponentAction action = ComponentAction.Load, ComponentTarget target = ComponentTarget.Overlay, object htmlAttributes = null)
         {
             string buttonClass = string.IsNullOrEmpty(buttonText) ? "btn-simple" : "btn-flat";
-            return await Button(url, buttonText, icon, options, routeValues, action, htmlAttributes, "ajax-get waves-effect " + buttonClass);
+            return await Button(url, null, icon, options, routeValues, action, target, htmlAttributes, "ajax-get waves-effect" + buttonClass);
+        }
+
+        public async Task<IHtmlContent> EditButton(string url, object routeValues = null, string buttonText = "Edit", string icon = "edit", DisplaySetting options = DisplaySetting.Render, ComponentAction action = ComponentAction.Load, ComponentTarget target = ComponentTarget.Overlay, object htmlAttributes = null)
+        {
+            string buttonClass = string.IsNullOrEmpty(buttonText) ? "btn-simple" : "btn-flat";
+            return await Button(url, buttonText, icon, options, routeValues, action, target, htmlAttributes, "ajax-get waves-effect " + buttonClass);
         }
 
 
-        public async Task<IHtmlContent> SubmitButton(string buttonText = "Submit", string icon = "send", ComponentAction action = ComponentAction.Close, string classes = "", object htmlAttributes = null)
+        public async Task<IHtmlContent> SubmitButton(string buttonText = "Submit", string icon = "send", ComponentAction action = ComponentAction.Close, ComponentTarget target = ComponentTarget.Self, string classes = "", object htmlAttributes = null)
         {
             IDictionary<string, object> attributes = ParseHtmlAttributes(htmlAttributes);
             attributes["type"] = "submit";
-            return await Button(null, buttonText, icon, DisplaySetting.Render, null, action, htmlAttributes, "ajax-submit btn waves-effect waves-light " + classes, false);
+            return await Button(null, buttonText, icon, DisplaySetting.Render, null, action, target, htmlAttributes, "ajax-submit btn waves-effect waves-light " + classes, false);
         }
 
-        public async Task<IHtmlContent> DeleteButton(string url, object routeValues = null, string buttonText = "Delete", DisplaySetting options = DisplaySetting.Render, ComponentAction action = ComponentAction.Close, object htmlAttributes = null)
+        public async Task<IHtmlContent> DeleteButton(string url, object routeValues = null, string buttonText = "Delete", DisplaySetting options = DisplaySetting.Render, ComponentAction action = ComponentAction.Close, ComponentTarget target = ComponentTarget.Self, object htmlAttributes = null)
         {
-            return await Button(url, buttonText, "delete", options, routeValues, action, htmlAttributes, "ajax-delete btn-flat waves-effect");
+            return await Button(url, buttonText, "delete", options, routeValues, action, target, htmlAttributes, "ajax-delete btn-flat waves-effect");
         }
 
-        public async Task<IHtmlContent> DeleteModalButton(Value value, string buttonText = "Delete", DisplaySetting options = DisplaySetting.Render, ComponentAction action = ComponentAction.Close, object htmlAttributes = null)
+        public async Task<IHtmlContent> DeleteModalButton(Value value, string buttonText = "Delete", DisplaySetting options = DisplaySetting.Render, ComponentAction action = ComponentAction.Load, ComponentTarget target = ComponentTarget.Modal, object htmlAttributes = null)
         {
             HtmlContentBuilder builder = new HtmlContentBuilder();
             IDictionary<string, object> attributes = ParseHtmlAttributes(htmlAttributes);
             attributes["data-target"] = "#modal";
             string buttonClass = string.IsNullOrEmpty(buttonText) ? "btn-simple" : "btn-flat";
 
-            builder.AppendHtml(await Button("/cystem/confirm-delete/", buttonText, "delete", options, new { value.Id }, ComponentAction.Modal, attributes, "ajax-get waves-effect " + buttonClass));
+            builder.AppendHtml(await Button("/cystem/confirm-delete/", buttonText, "delete", options, new { value.Id }, action, target, attributes, "ajax-get waves-effect " + buttonClass));
             return builder;
         }
 
-        public async Task<IHtmlContent> SelectButton(string url, string buttonText, object routeValues = null, string icon = "arrow_forward", DisplaySetting options = DisplaySetting.Render, ComponentAction action = ComponentAction.Overlay, object htmlAttributes = null)
+        public async Task<IHtmlContent> SelectButton(string url, string buttonText, object routeValues = null, string icon = "arrow_forward", DisplaySetting options = DisplaySetting.Render, ComponentAction action = ComponentAction.Load, ComponentTarget target = ComponentTarget.Overlay, object htmlAttributes = null)
         {
-            return await Button(url, buttonText, icon, options, routeValues, action, htmlAttributes, "ajax-get btn-flat waves-effect");
+            return await Button(url, buttonText, icon, options, routeValues, action, target, htmlAttributes, "ajax-get btn-flat waves-effect");
         }
 
         private string ParseRouteValues(object values)

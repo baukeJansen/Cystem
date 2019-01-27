@@ -4,7 +4,8 @@
     private target: Component;
 
     constructor(public $component: JQuery, actionTarget: string = null) {
-        this.target = this.getTarget($component, actionTarget);
+        var targetString: string = actionTarget ? actionTarget : $component.getTargetString();
+        this.target = $.getTargetComponent(this, targetString);
     }
 
     unloadContent(): void {
@@ -44,28 +45,6 @@
                 $replace.removeClass('fade-in');
                 self.$component.css({ height: 'auto' });
             }, 300);
-        }
-    }
-
-    getParent(): Component {
-        var $parent: JQuery = this.$component.closest('.component-wrapper');
-        return new Component($parent);
-    }
-
-    static getMain(): Component {
-        var $main: JQuery = $('.main-component');
-        return new Component($main);
-    }
-
-    getTarget($component: JQuery, actionTarget: string): Component {
-        var target: string = actionTarget ? actionTarget : $component.data('target')
-        if (target) target = target.toLowerCase();
-
-        switch (target) {
-            case 'self': return null;
-            case 'main': return Component.getMain();
-            case 'parent': return this.getParent();
-            default: return null;
         }
     }
 }

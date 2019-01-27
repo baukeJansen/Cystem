@@ -8,7 +8,7 @@
         <div class="col s2 l1">@Model.Value.Attribute.Label:</div>
         <div class="col s8 l10">@Model.Value.SerializedString</div>
         <div class="col s2 l1">
-            @await Render.EditButton("/cystem/edit-value/", new { id = Model.Value.Id }, "", "edit", DisplaySetting.Render, ComponentAction.Overlay, new { @class = "right" })
+            @await Render.EditButton("/cystem/edit-value/", new { id = Model.Value.Id }, "", target: ComponentTarget.Overlay, htmlAttributes: new { @class = "right" })
         </div>
     </div>
 

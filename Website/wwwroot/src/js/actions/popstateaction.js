@@ -2,7 +2,7 @@ var PopstateAction = (function () {
     function PopstateAction() {
         var self = this;
         window.onpopstate = function (e) { self.onPopState.call(self, e); };
-        this.component = Component.getMain();
+        this.component = $.getMainComponent();
     }
     PopstateAction.prototype.onPopState = function (event) {
         var url = document.location.href;

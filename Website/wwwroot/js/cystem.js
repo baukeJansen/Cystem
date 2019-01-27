@@ -31388,6 +31388,49 @@ var ServiceName;
     ServiceName[ServiceName["FloatingActionButton"] = 7] = "FloatingActionButton";
 })(ServiceName || (ServiceName = {}));
 //# sourceMappingURL=service.js.map
+jQuery.extend({
+    getMainComponent: function () {
+        var $main = $('.main-component');
+        return new Component($main);
+    },
+    getParentComponent: function () {
+        var $parent = this.$component.closest('.component-wrapper');
+        return new Component($parent);
+    },
+    getOverlayComponent: function () {
+        return new OverlayComponent(null);
+    },
+    getModalComponent: function () {
+        return new ModalComponent(null);
+    },
+    getTargetComponent: function (component, target) {
+        switch (target) {
+            case 'self': return null;
+            case 'main': return jQuery.getMainComponent();
+            case 'parent': return jQuery.getParentComponent(component);
+            case 'overlay': return jQuery.getOverlayComponent();
+            case 'modal': return jQuery.getModalComponent();
+            default: return null;
+        }
+    }
+});
+jQuery.fn.extend({
+    getComponent: function () {
+        var $component = this.closest('.component-wrapper');
+        var type = this.data('type');
+        var target = this.data('target');
+        switch (type) {
+            case 'overlay': return new OverlayComponent($component, target);
+            case 'modal': return new ModalComponent($component, target);
+            default: return new Component($component, target);
+        }
+    },
+    getTargetString: function () {
+        var target = this.data('target');
+        return target ? target.toLowerCase() : target;
+    }
+});
+//# sourceMappingURL=jqextensions.js.map
 //# sourceMappingURL=iservice.js.map
 //# sourceMappingURL=iservicemanager.js.map
 var ServiceManager = (function () {
@@ -31421,7 +31464,8 @@ var Component = (function () {
         this.$component = $component;
         this.ready = true;
         this.fnReady = [];
-        this.target = this.getTarget($component, actionTarget);
+        var targetString = actionTarget ? actionTarget : $component.getTargetString();
+        this.target = $.getTargetComponent(this, targetString);
     }
     Component.prototype.unloadContent = function () {
         if (this.target != null)
@@ -31456,28 +31500,29 @@ var Component = (function () {
             }, 300);
         }
     };
-    Component.prototype.getParent = function () {
-        var $parent = this.$component.closest('.component-wrapper');
-        return new Component($parent);
-    };
-    Component.getMain = function () {
-        var $main = $('.main-component');
-        return new Component($main);
-    };
-    Component.prototype.getTarget = function ($component, actionTarget) {
-        var target = actionTarget ? actionTarget : $component.data('target');
-        if (target)
-            target = target.toLowerCase();
-        switch (target) {
-            case 'self': return null;
-            case 'main': return Component.getMain();
-            case 'parent': return this.getParent();
-            default: return null;
-        }
-    };
     return Component;
 }());
 //# sourceMappingURL=component.js.map
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var ModalComponent = (function (_super) {
+    __extends(ModalComponent, _super);
+    function ModalComponent() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    return ModalComponent;
+}(Component));
 //# sourceMappingURL=modalcomponent.js.map
 var __extends = (this && this.__extends) || (function () {
     var extendStatics = function (d, b) {
@@ -31504,8 +31549,7 @@ var LoadAction = (function () {
     function LoadAction($el, method) {
         if (method === void 0) { method = Method.GET; }
         this.$el = $el;
-        var target = $el.data('target');
-        this.component = new Component($el.closest('.component-wrapper'), target);
+        this.component = $el.getComponent();
         this.component.unloadContent();
         var actionResult = this.getActionResult($el);
         var url = this.getUrl($el);
@@ -31605,7 +31649,6 @@ var AjaxAction = (function () {
             data: this.data,
             mimeType: 'text/html'
         }).done(function (response, status, xhr) {
-            console.log(xhr.status);
             switch (xhr.status) {
                 case 200:
                     fnSucces.call(caller, response);
@@ -31639,9 +31682,7 @@ var AjaxAction = (function () {
 }());
 //# sourceMappingURL=ajaxaction.js.map
 var Materialize = (function () {
-    function Materialize() {
-    }
-    Materialize.prototype.bind = function (root) {
+    function Materialize(root) {
         var registry = {
             Autocomplete: {
                 el: root.querySelectorAll('.autocomplete:not(.no-autoinit)'), config: {}
@@ -31700,10 +31741,42 @@ var Materialize = (function () {
         $(root).find('#nav-mobile a').click(function () {
             $('#nav-mobile').sidenav('close');
         });
-    };
+    }
     return Materialize;
 }());
 //# sourceMappingURL=materialize.js.map
+var PopstateAction = (function () {
+    function PopstateAction() {
+        var self = this;
+        window.onpopstate = function (e) { self.onPopState.call(self, e); };
+        this.component = $.getMainComponent();
+    }
+    PopstateAction.prototype.onPopState = function (event) {
+        var url = document.location.href;
+        var state = event.state || {};
+        var data = {
+            CurrentLayout: $("#Layout").val(),
+            Layout: "AjaxLayout"
+        };
+        this.component.unloadContent();
+        var ajax = new AjaxAction(Method.GET, url, data, state.actionResult || ActionResult.DISPLAY);
+        ajax.send(this.onResult, this);
+    };
+    PopstateAction.prototype.onResult = function (response) {
+        var $response = $(response);
+        this.component.loadContent($response);
+        cystem.bindActions($response);
+    };
+    return PopstateAction;
+}());
+//# sourceMappingURL=popstateaction.js.map
+var FloatingActionButton = (function () {
+    function FloatingActionButton($fab) {
+        $fab.floatingActionButton();
+    }
+    return FloatingActionButton;
+}());
+//# sourceMappingURL=floatingactionbutton.js.map
 var Cystem = (function () {
     function Cystem() {
         this.parsers = [];
@@ -31716,11 +31789,11 @@ var Cystem = (function () {
         $el.find('.ajax-get, .ajax-post, .ajax-delete, .link').each(function (_, el) {
             var action = new LinkAction($(el));
         });
-        var materialize = new Materialize();
-        materialize.bind($el[0]);
-    };
-    Cystem.prototype.getComponent = function ($component) {
-        return new Component($component);
+        var materialize = new Materialize($el[0]);
+        var popstateAction = new PopstateAction();
+        $el.find('.fixed-action-btn').each(function (_, el) {
+            var fab = new FloatingActionButton($(el));
+        });
     };
     return Cystem;
 }());

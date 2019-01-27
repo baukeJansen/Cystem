@@ -21,7 +21,7 @@
                 <p>@await Render.Value(Model, "Text")</p>
 
                 <div class="content-wrapper">
-                    <div class="content ajax-load" data-url="/cystem/delete-details/?id=@target.Id" data-on-result="@ComponentAction.Load">
+                    <div class="content ajax-load" data-url="/cystem/delete-details/?id=@target.Id" data-action="@ComponentAction.Load">
 
                     </div>
                 </div>

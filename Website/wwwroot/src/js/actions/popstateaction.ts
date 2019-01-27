@@ -5,7 +5,7 @@
         var self = this;
         window.onpopstate = function (e) { self.onPopState.call(self, e); };
 
-        this.component = Component.getMain();
+        this.component = $.getMainComponent();
     }
 
     onPopState(event): void {

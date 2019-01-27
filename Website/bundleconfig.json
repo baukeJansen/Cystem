@@ -33,6 +33,7 @@
       "wwwroot/src/js/common/actionresult.js",
       "wwwroot/src/js/common/method.js",
       "wwwroot/src/js/common/service.js",
+      "wwwroot/src/js/common/jqextensions.js",
 
       "wwwroot/src/js/service/iservice.js",
       "wwwroot/src/js/service/iservicemanager.js",
@@ -47,15 +48,11 @@
       "wwwroot/src/js/actions/ajaxaction.js",
       "wwwroot/src/js/actions/materialize.js",
       "wwwroot/src/js/actions/popstateaction.js",
+      "wwwroot/src/js/actions/floatingactionbutton.js",
 
       "wwwroot/src/js/cystem.js",
-      //"wwwroot/src/js/action.js",
-      //"wwwroot/src/js/navigate.js",
-      //"wwwroot/src/js/overlay.js",
-      //"wwwroot/src/js/overlayhelper.js",
       //"wwwroot/src/js/modalhelper.js",
       //"wwwroot/src/js/formtab.js",
-      //"wwwroot/src/js/floatingactionbutton.js",
       //"wwwroot/src/js/graph.js",
       "wwwroot/src/js/init.js"
     ],

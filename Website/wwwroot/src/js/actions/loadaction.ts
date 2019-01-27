@@ -1,9 +1,7 @@
 ﻿class LoadAction implements IAction {
     private component: Component;
     constructor(private $el: JQuery, method: Method = Method.GET) {
-        var target = $el.data('target');
-
-        this.component = new Component($el.closest('.component-wrapper'), target);
+        this.component = $el.getComponent();
         this.component.unloadContent();
 
         var actionResult: ActionResult = this.getActionResult($el);

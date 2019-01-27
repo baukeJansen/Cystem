@@ -4,7 +4,8 @@ var Component = (function () {
         this.$component = $component;
         this.ready = true;
         this.fnReady = [];
-        this.target = this.getTarget($component, actionTarget);
+        var targetString = actionTarget ? actionTarget : $component.getTargetString();
+        this.target = $.getTargetComponent(this, targetString);
     }
     Component.prototype.unloadContent = function () {
         if (this.target != null)
@@ -37,25 +38,6 @@ var Component = (function () {
                 $replace.removeClass('fade-in');
                 self.$component.css({ height: 'auto' });
             }, 300);
-        }
-    };
-    Component.prototype.getParent = function () {
-        var $parent = this.$component.closest('.component-wrapper');
-        return new Component($parent);
-    };
-    Component.getMain = function () {
-        var $main = $('.main-component');
-        return new Component($main);
-    };
-    Component.prototype.getTarget = function ($component, actionTarget) {
-        var target = actionTarget ? actionTarget : $component.data('target');
-        if (target)
-            target = target.toLowerCase();
-        switch (target) {
-            case 'self': return null;
-            case 'main': return Component.getMain();
-            case 'parent': return this.getParent();
-            default: return null;
         }
     };
     return Component;
