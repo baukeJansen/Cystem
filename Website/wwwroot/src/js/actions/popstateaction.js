@@ -5,19 +5,39 @@ var PopstateAction = (function () {
         this.component = $.getMainComponent();
     }
     PopstateAction.prototype.onPopState = function (event) {
+        var self = this;
         var url = document.location.href;
         var state = event.state || {};
+        console.log(event);
+        var previousState = event.originalEvent.state;
+        switch (previousState.target) {
+            case ComponentType.OVERLAY:
+                new CloseAction(null, $('.overlay-wrapper').last().data('component'));
+                break;
+        }
         var data = {
             CurrentLayout: $("#Layout").val(),
             Layout: "AjaxLayout"
         };
-        this.component.unloadContent();
-        var ajax = new AjaxAction(Method.GET, url, data, state.actionResult || ActionResult.DISPLAY);
-        ajax.send(this.onResult, this);
+        var ajax = new AjaxAction(Method.GET, url, data);
+        switch (state.target) {
+            case ComponentType.OVERLAY:
+                var overlay = $.createOverlayComponent();
+                ajax.send2(function (response) {
+                    self.succes.call(self, response, overlay);
+                });
+                break;
+            default:
+                self.component.empty();
+                ajax.send2(function (response) {
+                    self.succes.call(self, response, self.component);
+                });
+                break;
+        }
     };
-    PopstateAction.prototype.onResult = function (response) {
+    PopstateAction.prototype.succes = function (response, component) {
         var $response = $(response);
-        this.component.loadContent($response);
+        component.load($response);
         cystem.bindActions($response);
     };
     return PopstateAction;

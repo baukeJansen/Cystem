@@ -6,20 +6,50 @@
     }
 
     bindActions($el: JQuery) {
+        if (!OverlayComponent.hasTemplate()) {
+            OverlayComponent.setTemplate($el.find('.overlay-template'));
+        }
+
+        if (!ModalComponent.hasTemplate()) {
+            ModalComponent.setTemplate($el.find('.overlay-template'));
+        }
+
+        $el.find('.component-wrapper').each(function (_, el) {
+            new Component($(el));
+        });
+
+
+        $el.find('.overlay-wrapper').addBack('.overlay-wrapper').each(function (_, el) {
+            new OverlayComponent($(el));
+        });
+
+        $el.find('.modal-wrapper').addBack('.modal-wrapper').each(function (_, el) {
+            new ModalComponent($(el));
+        });
+
+        $el.find('form').addBack('form').each(function (_, el) {
+            new FormComponent($(el));
+        });
+
         $el.find('.load').each(function (_, el) {
-            var action: LoadAction = new LoadAction($(el));
+            new LoadAction($(el));
         });
 
         $el.find('.ajax-get, .ajax-post, .ajax-delete, .link').each(function (_, el){
-            var action: LinkAction = new LinkAction($(el));
+            new LinkAction($(el));
         });
 
-        var materialize = new Materialize($el[0]);
+        new Materialize($el[0]);
 
-        var popstateAction = new PopstateAction();
+        new PopstateAction();
 
         $el.find('.fixed-action-btn').each(function (_, el) {
-            var fab = new FloatingActionButton($(el));
+           new FloatingActionButton($(el));
+        });
+
+
+        $el.find('.ajax-submit, .submit').each(function (_, el) {
+            new SubmitAction($(el));
         });
     }
 }

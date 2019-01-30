@@ -1,0 +1,80 @@
+﻿@import 'variables';
+
+form {
+    border-radius: 10px;
+
+    &.loading {
+        position: relative;
+        background: $background-color-light;
+        overflow: hidden;
+    }
+
+    &.loading::before {
+        content: '';
+        position: absolute;
+        width: 100%;
+        left: 50%;
+        padding: 50% 0;
+        border-radius: 100%;
+        transform: translate(-50%);
+        animation-name: loader;
+        animation-duration: 2s;
+        animation-iteration-count: infinite;
+    }
+
+    &.succes {
+        border: 2px solid $success-color;
+    }
+
+    &.error {
+        border: 2px solid $error-color;
+    }
+}
+
+.form-content {
+    background: $background-color;
+
+    &.send {
+        border-radius: 10px;
+        animation-name: send;
+        animation-duration: 2s;
+        animation-timing-function: ease;
+        animation-fill-mode: forwards;
+    }
+}
+
+@keyframes send {
+    0% {
+        transform: translateY(0) scale(1);
+        box-shadow: 0 0 0 0 rgba(0,0,0,.14);
+    }
+    20% {
+        transform: translateY(0) scale(1.05);
+        box-shadow: 0 4px 5px 0 rgba(0,0,0,.14),0 1px 10px 0 rgba(0,0,0,.12),0 2px 4px -1px rgba(0,0,0,.3);
+        opacity: 1;
+    }
+    30% {
+        transform: translateY(-30px) scale(.90);
+    }
+    100% {
+        transform: translateY(-8000px) scale(.85);
+        opacity: 0;
+    }
+}
+
+@keyframes loader {
+    0% {
+        top: 30%;
+        transform: translate(-50%) scale(0);
+        opacity: 1;
+        background: $background-color;
+    }
+    70% {
+        top: -20%;
+        transform: translate(-50%) scale(1.5);
+        opacity: 0;
+        background: $background-color-light;
+    }
+    100% {
+    }
+}

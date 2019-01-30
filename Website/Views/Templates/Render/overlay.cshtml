@@ -1,13 +1,12 @@
 ﻿@using Website.Common.Viewmodels
+@using Website.Common.Enums
 @model GenericViewModel
 
 <div class="overlay-template overlay-wrapper hide">
     <div class="overlay z-depth-2">
-        <div class="close btn-floating primary waves-effect">
-            <i class="material-icons">close</i>
-        </div>
+        @await Render.Button(null, "", "close", Model.Options, action: ComponentAction.Close, cssClasses: "link close btn-floating primary waves-effect", link: false)
 
-        <div class="content-wrapper">
+        <div class="component-wrapper" data-type="@ComponentTarget.Overlay">
         </div>
     </div>
 </div>

@@ -3,8 +3,18 @@ var LinkAction = (function () {
         this.$el = $el;
         var self = this;
         $el.click(function () {
-            var method = self.getMethod($el);
-            var loadAction = new LoadAction($el, method);
+            var action = $el.getAction();
+            switch (action) {
+                case ComponentAction.CLOSE:
+                    new CloseAction($el);
+                    break;
+                case ComponentAction.NONE: break;
+                case ComponentAction.LOAD:
+                default:
+                    var method = self.getMethod($el);
+                    new LoadAction($el, method);
+                    break;
+            }
             return false;
         });
     }

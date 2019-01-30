@@ -42,13 +42,14 @@
     {
         @using (Html.BeginForm(null, null, new { }, FormMethod.Post, true, new { action = "/cystem/edit-page/" }))
         {
+            <div class="form-content">
+                @await Render.Value(sourceValue, Model.Options);
 
-            @await Render.Value(sourceValue, Model.Options);
-
-            <div class="row">
-                <div class="col s12 right-align">
-                    @await Render.DeleteModalButton(sourceValue, htmlAttributes: new { @class = "btn-outline" })
-                    @await Render.SubmitButton("Update")
+                <div class="row">
+                    <div class="col s12 right-align">
+                        @await Render.DeleteModalButton(sourceValue, htmlAttributes: new { @class = "btn-outline" })
+                        @await Render.SubmitButton("Update")
+                    </div>
                 </div>
             </div>
         }

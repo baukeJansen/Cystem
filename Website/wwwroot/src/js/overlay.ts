@@ -1,11 +1,9 @@
 ﻿class Overlay {
-    private _serviceManager: IServiceManager;
     private _helper: OverlayHelper
     private $overlay: JQuery;
 
-    constructor(serviceManager: IServiceManager, helper: OverlayHelper) {
+    constructor(helper: OverlayHelper) {
         var self = this;
-        this._serviceManager = serviceManager;
         this._helper = helper;
         this.$overlay = helper.$overlayTemplate.clone();
 

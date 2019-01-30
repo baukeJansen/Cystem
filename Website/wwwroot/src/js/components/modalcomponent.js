@@ -1,21 +1,33 @@
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
+var ModalComponent = (function () {
+    function ModalComponent($component) {
+        this.$component = $component;
+        var self = this;
+        $component.removeClass('hide');
+        $component.addClass('fade');
+        setTimeout(function () {
+            self.$component.removeClass('fade');
+        }, 50);
+        $component.data('component', this);
     }
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    ModalComponent.prototype.close = function () {
+        var self = this;
+        if (this.$component.hasClass('fade'))
+            return;
+        this.$component.addClass('fade');
+        setTimeout(function () {
+            self.$component.remove();
+        }, 400);
     };
-})();
-var ModalComponent = (function (_super) {
-    __extends(ModalComponent, _super);
-    function ModalComponent() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
+    ModalComponent.setTemplate = function ($template) {
+        if ($template.length) {
+            $template.removeClass('overlay-template');
+            $template.detach();
+            this.$template = $template;
+        }
+    };
+    ModalComponent.hasTemplate = function () {
+        return this.$template != null;
+    };
     return ModalComponent;
-}(Component));
+}());
 //# sourceMappingURL=modalcomponent.js.map

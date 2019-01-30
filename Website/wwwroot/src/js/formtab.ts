@@ -1,17 +1,4 @@
 ﻿class Formtab {
-    Name: ServiceName = ServiceName.Formtab;
-    private $modal: JQuery;
-
-    private _serviceManager: IServiceManager;
-
-    constructor() {
-
-    }
-
-    construct(serviceManager: IServiceManager) {
-        this._serviceManager = serviceManager;
-    }
-
     bind(el: HTMLElement): void {
         var self: Formtab = this;
         var $formtabs: JQuery = $(el).find('.tabs.formtab');

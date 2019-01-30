@@ -4,7 +4,7 @@ var Action = (function () {
         this.method = method;
         this.url = url;
         this.data = data;
-        this.actionResult = actionResult || ActionResult.DISPLAY;
+        this.actionResult = actionResult || ComponentAction.LOAD;
         this.setSource($source);
     }
     Action.prototype.setSource = function ($source) {

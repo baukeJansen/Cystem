@@ -9,3 +9,4 @@ serviceManager.register(FloatingActionButton);
 serviceManager.init();*/
 
 var cystem: Cystem = new Cystem();
+var state: StateManager = new StateManager();

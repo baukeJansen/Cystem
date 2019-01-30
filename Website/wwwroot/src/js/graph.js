@@ -1,10 +1,6 @@
 var Graph = (function () {
     function Graph() {
-        this.Name = ServiceName.Graph;
     }
-    Graph.prototype.construct = function (serviceManager) {
-        this._serviceManager = serviceManager;
-    };
     Graph.prototype.bind = function (el) {
         var $graphs = $(el).find('.graph');
         var timeFormat = 'DD MMM YYYY';

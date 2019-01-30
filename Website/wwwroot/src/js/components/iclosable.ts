@@ -1,0 +1,3 @@
+﻿interface IClosable {
+    close(): void;
+}

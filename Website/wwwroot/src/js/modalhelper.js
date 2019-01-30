@@ -1,10 +1,6 @@
 var ModalHelper = (function () {
     function ModalHelper() {
-        this.Name = ServiceName.ModalHelper;
     }
-    ModalHelper.prototype.construct = function (serviceManager) {
-        this._serviceManager = serviceManager;
-    };
     ModalHelper.prototype.bind = function (el) {
         var self = this;
         if (!(this.$modal && this.$modal.length)) {

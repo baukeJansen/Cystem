@@ -1,19 +1,6 @@
 ﻿declare var Chart: any;
 
-class Graph implements IService{
-    Name: ServiceName = ServiceName.Graph;
-    private $modal: JQuery;
-
-    private _serviceManager: IServiceManager;
-
-    constructor() {
-
-    }
-
-    construct(serviceManager: IServiceManager) {
-        this._serviceManager = serviceManager;
-    }
-
+class Graph{
     bind(el: HTMLElement) {
         var $graphs: JQuery = $(el).find('.graph');
         var timeFormat: string = 'DD MMM YYYY';

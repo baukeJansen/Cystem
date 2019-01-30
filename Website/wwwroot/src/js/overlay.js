@@ -1,7 +1,6 @@
 var Overlay = (function () {
-    function Overlay(serviceManager, helper) {
+    function Overlay(helper) {
         var self = this;
-        this._serviceManager = serviceManager;
         this._helper = helper;
         this.$overlay = helper.$overlayTemplate.clone();
         var $closeButton = this.$overlay.find('.close');

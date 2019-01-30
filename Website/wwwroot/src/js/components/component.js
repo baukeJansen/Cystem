@@ -1,15 +1,16 @@
 var Component = (function () {
-    function Component($component, actionTarget) {
-        if (actionTarget === void 0) { actionTarget = null; }
+    function Component($component) {
         this.$component = $component;
         this.ready = true;
         this.fnReady = [];
-        var targetString = actionTarget ? actionTarget : $component.getTargetString();
-        this.target = $.getTargetComponent(this, targetString);
+        this.target = null;
+        var targetType = $component.getTarget();
+        if (targetType) {
+            this.target = $.getTargetComponent(this, targetType);
+        }
+        $component.data('component', this);
     }
-    Component.prototype.unloadContent = function () {
-        if (this.target != null)
-            return this.target.unloadContent();
+    Component.prototype.empty = function () {
         var self = this;
         this.ready = false;
         var $children = this.$component.children();
@@ -23,13 +24,11 @@ var Component = (function () {
             });
         }, 50);
     };
-    Component.prototype.loadContent = function ($replace) {
-        if (this.target != null)
-            return this.target.loadContent($replace);
+    Component.prototype.load = function ($replace) {
         var self = this;
         $replace.addClass('fade-in');
         if (!this.ready) {
-            this.fnReady.push(function () { self.loadContent($replace); });
+            this.fnReady.push(function () { self.load($replace); });
         }
         else {
             this.$component.append($replace);

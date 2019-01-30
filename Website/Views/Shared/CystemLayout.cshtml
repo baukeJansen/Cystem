@@ -30,7 +30,7 @@
         <div class="header-space"></div>
 
         <div class="component-wrapper main-component">
-            <div class="component" data-url="@Model.Url" data-action="@ComponentAction.Reload">
+            <div class="component" data-url="@Model.Url">
                 @RenderBody()
             </div>
         </div>
@@ -38,31 +38,31 @@
         <div class="footer-space"></div>
 
         <header>
-            <div class="component-wrapper z-depth-1" data-target="@TargetComponent.Main">
-                <div class="component load" data-url="/cystem/header/" data-target="@TargetComponent.Self" data-action="@ComponentAction.Load">
+            <div class="component-wrapper z-depth-1" data-target="@ComponentTarget.Main">
+                <div class="component load" data-url="/cystem/header/" data-action="@ComponentAction.LoadSilent" data-target="@ComponentTarget.Self">
 
                 </div>
             </div>
         </header>
 
         <footer>
-            <div class="component-wrapper z-depth-1" data-target="@TargetComponent.Main">
-                <div class="component load" data-url="/cystem/footer/" data-target="@TargetComponent.Self" data-action="@ComponentAction.Load">
+            <div class="component-wrapper z-depth-1" data-target="@ComponentTarget.Main">
+                <div class="component load" data-url="/cystem/footer/" data-action="@ComponentAction.LoadSilent" data-target="@ComponentTarget.Self">
 
                 </div>
             </div>
         </footer>
 
         <div class="component-wrapper z-depth-1">
-            <div class="component load" data-url="/cystem/overlay/" data-action="@ComponentAction.Load"></div>
+            <div class="component load" data-url="/cystem/overlay/" data-action="@ComponentAction.LoadSilent"></div>
         </div>
 
         <div class="component-wrapper z-depth-1">
-            <div class="component load" data-url="/cystem/modal/" data-action="@ComponentAction.Load"></div>
+            <div class="component load" data-url="/cystem/modal/" data-action="@ComponentAction.LoadSilent"></div>
         </div>
 
-        <div class="component-wrapper z-depth-1">
-            <div class="component load" data-url="/cystem/floating-action-button/" data-action="@ComponentAction.Load"></div>
+        <div class="component-wrapper z-depth-1" data-target="@ComponentTarget.Main">
+            <div class="component load" data-url="/cystem/floating-action-button/" data-action="@ComponentAction.LoadSilent" data-target="@ComponentTarget.Self"></div>
         </div>
 
         <environment names="Development">

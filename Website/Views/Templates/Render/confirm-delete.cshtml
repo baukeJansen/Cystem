@@ -32,7 +32,7 @@
 
 
             <div class="modal-footer">
-                @await Render.Button(null, "Cancel", null, Model.Options, null, ComponentAction.None, cssClasses: "btn-flat modal-close waves-effect", link: false)
+                @await Render.Button(null, "Cancel", null, Model.Options, null, ComponentAction.Close, cssClasses: "btn-flat modal-close waves-effect", link: true)
                 @await Render.SubmitButton("Delete", "delete")
             </div>
         }

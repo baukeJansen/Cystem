@@ -1,16 +1,19 @@
 ﻿class Component {
-    private ready: boolean = true;
-    private fnReady: Function[] = [];
-    private target: Component;
+    protected ready: boolean = true;
+    protected fnReady: Function[] = [];
+    public target: Component = null;
 
-    constructor(public $component: JQuery, actionTarget: string = null) {
-        var targetString: string = actionTarget ? actionTarget : $component.getTargetString();
-        this.target = $.getTargetComponent(this, targetString);
+    constructor(public $component: JQuery) {
+        var targetType: ComponentType = $component.getTarget();
+
+        if (targetType) {
+            this.target = $.getTargetComponent(this, targetType);
+        }
+
+        $component.data('component', this);
     }
 
-    unloadContent(): void {
-        if (this.target != null) return this.target.unloadContent();
-
+    empty(): void {
         var self = this;
         this.ready = false;
 
@@ -28,14 +31,12 @@
         }, 50);
     }
 
-    loadContent($replace: JQuery): void {
-        if (this.target != null) return this.target.loadContent($replace);
-
+    load($replace: JQuery): void {
         var self = this;
         $replace.addClass('fade-in');
 
         if (!this.ready) {
-            this.fnReady.push(function () { self.loadContent($replace); });
+            this.fnReady.push(function () { self.load($replace); });
         } else {
             this.$component.append($replace);
 

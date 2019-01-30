@@ -1,19 +1,8 @@
-﻿class OverlayHelper implements IService {
-    Name: ServiceName = ServiceName.OverlayHelper;
+﻿class OverlayHelper {
     private $window: JQuery<Window>;
     private _overlays: Overlay[] = [];
-    private _serviceManager: IServiceManager;
     $body: JQuery;
     $overlayTemplate: JQuery;
-
-    constructor() {
-    }
-
-    construct(serviceManager: IServiceManager) {
-        this._serviceManager = serviceManager;
-        this.$window = $(window);
-        this.$body = $('body');
-    }
 
     bind(el: HTMLElement): void {
         var $template = this.$body.find('.overlay-template');
@@ -25,10 +14,10 @@
         }
     }
 
-    open(): Overlay {
-        var overlay = new Overlay(this._serviceManager, this);
-        this._overlays.push(overlay);
-        return overlay;
+    open()/*: Overlay*/ {
+        //var overlay = new Overlay(this._serviceManager, this);
+        //this._overlays.push(overlay);
+        //return overlay;
     }
 
     setContent(content: string): void {
@@ -67,7 +56,7 @@
             $content = $('.main-content .content');
         }
 
-        var navigate: Navigate = this._serviceManager.get(Navigate);
-        navigate.reload($content);
+        //var navigate: Navigate = this._serviceManager.get(Navigate);
+        //navigate.reload($content);
     }
 }

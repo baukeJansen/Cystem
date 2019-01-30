@@ -4,7 +4,7 @@
     url: string;
     data: any;
     response: string;
-    actionResult: ActionResult;
+    actionResult: ComponentAction;
     $source: JQuery;
     $target: JQuery;
     $oldContent: JQuery;
@@ -13,11 +13,11 @@
     overlay: Overlay;
     modal: ModalHelper;
 
-    constructor(method: string, url: string, data: any, $source: JQuery, actionResult: ActionResult) {
+    constructor(method: string, url: string, data: any, $source: JQuery, actionResult: ComponentAction) {
         this.method = method;
         this.url = url;
         this.data = data;
-        this.actionResult = actionResult || ActionResult.DISPLAY;
+        this.actionResult = actionResult || ComponentAction.LOAD;
         this.setSource($source);
     }
 

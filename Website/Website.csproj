@@ -21,11 +21,11 @@
     <Content Remove="wwwroot\src\js\actions\ajaxaction.ts" />
     <Content Remove="wwwroot\src\js\actions\popstateaction.ts" />
     <Content Remove="wwwroot\src\js\common\jqextensions.ts" />
+    <Content Remove="wwwroot\src\js\components\formcomponent.ts" />
     <Content Remove="wwwroot\src\js\map.ts" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="wwwroot\src\js\common\actionresult.ts" />
     <None Remove="wwwroot\src\js\common\method.ts" />
     <None Remove="wwwroot\src\js\overlayhelper.ts" />
     <None Remove="wwwroot\src\js\servicemanager.ts" />
@@ -50,8 +50,8 @@
   <ItemGroup>
     <Folder Include="BL\LL\PageLL\" />
     <Folder Include="Common\Interfaces\" />
-    <Folder Include="wwwroot\src\img\" />
     <Folder Include="Views\Shared\DisplayTemplates\" />
+    <Folder Include="wwwroot\src\img\" />
   </ItemGroup>
 
   <ItemGroup>
@@ -110,10 +110,6 @@
     <None Include="wwwroot\src\js\action.js" />
     <None Include="wwwroot\src\js\action.js.map" />
     <None Include="wwwroot\src\js\action.ts" />
-    <None Include="wwwroot\src\js\common\actionresult.js" />
-    <None Include="wwwroot\src\js\common\actionresult.js.map" />
-    <None Include="wwwroot\src\js\common\method.js" />
-    <None Include="wwwroot\src\js\common\method.js.map" />
     <None Include="wwwroot\src\js\cystem.js" />
     <None Include="wwwroot\src\js\cystem.js.map" />
     <None Include="wwwroot\src\js\cystem.ts" />
@@ -126,11 +122,6 @@
     <None Include="wwwroot\src\js\overlay.js" />
     <None Include="wwwroot\src\js\overlay.js.map" />
     <None Include="wwwroot\src\js\overlay.ts" />
-    <None Include="wwwroot\src\js\overlayhelper.js" />
-    <None Include="wwwroot\src\js\overlayhelper.js.map" />
-    <None Include="wwwroot\src\js\service\iservice.js" />
-    <None Include="wwwroot\src\js\service\iservice.js.map" />
-    <None Include="wwwroot\src\js\service\iservice.ts" />
     <None Include="wwwroot\src\lib\chart.js" />
     <None Include="wwwroot\src\lib\materialize.js" />
     <None Include="wwwroot\src\lib\moment.js" />
@@ -139,10 +130,10 @@
   <ItemGroup>
     <TypeScriptCompile Include="wwwroot\src\js\actions\ajaxaction.ts" />
     <TypeScriptCompile Include="wwwroot\src\js\actions\popstateaction.ts" />
-    <TypeScriptCompile Include="wwwroot\src\js\common\actionresult.ts" />
+    <TypeScriptCompile Include="wwwroot\src\js\common\componentaction.ts" />
     <TypeScriptCompile Include="wwwroot\src\js\common\jqextensions.ts" />
     <TypeScriptCompile Include="wwwroot\src\js\common\method.ts" />
-    <TypeScriptCompile Include="wwwroot\src\js\service\servicemanager.ts" />
+    <TypeScriptCompile Include="wwwroot\src\js\components\formcomponent.ts" />
     <TypeScriptCompile Include="wwwroot\src\js\overlayhelper.ts" />
   </ItemGroup>
 

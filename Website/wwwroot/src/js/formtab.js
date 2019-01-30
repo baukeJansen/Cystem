@@ -1,10 +1,6 @@
 var Formtab = (function () {
     function Formtab() {
-        this.Name = ServiceName.Formtab;
     }
-    Formtab.prototype.construct = function (serviceManager) {
-        this._serviceManager = serviceManager;
-    };
     Formtab.prototype.bind = function (el) {
         var self = this;
         var $formtabs = $(el).find('.tabs.formtab');

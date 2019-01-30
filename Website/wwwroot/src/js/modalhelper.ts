@@ -1,17 +1,6 @@
-﻿class ModalHelper implements IService{
-    Name: ServiceName = ServiceName.ModalHelper;
+﻿class ModalHelper{
     private $modal: JQuery;
     private $button: JQuery;
-
-    private _serviceManager: IServiceManager;
-
-    constructor() {
-        
-    }
-
-    construct(serviceManager: IServiceManager) {
-        this._serviceManager = serviceManager;
-    }
 
     bind(el: HTMLElement) {
         var self = this;

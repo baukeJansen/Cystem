@@ -31356,17 +31356,23 @@ module.exports = function() {
 },{"1":1,"26":26,"33":33,"34":34,"46":46}]},{},[7])(7)
 });
 
-var ActionResult;
-(function (ActionResult) {
-    ActionResult["DISPLAY"] = "display";
-    ActionResult["LOAD"] = "load";
-    ActionResult["RELOAD"] = "reload";
-    ActionResult["OVERLAY"] = "overlay";
-    ActionResult["MODAL"] = "popup";
-    ActionResult["CLOSE"] = "close";
-    ActionResult["NONE"] = "none";
-})(ActionResult || (ActionResult = {}));
-//# sourceMappingURL=actionresult.js.map
+var ComponentAction;
+(function (ComponentAction) {
+    ComponentAction["LOAD"] = "load";
+    ComponentAction["LOADSILENT"] = "loadsilent";
+    ComponentAction["CLOSE"] = "close";
+    ComponentAction["NONE"] = "none";
+})(ComponentAction || (ComponentAction = {}));
+//# sourceMappingURL=componentaction.js.map
+var ComponentType;
+(function (ComponentType) {
+    ComponentType["SELF"] = "self";
+    ComponentType["MAIN"] = "main";
+    ComponentType["PARENT"] = "parent";
+    ComponentType["OVERLAY"] = "overlay";
+    ComponentType["MODAL"] = "popup";
+})(ComponentType || (ComponentType = {}));
+//# sourceMappingURL=componenttarget.js.map
 var Method;
 (function (Method) {
     Method["GET"] = "get";
@@ -31376,216 +31382,92 @@ var Method;
     Method["POPSTATE"] = "popstate";
 })(Method || (Method = {}));
 //# sourceMappingURL=method.js.map
-var ServiceName;
-(function (ServiceName) {
-    ServiceName[ServiceName["Cystem"] = 0] = "Cystem";
-    ServiceName[ServiceName["Navigate"] = 1] = "Navigate";
-    ServiceName[ServiceName["OverlayHelper"] = 2] = "OverlayHelper";
-    ServiceName[ServiceName["ModalHelper"] = 3] = "ModalHelper";
-    ServiceName[ServiceName["Materialize"] = 4] = "Materialize";
-    ServiceName[ServiceName["Graph"] = 5] = "Graph";
-    ServiceName[ServiceName["Formtab"] = 6] = "Formtab";
-    ServiceName[ServiceName["FloatingActionButton"] = 7] = "FloatingActionButton";
-})(ServiceName || (ServiceName = {}));
-//# sourceMappingURL=service.js.map
 jQuery.extend({
     getMainComponent: function () {
         var $main = $('.main-component');
-        return new Component($main);
+        return $main.data('component');
     },
-    getParentComponent: function () {
-        var $parent = this.$component.closest('.component-wrapper');
-        return new Component($parent);
+    getParentComponent: function (component) {
+        var $parent = component.$component.parent().closest('.component-wrapper');
+        if ($parent.length) {
+            return $parent.data('component');
+        }
+        return jQuery.getMainComponent();
     },
-    getOverlayComponent: function () {
-        return new OverlayComponent(null);
+    createOverlayComponent: function () {
+        var $overlay = OverlayComponent.$template.clone();
+        $('body').append($overlay);
+        cystem.bindActions($overlay);
+        var component = $overlay.find('.component-wrapper').data('component');
+        return component;
     },
-    getModalComponent: function () {
-        return new ModalComponent(null);
+    createModalComponent: function () {
+        var $modal = ModalComponent.$template.clone();
+        var component = $modal.find('.component-wrapper').data('component');
+        return component;
     },
     getTargetComponent: function (component, target) {
         switch (target) {
-            case 'self': return null;
-            case 'main': return jQuery.getMainComponent();
-            case 'parent': return jQuery.getParentComponent(component);
-            case 'overlay': return jQuery.getOverlayComponent();
-            case 'modal': return jQuery.getModalComponent();
-            default: return null;
+            case ComponentType.SELF: return component;
+            case ComponentType.MAIN: return jQuery.getMainComponent();
+            case ComponentType.PARENT: return jQuery.getParentComponent(component);
+            case ComponentType.OVERLAY: return jQuery.createOverlayComponent();
+            case ComponentType.MODAL: return jQuery.createModalComponent();
+            default: return component;
         }
     }
 });
 jQuery.fn.extend({
     getComponent: function () {
         var $component = this.closest('.component-wrapper');
-        var type = this.data('type');
-        var target = this.data('target');
-        switch (type) {
-            case 'overlay': return new OverlayComponent($component, target);
-            case 'modal': return new ModalComponent($component, target);
-            default: return new Component($component, target);
+        var component = $component.data('component');
+        var targetType = this.getTarget();
+        if (targetType) {
+            return $.getTargetComponent(component, targetType);
         }
+        if (component.target) {
+            return component.target;
+        }
+        return component;
     },
-    getTargetString: function () {
+    getOverlayComponent: function () {
+        return this.closest('.overlay-wrapper').data('component');
+    },
+    getFormComponent: function () {
+        return this.closest('form').data('component');
+    },
+    getAction: function () {
+        var action = this.data('action');
+        if (action) {
+            var resultKey = action.toUpperCase();
+            return ComponentAction[resultKey];
+        }
+        return ComponentAction.LOAD;
+    },
+    getType: function () {
+        var type = this.data('type');
+        if (type) {
+            var resultKey = type.toUpperCase();
+            return ComponentType[resultKey];
+        }
+        return ComponentType.SELF;
+    },
+    getTarget: function () {
         var target = this.data('target');
-        return target ? target.toLowerCase() : target;
-    }
-});
-//# sourceMappingURL=jqextensions.js.map
-//# sourceMappingURL=iservice.js.map
-//# sourceMappingURL=iservicemanager.js.map
-var ServiceManager = (function () {
-    function ServiceManager() {
-        this._services = [];
-    }
-    ServiceManager.prototype.register = function (r) {
-        var registerable = new r(this);
-        this._services[registerable.Name] = registerable;
-    };
-    ServiceManager.prototype.get = function (r) {
-        var registerable = new r();
-        var o = this._services[registerable.Name];
-        return o;
-    };
-    ServiceManager.prototype.getServices = function () {
-        return this._services;
-    };
-    ServiceManager.prototype.init = function () {
-        for (var _i = 0, _a = this._services; _i < _a.length; _i++) {
-            var service = _a[_i];
-            service.construct(this);
+        if (target) {
+            var resultKey = target.toUpperCase();
+            return ComponentType[resultKey];
         }
-    };
-    return ServiceManager;
-}());
-//# sourceMappingURL=servicemanager.js.map
-var Component = (function () {
-    function Component($component, actionTarget) {
-        if (actionTarget === void 0) { actionTarget = null; }
-        this.$component = $component;
-        this.ready = true;
-        this.fnReady = [];
-        var targetString = actionTarget ? actionTarget : $component.getTargetString();
-        this.target = $.getTargetComponent(this, targetString);
-    }
-    Component.prototype.unloadContent = function () {
-        if (this.target != null)
-            return this.target.unloadContent();
-        var self = this;
-        this.ready = false;
-        var $children = this.$component.children();
-        this.$component.css({ height: $children.outerHeight() });
-        $children.addClass('fade-out');
-        setTimeout(function () {
-            $children.remove();
-            self.ready = true;
-            $.each(self.fnReady, function (_, fn) {
-                fn();
-            });
-        }, 50);
-    };
-    Component.prototype.loadContent = function ($replace) {
-        if (this.target != null)
-            return this.target.loadContent($replace);
-        var self = this;
-        $replace.addClass('fade-in');
-        if (!this.ready) {
-            this.fnReady.push(function () { self.loadContent($replace); });
-        }
-        else {
-            this.$component.append($replace);
-            this.$component.css({ height: $replace.outerHeight() });
-            setTimeout(function () {
-                $replace.removeClass('fade-in');
-                self.$component.css({ height: 'auto' });
-            }, 300);
-        }
-    };
-    return Component;
-}());
-//# sourceMappingURL=component.js.map
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    }
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var ModalComponent = (function (_super) {
-    __extends(ModalComponent, _super);
-    function ModalComponent() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return ModalComponent;
-}(Component));
-//# sourceMappingURL=modalcomponent.js.map
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    }
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var OverlayComponent = (function (_super) {
-    __extends(OverlayComponent, _super);
-    function OverlayComponent() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    return OverlayComponent;
-}(Component));
-//# sourceMappingURL=overlaycomponent.js.map
-var LoadAction = (function () {
-    function LoadAction($el, method) {
-        if (method === void 0) { method = Method.GET; }
-        this.$el = $el;
-        this.component = $el.getComponent();
-        this.component.unloadContent();
-        var actionResult = this.getActionResult($el);
-        var url = this.getUrl($el);
-        var data = this.getData($el, actionResult);
-        var ajax = new AjaxAction(method, url, data, actionResult);
-        ajax.send(this.onResult, this);
-        if (method === Method.GET && actionResult === ActionResult.DISPLAY) {
-            var state = {};
-            history.pushState(state, "", url);
-        }
-    }
-    LoadAction.prototype.onResult = function (response) {
-        var $response = $(response);
-        this.component.loadContent($response);
-        cystem.bindActions($response);
-    };
-    LoadAction.prototype.getActionResult = function ($el) {
-        var actionResult = ActionResult.DISPLAY;
-        if ($el.length) {
-            var result = $el.data('on-result');
-            if (result) {
-                var resultKey = result.toUpperCase();
-                actionResult = ActionResult[resultKey];
-            }
-        }
-        return actionResult;
-    };
-    ;
-    LoadAction.prototype.getUrl = function ($el, keepParams) {
+        return null;
+    },
+    getUrl: function (keepParams) {
         if (keepParams === void 0) { keepParams = false; }
         var url;
-        if ($el[0].hasAttribute('href')) {
-            url = $el.attr('href');
+        if (this[0].hasAttribute('href')) {
+            url = this.attr('href');
         }
         else {
-            url = $el.data('url');
+            url = this.data('url');
         }
         if (keepParams) {
             return url;
@@ -31593,11 +31475,10 @@ var LoadAction = (function () {
         else {
             return url.split('?')[0];
         }
-    };
-    ;
-    LoadAction.prototype.getData = function ($el, actionResult) {
-        var url = this.getUrl($el, true).split('?');
-        var data = $el ? $el.data('params') : {};
+    },
+    getData: function () {
+        var url = this.getUrl(true).split('?');
+        var data = this ? this.data('params') : {};
         data = data || {};
         if (url.length > 1) {
             var paramString = url[1];
@@ -31612,18 +31493,227 @@ var LoadAction = (function () {
         data.CurrentLayout = $("#Layout").val();
         data.Layout = "AjaxLayout";
         return data;
+    }
+});
+//# sourceMappingURL=jqextensions.js.map
+var Component = (function () {
+    function Component($component) {
+        this.$component = $component;
+        this.ready = true;
+        this.fnReady = [];
+        this.target = null;
+        var targetType = $component.getTarget();
+        if (targetType) {
+            this.target = $.getTargetComponent(this, targetType);
+        }
+        $component.data('component', this);
+    }
+    Component.prototype.empty = function () {
+        var self = this;
+        this.ready = false;
+        var $children = this.$component.children();
+        this.$component.css({ height: $children.outerHeight() });
+        $children.addClass('fade-out');
+        setTimeout(function () {
+            $children.remove();
+            self.ready = true;
+            $.each(self.fnReady, function (_, fn) {
+                fn();
+            });
+        }, 50);
     };
-    ;
+    Component.prototype.load = function ($replace) {
+        var self = this;
+        $replace.addClass('fade-in');
+        if (!this.ready) {
+            this.fnReady.push(function () { self.load($replace); });
+        }
+        else {
+            this.$component.append($replace);
+            this.$component.css({ height: $replace.outerHeight() });
+            setTimeout(function () {
+                $replace.removeClass('fade-in');
+                self.$component.css({ height: 'auto' });
+            }, 300);
+        }
+    };
+    return Component;
+}());
+//# sourceMappingURL=component.js.map
+var FormComponent = (function () {
+    function FormComponent($form) {
+        this.$form = $form;
+        $form.data('component', this);
+    }
+    FormComponent.prototype.send = function () {
+        this.$form.css({ width: this.$form.outerWidth(), height: this.$form.outerHeight() });
+        this.$form.addClass('loading');
+        var $content = this.$form.find('> .form-content');
+        $content.addClass('send');
+    };
+    FormComponent.prototype.succes = function () {
+        this.$form.removeClass('loading').addClass('succes');
+    };
+    FormComponent.prototype.error = function (message) {
+        this.$form.removeClass('loading').addClass('error');
+        this.$form.empty().append($(message));
+    };
+    FormComponent.prototype.getMethod = function () {
+        var method = this.$form.attr('method').toLowerCase();
+        var resultKey = method.toUpperCase();
+        return Method[resultKey];
+    };
+    FormComponent.prototype.getUrl = function () {
+        return this.$form.attr('action');
+    };
+    FormComponent.prototype.getData = function () {
+        return this.$form.serialize();
+    };
+    return FormComponent;
+}());
+//# sourceMappingURL=formcomponent.js.map
+var ModalComponent = (function () {
+    function ModalComponent($component) {
+        this.$component = $component;
+        var self = this;
+        $component.removeClass('hide');
+        $component.addClass('fade');
+        setTimeout(function () {
+            self.$component.removeClass('fade');
+        }, 50);
+        $component.data('component', this);
+    }
+    ModalComponent.prototype.close = function () {
+        var self = this;
+        if (this.$component.hasClass('fade'))
+            return;
+        this.$component.addClass('fade');
+        setTimeout(function () {
+            self.$component.remove();
+        }, 400);
+    };
+    ModalComponent.setTemplate = function ($template) {
+        if ($template.length) {
+            $template.removeClass('overlay-template');
+            $template.detach();
+            this.$template = $template;
+        }
+    };
+    ModalComponent.hasTemplate = function () {
+        return this.$template != null;
+    };
+    return ModalComponent;
+}());
+//# sourceMappingURL=modalcomponent.js.map
+var OverlayComponent = (function () {
+    function OverlayComponent($component) {
+        this.$component = $component;
+        var self = this;
+        $component.removeClass('hide');
+        $component.addClass('fade');
+        setTimeout(function () {
+            self.$component.removeClass('fade');
+        }, 50);
+        $component.click(function (e) {
+            var $target = $(e.target);
+            if ($target.hasClass('overlay-wrapper')) {
+                new CloseAction(null, self);
+            }
+        });
+        $component.data('component', this);
+    }
+    OverlayComponent.prototype.close = function () {
+        var self = this;
+        if (this.$component.hasClass('fade'))
+            return;
+        this.$component.addClass('fade');
+        var mainComponent = $.getMainComponent();
+        var url = mainComponent.$component.find('.component').getUrl();
+        var state = {};
+        new HistoryAction(url, state);
+        setTimeout(function () {
+            self.$component.remove();
+        }, 400);
+    };
+    OverlayComponent.setTemplate = function ($template) {
+        if ($template.length) {
+            $template.removeClass('overlay-template');
+            $template.detach();
+            this.$template = $template;
+        }
+    };
+    OverlayComponent.hasTemplate = function () {
+        return this.$template != null;
+    };
+    OverlayComponent.$template = null;
+    return OverlayComponent;
+}());
+//# sourceMappingURL=overlaycomponent.js.map
+var ComponentActio = (function () {
+    function ComponentActio($component) {
+        var component = new Component($component);
+        $component.data('component', component);
+    }
+    return ComponentActio;
+}());
+//# sourceMappingURL=componentaction.js.map
+var LoadAction = (function () {
+    function LoadAction($el, method) {
+        if (method === void 0) { method = Method.GET; }
+        this.$el = $el;
+        var action = $el.getAction();
+        this.component = $el.getComponent();
+        this.component.empty();
+        var url = $el.getUrl();
+        var data = $el.getData();
+        var ajax = new AjaxAction(method, url, data);
+        ajax.send(this.onResult, this);
+        if (method === Method.GET && action === ComponentAction.LOAD) {
+            var target = $el.getTarget();
+            var state = {
+                target: target
+            };
+            new HistoryAction(url, state);
+        }
+    }
+    LoadAction.prototype.onResult = function (response) {
+        var $response = $(response);
+        this.component.load($response);
+        cystem.bindActions($response);
+    };
     return LoadAction;
 }());
 //# sourceMappingURL=loadaction.js.map
+var ReloadAction = (function () {
+    function ReloadAction(component, $el) {
+        this.component = component;
+        this.$el = $el;
+        if (component) {
+            this.$el = component.$component;
+        }
+        var $reload = this.$el.find('.component');
+        new LoadAction($reload);
+    }
+    return ReloadAction;
+}());
+//# sourceMappingURL=reloadaction.js.map
 var LinkAction = (function () {
     function LinkAction($el) {
         this.$el = $el;
         var self = this;
         $el.click(function () {
-            var method = self.getMethod($el);
-            var loadAction = new LoadAction($el, method);
+            var action = $el.getAction();
+            switch (action) {
+                case ComponentAction.CLOSE:
+                    new CloseAction($el);
+                    break;
+                case ComponentAction.NONE: break;
+                case ComponentAction.LOAD:
+                default:
+                    var method = self.getMethod($el);
+                    new LoadAction($el, method);
+                    break;
+            }
             return false;
         });
     }
@@ -31633,13 +31723,47 @@ var LinkAction = (function () {
     return LinkAction;
 }());
 //# sourceMappingURL=linkaction.js.map
+var SubmitAction = (function () {
+    function SubmitAction($el) {
+        this.$el = $el;
+        this.component = null;
+        var self = this;
+        $el.click(function () {
+            self.component = $el.getComponent();
+            self.formComponent = $el.getFormComponent();
+            self.formComponent.send();
+            var method = self.formComponent.getMethod();
+            var url = self.formComponent.getUrl();
+            var data = self.formComponent.getData();
+            var ajax = new AjaxAction(method, url, data);
+            ajax.send2(function () {
+                self.succes.call(self);
+            }, function () {
+                self.error.call(self);
+            });
+            return false;
+        });
+    }
+    SubmitAction.prototype.succes = function (response) {
+        var self = this;
+        var parentComponent = $.getParentComponent(this.component);
+        this.formComponent.succes();
+        new ReloadAction(parentComponent);
+        setTimeout(function () {
+            new CloseAction(self.$el);
+        }, 500);
+    };
+    SubmitAction.prototype.error = function (message) {
+        this.formComponent.error($(message));
+    };
+    return SubmitAction;
+}());
+//# sourceMappingURL=submitaction.js.map
 var AjaxAction = (function () {
-    function AjaxAction(method, url, data, actionResult) {
-        if (actionResult === void 0) { actionResult = ActionResult.DISPLAY; }
+    function AjaxAction(method, url, data) {
         this.method = method;
         this.url = url;
         this.data = data;
-        this.actionResult = actionResult;
     }
     AjaxAction.prototype.send = function (fnSucces, caller) {
         var self = this;
@@ -31678,9 +31802,62 @@ var AjaxAction = (function () {
             }, 1);
         });
     };
+    AjaxAction.prototype.send2 = function (fnSucces, fnError) {
+        var self = this;
+        $.ajax({
+            method: this.method,
+            url: this.url,
+            data: this.data,
+            mimeType: 'text/html'
+        }).done(function (response, status, xhr) {
+            switch (xhr.status) {
+                case 200:
+                    fnSucces(response);
+                    break;
+                case 205:
+                    window.location.href = self.url;
+                    break;
+                default:
+                    console.log('unknown status: ', xhr.status);
+                    break;
+            }
+        }).fail(function (error) {
+            if (fnError) {
+                fnError(error);
+            }
+            else {
+                var $popup = $('<div class="popup error"></div>');
+                var $wrapper = $('<div class="wrapper"></div>');
+                var $closeButton = $('<div class="close">x</div>');
+                var $iframe = $('<iframe>');
+                $wrapper.append($closeButton);
+                $wrapper.append($iframe);
+                $popup.append($wrapper);
+                $('body').append($popup);
+                setTimeout(function () {
+                    var iframe = $iframe[0];
+                    var doc = iframe.contentWindow.document;
+                    var $iframeBody = $('body', doc);
+                    $iframeBody.html(error.responseText);
+                    $closeButton.click(function () { $popup.remove(); });
+                }, 1);
+            }
+        });
+    };
     return AjaxAction;
 }());
 //# sourceMappingURL=ajaxaction.js.map
+var CloseAction = (function () {
+    function CloseAction($el, component) {
+        if (!component) {
+            var $wrapper = $el.closest('.overlay-wrapper, .modal-wrapper').addBack('.overlay-wrapper, .modal-wrapper');
+            component = $wrapper.data('component');
+        }
+        component.close();
+    }
+    return CloseAction;
+}());
+//# sourceMappingURL=closeaction.js.map
 var Materialize = (function () {
     function Materialize(root) {
         var registry = {
@@ -31745,6 +31922,13 @@ var Materialize = (function () {
     return Materialize;
 }());
 //# sourceMappingURL=materialize.js.map
+var HistoryAction = (function () {
+    function HistoryAction(url, state) {
+        history.pushState(state, "", url);
+    }
+    return HistoryAction;
+}());
+//# sourceMappingURL=historyaction.js.map
 var PopstateAction = (function () {
     function PopstateAction() {
         var self = this;
@@ -31752,19 +31936,39 @@ var PopstateAction = (function () {
         this.component = $.getMainComponent();
     }
     PopstateAction.prototype.onPopState = function (event) {
+        var self = this;
         var url = document.location.href;
         var state = event.state || {};
+        console.log(event);
+        var previousState = event.originalEvent.state;
+        switch (previousState.target) {
+            case ComponentType.OVERLAY:
+                new CloseAction(null, $('.overlay-wrapper').last().data('component'));
+                break;
+        }
         var data = {
             CurrentLayout: $("#Layout").val(),
             Layout: "AjaxLayout"
         };
-        this.component.unloadContent();
-        var ajax = new AjaxAction(Method.GET, url, data, state.actionResult || ActionResult.DISPLAY);
-        ajax.send(this.onResult, this);
+        var ajax = new AjaxAction(Method.GET, url, data);
+        switch (state.target) {
+            case ComponentType.OVERLAY:
+                var overlay = $.createOverlayComponent();
+                ajax.send2(function (response) {
+                    self.succes.call(self, response, overlay);
+                });
+                break;
+            default:
+                self.component.empty();
+                ajax.send2(function (response) {
+                    self.succes.call(self, response, self.component);
+                });
+                break;
+        }
     };
-    PopstateAction.prototype.onResult = function (response) {
+    PopstateAction.prototype.succes = function (response, component) {
         var $response = $(response);
-        this.component.loadContent($response);
+        component.load($response);
         cystem.bindActions($response);
     };
     return PopstateAction;
@@ -31783,20 +31987,42 @@ var Cystem = (function () {
         this.bindActions($('body'));
     }
     Cystem.prototype.bindActions = function ($el) {
+        if (!OverlayComponent.hasTemplate()) {
+            OverlayComponent.setTemplate($el.find('.overlay-template'));
+        }
+        if (!ModalComponent.hasTemplate()) {
+            ModalComponent.setTemplate($el.find('.overlay-template'));
+        }
+        $el.find('.component-wrapper').each(function (_, el) {
+            new Component($(el));
+        });
+        $el.find('.overlay-wrapper').addBack('.overlay-wrapper').each(function (_, el) {
+            new OverlayComponent($(el));
+        });
+        $el.find('.modal-wrapper').addBack('.modal-wrapper').each(function (_, el) {
+            new ModalComponent($(el));
+        });
+        $el.find('form').addBack('form').each(function (_, el) {
+            new FormComponent($(el));
+        });
         $el.find('.load').each(function (_, el) {
-            var action = new LoadAction($(el));
+            new LoadAction($(el));
         });
         $el.find('.ajax-get, .ajax-post, .ajax-delete, .link').each(function (_, el) {
-            var action = new LinkAction($(el));
+            new LinkAction($(el));
         });
-        var materialize = new Materialize($el[0]);
-        var popstateAction = new PopstateAction();
+        new Materialize($el[0]);
+        new PopstateAction();
         $el.find('.fixed-action-btn').each(function (_, el) {
-            var fab = new FloatingActionButton($(el));
+            new FloatingActionButton($(el));
+        });
+        $el.find('.ajax-submit, .submit').each(function (_, el) {
+            new SubmitAction($(el));
         });
     };
     return Cystem;
 }());
 //# sourceMappingURL=cystem.js.map
 var cystem = new Cystem();
+var state = new StateManager();
 //# sourceMappingURL=init.js.map

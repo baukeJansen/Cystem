@@ -2,71 +2,26 @@ var LoadAction = (function () {
     function LoadAction($el, method) {
         if (method === void 0) { method = Method.GET; }
         this.$el = $el;
-        this.component = $el.getComponent();
-        this.component.unloadContent();
-        var actionResult = this.getActionResult($el);
-        var url = this.getUrl($el);
-        var data = this.getData($el, actionResult);
-        var ajax = new AjaxAction(method, url, data, actionResult);
+        var action = $el.getAction();
+        this.component = $el.findComponent();
+        this.component.empty();
+        var url = $el.getUrl();
+        var data = $el.getData();
+        var ajax = new AjaxAction(method, url, data);
         ajax.send(this.onResult, this);
-        if (method === Method.GET && actionResult === ActionResult.DISPLAY) {
-            var state = {};
-            history.pushState(state, "", url);
+        if (method === Method.GET && action === ComponentAction.LOAD) {
+            var target = $el.getTarget();
+            var state = {
+                target: target
+            };
+            new HistoryAction(url, state);
         }
     }
     LoadAction.prototype.onResult = function (response) {
         var $response = $(response);
-        this.component.loadContent($response);
+        this.component.load($response);
         cystem.bindActions($response);
     };
-    LoadAction.prototype.getActionResult = function ($el) {
-        var actionResult = ActionResult.DISPLAY;
-        if ($el.length) {
-            var result = $el.data('on-result');
-            if (result) {
-                var resultKey = result.toUpperCase();
-                actionResult = ActionResult[resultKey];
-            }
-        }
-        return actionResult;
-    };
-    ;
-    LoadAction.prototype.getUrl = function ($el, keepParams) {
-        if (keepParams === void 0) { keepParams = false; }
-        var url;
-        if ($el[0].hasAttribute('href')) {
-            url = $el.attr('href');
-        }
-        else {
-            url = $el.data('url');
-        }
-        if (keepParams) {
-            return url;
-        }
-        else {
-            return url.split('?')[0];
-        }
-    };
-    ;
-    LoadAction.prototype.getData = function ($el, actionResult) {
-        var url = this.getUrl($el, true).split('?');
-        var data = $el ? $el.data('params') : {};
-        data = data || {};
-        if (url.length > 1) {
-            var paramString = url[1];
-            var params = paramString.split('&');
-            $.each(params, function (_, param) {
-                var keyValuePair = param.split('=');
-                if (keyValuePair.length === 2) {
-                    data[keyValuePair[0]] = keyValuePair[1];
-                }
-            });
-        }
-        data.CurrentLayout = $("#Layout").val();
-        data.Layout = "AjaxLayout";
-        return data;
-    };
-    ;
     return LoadAction;
 }());
 //# sourceMappingURL=loadaction.js.map

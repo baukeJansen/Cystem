@@ -1,13 +1,7 @@
 var Navigate = (function () {
     function Navigate() {
-        this.Name = ServiceName.Navigate;
         this._currentUrl = '';
-        var self = this;
-        window.onpopstate = function (e) { self.onPopState.call(self, e); };
     }
-    Navigate.prototype.construct = function (serviceManager) {
-        this._serviceManager = serviceManager;
-    };
     Navigate.prototype.bind = function (el) {
         var self = this;
         var $el = $(el);
@@ -52,7 +46,7 @@ var Navigate = (function () {
             Layout: "AjaxLayout"
         };
         console.log(this._currentUrl, url);
-        var action = new Action(Method.POPSTATE, url, data, undefined, state.actionResult || ActionResult.DISPLAY);
+        var action = new Action(Method.POPSTATE, url, data, undefined, state.actionResult || ComponentAction.LOAD);
         this._exec(action);
     };
     ;
@@ -101,7 +95,7 @@ var Navigate = (function () {
         var $target = action.$target;
         var $oldContent = action.$oldContent;
         var state;
-        if (action.method === Method.GET && action.actionResult === ActionResult.DISPLAY) {
+        if (action.method === Method.GET && action.actionResult === ComponentAction.LOAD) {
             state = state || {};
             history.pushState(state, "", action.url);
             this._currentUrl = action.url;
@@ -110,9 +104,7 @@ var Navigate = (function () {
             action.method = Method.GET;
         }
         switch (action.actionResult) {
-            case ActionResult.DISPLAY:
-            case ActionResult.LOAD:
-            case ActionResult.RELOAD:
+            case ComponentAction.LOAD:
                 if (action.hasOldContent()) {
                     $target.css({ height: action.$oldContent.outerHeight() });
                     $oldContent.addClass('fade-out');
@@ -122,38 +114,22 @@ var Navigate = (function () {
                     action.ready();
                 }, 50);
                 break;
-            case ActionResult.OVERLAY:
-                var _overlayHelper = this._serviceManager.get(OverlayHelper);
-                action.overlay = _overlayHelper.open();
+            case ComponentAction.CLOSE:
                 break;
-            case ActionResult.MODAL:
-                var _modalHelper = this._serviceManager.get(ModalHelper);
-                action.modal = _modalHelper.open(action.$source);
-                break;
-            case ActionResult.CLOSE:
-                break;
-            case ActionResult.NONE:
+            case ComponentAction.NONE:
                 break;
         }
     };
     ;
     Navigate.prototype._done = function (action) {
         switch (action.actionResult) {
-            case ActionResult.DISPLAY:
-            case ActionResult.LOAD:
-            case ActionResult.RELOAD:
+            case ComponentAction.LOAD:
                 this._display(action);
                 break;
-            case ActionResult.OVERLAY:
-                this._setOverlay(action);
-                break;
-            case ActionResult.MODAL:
-                this._setModal(action);
-                break;
-            case ActionResult.CLOSE:
+            case ComponentAction.CLOSE:
                 this._close(action);
                 break;
-            case ActionResult.NONE:
+            case ComponentAction.NONE:
                 break;
         }
     };
@@ -183,17 +159,15 @@ var Navigate = (function () {
     };
     ;
     Navigate.prototype._close = function (action) {
-        var _overlayHelper = this._serviceManager.get(OverlayHelper);
-        _overlayHelper.close();
     };
     ;
     Navigate.prototype._getActionResult = function ($el) {
-        var actionResult = ActionResult.DISPLAY;
+        var actionResult = ComponentAction.LOAD;
         if ($el.length) {
             var result = $el.data('on-result');
             if (result) {
                 var resultKey = result.toUpperCase();
-                actionResult = ActionResult[resultKey];
+                actionResult = ComponentAction[resultKey];
             }
         }
         return actionResult;

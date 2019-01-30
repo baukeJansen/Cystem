@@ -1,21 +1,44 @@
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
+var OverlayComponent = (function () {
+    function OverlayComponent($component) {
+        this.$component = $component;
+        var self = this;
+        $component.removeClass('hide');
+        $component.addClass('fade');
+        setTimeout(function () {
+            self.$component.removeClass('fade');
+        }, 50);
+        $component.click(function (e) {
+            var $target = $(e.target);
+            if ($target.hasClass('overlay-wrapper')) {
+                new CloseAction(null, self);
+            }
+        });
+        $component.data('component', this);
     }
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    OverlayComponent.prototype.close = function () {
+        var self = this;
+        if (this.$component.hasClass('fade'))
+            return;
+        this.$component.addClass('fade');
+        var mainComponent = $.getMainComponent();
+        var url = mainComponent.$component.find('.component').getUrl();
+        var state = {};
+        new HistoryAction(url, state);
+        setTimeout(function () {
+            self.$component.remove();
+        }, 400);
     };
-})();
-var OverlayComponent = (function (_super) {
-    __extends(OverlayComponent, _super);
-    function OverlayComponent() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
+    OverlayComponent.setTemplate = function ($template) {
+        if ($template.length) {
+            $template.removeClass('overlay-template');
+            $template.detach();
+            this.$template = $template;
+        }
+    };
+    OverlayComponent.hasTemplate = function () {
+        return this.$template != null;
+    };
+    OverlayComponent.$template = null;
     return OverlayComponent;
-}(Component));
+}());
 //# sourceMappingURL=overlaycomponent.js.map

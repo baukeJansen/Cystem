@@ -1,13 +1,7 @@
 var OverlayHelper = (function () {
     function OverlayHelper() {
-        this.Name = ServiceName.OverlayHelper;
         this._overlays = [];
     }
-    OverlayHelper.prototype.construct = function (serviceManager) {
-        this._serviceManager = serviceManager;
-        this.$window = $(window);
-        this.$body = $('body');
-    };
     OverlayHelper.prototype.bind = function (el) {
         var $template = this.$body.find('.overlay-template');
         if ($template.length) {
@@ -17,9 +11,6 @@ var OverlayHelper = (function () {
         }
     };
     OverlayHelper.prototype.open = function () {
-        var overlay = new Overlay(this._serviceManager, this);
-        this._overlays.push(overlay);
-        return overlay;
     };
     OverlayHelper.prototype.setContent = function (content) {
     };
@@ -51,8 +42,6 @@ var OverlayHelper = (function () {
         else {
             $content = $('.main-content .content');
         }
-        var navigate = this._serviceManager.get(Navigate);
-        navigate.reload($content);
     };
     return OverlayHelper;
 }());

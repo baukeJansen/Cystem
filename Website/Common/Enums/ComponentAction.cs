@@ -7,6 +7,6 @@ namespace Website.Common.Enums
 {
     public enum ComponentAction
     {
-        Display, Load, Reload, Close , None
+        Display, Load, LoadSilent, Close , None
     }
 }

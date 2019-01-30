@@ -1,17 +1,5 @@
-﻿class Navigate implements IService {
-    Name: ServiceName = ServiceName.Navigate;
-    private _serviceManager: IServiceManager
+﻿class Navigate {
     private _currentUrl: string = '';
-
-    constructor() {
-        var self = this;
-        window.onpopstate = function (e) { self.onPopState.call(self, e); };
-    }
-
-    construct(serviceManager: IServiceManager) {
-        this._serviceManager = serviceManager;
-    }
-
     bind(el: HTMLElement): void {
         var self = this;
         var $el = $(el);
@@ -30,7 +18,7 @@
 
     // Action button
     private _action(event, method: string, $el: JQuery) {
-        var actionResult: ActionResult = this._getActionResult($el);
+        var actionResult: ComponentAction = this._getActionResult($el);
         var url = this._getUrl($el);
         var data = this._getData($el, actionResult);
         var action = new Action(method, url, data, $el, actionResult);
@@ -65,7 +53,7 @@
 
         console.log(this._currentUrl, url);
 
-        var action = new Action(Method.POPSTATE, url, data, undefined, state.actionResult || ActionResult.DISPLAY);
+        var action = new Action(Method.POPSTATE, url, data, undefined, state.actionResult || ComponentAction.LOAD);
         this._exec(action);
     };
 
@@ -118,7 +106,7 @@
         var $oldContent = action.$oldContent;
         var state;
 
-        if (action.method === Method.GET && action.actionResult === ActionResult.DISPLAY) {
+        if (action.method === Method.GET && action.actionResult === ComponentAction.LOAD) {
             state = state || {};
             history.pushState(state, "", action.url);
             this._currentUrl = action.url;
@@ -129,9 +117,7 @@
         }
 
         switch (action.actionResult) {
-            case ActionResult.DISPLAY:
-            case ActionResult.LOAD:
-            case ActionResult.RELOAD:
+            case ComponentAction.LOAD:
                 if (action.hasOldContent()) {
                     $target.css({ height: action.$oldContent.outerHeight() });
                     $oldContent.addClass('fade-out');
@@ -143,38 +129,36 @@
                 }, 50);
 
                 break;
-            case ActionResult.OVERLAY:
+            /*case ComponentAction.OVERLAY:
                 var _overlayHelper: OverlayHelper = this._serviceManager.get(OverlayHelper);
                 action.overlay = _overlayHelper.open();
                 break;
-            case ActionResult.MODAL:
+            case ComponentAction.MODAL:
                 var _modalHelper: ModalHelper = this._serviceManager.get(ModalHelper);
                 action.modal = _modalHelper.open(action.$source);
+                break;*/
+            case ComponentAction.CLOSE:
                 break;
-            case ActionResult.CLOSE:
-                break;
-            case ActionResult.NONE:
+            case ComponentAction.NONE:
                 break;
         }
     };
 
     private _done(action: Action) {
         switch (action.actionResult) {
-            case ActionResult.DISPLAY:
-            case ActionResult.LOAD:
-            case ActionResult.RELOAD:
+            case ComponentAction.LOAD:
                 this._display(action);
                 break;
-            case ActionResult.OVERLAY:
+            /*case ComponentAction.OVERLAY:
                 this._setOverlay(action);
                 break;
-            case ActionResult.MODAL:
+            case ComponentAction.MODAL:
                 this._setModal(action);
-                break;
-            case ActionResult.CLOSE:
+                break;*/
+            case ComponentAction.CLOSE:
                 this._close(action);
                 break;
-            case ActionResult.NONE:
+            case ComponentAction.NONE:
                 break;
         }
     };
@@ -211,19 +195,19 @@
     };
 
     private _close(action: Action) {
-        var _overlayHelper: OverlayHelper = this._serviceManager.get(OverlayHelper);
-        _overlayHelper.close();
+        //var _overlayHelper: OverlayHelper = this._serviceManager.get(OverlayHelper);
+        //_overlayHelper.close();
     };
 
-    private _getActionResult($el: JQuery): ActionResult {
-        var actionResult: ActionResult = ActionResult.DISPLAY;
+    private _getActionResult($el: JQuery): ComponentAction {
+        var actionResult: ComponentAction = ComponentAction.LOAD;
 
         if ($el.length) {
             var result: string = $el.data('on-result');
 
             if (result) {
-                var resultKey = result.toUpperCase() as keyof typeof ActionResult;
-                actionResult = ActionResult[resultKey];
+                var resultKey = result.toUpperCase() as keyof typeof ComponentAction;
+                actionResult = ComponentAction[resultKey];
             }
         }
 
@@ -245,7 +229,7 @@
         }
     };
 
-    private _getData($el: JQuery, actionResult: ActionResult): object {
+    private _getData($el: JQuery, actionResult: ComponentAction): object {
         var url = this._getUrl($el, true).split('?');
         var data = $el ? $el.data('params') : {};
         data = data || {};
