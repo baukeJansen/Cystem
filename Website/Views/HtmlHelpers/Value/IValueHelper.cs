@@ -31,5 +31,8 @@ namespace Website.Views.HtmlHelpers
         string Display(Value value);
 
         void MergeEditorValues(Value source, Value target);
+
+        void Remove(GenericViewModel model, string label);
+        void Remove(List<Value> values, Value remove);
     }
 }

@@ -1,6 +1,12 @@
 ﻿@using Website.Common.Viewmodels
 @using Website.Common.Models.EAV
-@using Website.ViewComponents
+@inject IValueHelper Value
 @model GenericViewModel
 
-@await Render.Values(Model, "Card")
+@{
+    Value.Remove(Model, "Template");
+}
+
+<div class="row">
+    @await Render.Values(Model)
+</div>

@@ -180,5 +180,21 @@ namespace Website.Views.HtmlHelpers
                 }
             }
         }
+
+        /* Remove */
+        public void Remove(GenericViewModel model, string label)
+        {
+            if (model == null || model.Value == null) return;
+
+            Value remove = Get(model, label);
+            Remove(model.Value.Values, remove);
+        }
+
+        public void Remove(List<Value> values, Value remove)
+        {
+            if (values == null || remove == null) return;
+
+            values.Remove(remove);
+        }
     }
 }
