@@ -41,7 +41,6 @@
       "wwwroot/src/js/animations/slideoutanimation.js",
       "wwwroot/src/js/animations/slideinanimation.js",
 
-      "wwwroot/src/js/actions/componentaction.js",
       "wwwroot/src/js/actions/loadaction.js",
       "wwwroot/src/js/actions/reloadaction.js",
       "wwwroot/src/js/actions/linkaction.js",
