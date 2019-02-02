@@ -17,7 +17,7 @@
             var ajax = new AjaxAction(method, url, data);
 
             //ajax.send(self.onResult, self);
-            ajax.send2(function () {
+            ajax.send(function () {
                 self.succes.call(self);
             }, function () {
                 self.error.call(self);

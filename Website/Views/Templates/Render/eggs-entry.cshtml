@@ -1,0 +1,26 @@
+﻿@using Website.Common.Enums
+@using Website.Common.Models.EAV
+@using Website.Common.Viewmodels
+@using ValueType = Website.Common.Enums.ValueType
+@model GenericViewModel
+@inject IValueHelper Value
+
+@{
+    Value entry = Model.Value;
+    Value link = Value.Get(Model, "Link");
+    string uri = link?.RelatedValue?.SerializedString;
+}
+
+@if (entry != null)
+{
+    <li class="collection-item">
+        @Value.Display(Model)
+        <div class="secondary-content">
+            @if (!string.IsNullOrEmpty(uri))
+            {
+                @await Render.EditButton(uri, new { Id = entry.Id }, "")
+            }
+            @await Render.DeleteModalButton(entry, "", Model.Options, ComponentAction.None)
+        </div>
+    </li>
+}

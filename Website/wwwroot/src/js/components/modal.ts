@@ -3,6 +3,10 @@
 
     public constructor(public $component: JQuery) {
         super($component);
+
+        $component.removeClass('hide');
+        //$component.modal('open');
+        M.Modal.init($component[0]).open();
     }
 
     public getType(): ComponentType {

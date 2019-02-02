@@ -19,7 +19,7 @@
         }
 
         var ajax = new AjaxAction(method, url, data);
-        ajax.send2(function (response: any) { self.succes.call(self, response, history) });
+        ajax.send(function (response: any) { self.succes.call(self, response, history) });
     }
 
     succes(response: any, history: HistoryAction) {

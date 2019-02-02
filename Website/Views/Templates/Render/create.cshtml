@@ -20,7 +20,7 @@
         </div>
     </div>
 
-    @if (attributes != null)
+    @if (attributes != null && settings != null)
     {
         @using (Html.BeginForm(null, null, new { }, FormMethod.Post, true, new { action = "/cystem/edit-page/" }))
         {
@@ -39,6 +39,17 @@
             <div class="row">
                 <div class="col s12 right-align">
                     @await Render.SubmitButton("Create", "add")
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        if (settings == null)
+        {
+            <div class="row">
+                <div class="col s12 error">
+                    settings missing
                 </div>
             </div>
         }

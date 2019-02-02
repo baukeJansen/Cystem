@@ -23,8 +23,10 @@
             </div>
         </div>
     }
-
-    <ul class="collection z-depth-1">
-        @await Render.Value(Model, "Group")
-    </ul>
+    
+    <div class="row">
+        <ul class="collection z-depth-1">
+            @await Render.Value(Model, "Group")
+        </ul>
+    </div>
 </div>
