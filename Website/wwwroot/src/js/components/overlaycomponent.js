@@ -10,23 +10,11 @@ var OverlayComponent = (function () {
         $component.click(function (e) {
             var $target = $(e.target);
             if ($target.hasClass('overlay-wrapper')) {
-                new CloseAction(null, self);
             }
         });
         $component.data('component', this);
     }
     OverlayComponent.prototype.close = function () {
-        var self = this;
-        if (this.$component.hasClass('fade'))
-            return;
-        this.$component.addClass('fade');
-        var mainComponent = $.getMainComponent();
-        var url = mainComponent.$component.find('.component').getUrl();
-        var state = {};
-        new HistoryAction(url, state);
-        setTimeout(function () {
-            self.$component.remove();
-        }, 400);
     };
     OverlayComponent.setTemplate = function ($template) {
         if ($template.length) {

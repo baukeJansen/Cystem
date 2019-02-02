@@ -1,0 +1,7 @@
+﻿@using Website.Common.Viewmodels
+@inject IValueHelper Value
+@model GenericViewModel
+
+<div class="container">
+    @await Render.Value(Model, "Content")
+</div>

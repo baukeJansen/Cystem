@@ -1,3 +1,3 @@
 var cystem = new Cystem();
-var state = new StateManager();
+cystem.init();
 //# sourceMappingURL=init.js.map

@@ -14,7 +14,7 @@
             var $target = $(e.target);
 
             if ($target.hasClass('overlay-wrapper')) {
-                new CloseAction(null, self);
+                //new CloseAction(null, self);
             }
         });
 
@@ -29,13 +29,13 @@
     }*/
 
     close(): void {
-        var self = this;
+        /*var self = this;
         if (this.$component.hasClass('fade')) return;
 
         this.$component.addClass('fade');
         //this._helper.moveParents(this, 'right');
 
-        var mainComponent: Component = $.getMainComponent();
+        var mainComponent: Component2 = $.getMainComponent();
         var url: string = mainComponent.$component.find('.component').getUrl();
         var state = {};
 
@@ -43,7 +43,7 @@
 
         setTimeout(function () {
             self.$component.remove();
-        }, 400);
+        }, 400);*/
     }
 
     static setTemplate($template: JQuery): void {

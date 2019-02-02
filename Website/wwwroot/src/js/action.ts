@@ -10,7 +10,7 @@
     $oldContent: JQuery;
     $newContent: JQuery;
 
-    overlay: Overlay;
+    overlay: Overlay2;
     modal: ModalHelper;
 
     constructor(method: string, url: string, data: any, $source: JQuery, actionResult: ComponentAction) {

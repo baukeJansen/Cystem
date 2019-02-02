@@ -1,8 +1,7 @@
 ﻿class CloseAction {
-    constructor($el: JQuery, component?: IClosable) {
+    constructor($el: JQuery, component?: IComponent) {
         if (!component) {
-            var $wrapper: JQuery = $el.closest('.overlay-wrapper, .modal-wrapper').addBack('.overlay-wrapper, .modal-wrapper');
-            component = $wrapper.data('component');
+            component = $el.findComponent();
         }
 
         component.close();

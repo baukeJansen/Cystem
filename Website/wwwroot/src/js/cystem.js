@@ -1,25 +1,29 @@
 var Cystem = (function () {
     function Cystem() {
-        this.parsers = [];
-        this.bindActions($('body'));
+        this.page = new Page();
     }
-    Cystem.prototype.bindActions = function ($el) {
-        if (!OverlayComponent.hasTemplate()) {
-            OverlayComponent.setTemplate($el.find('.overlay-template'));
-        }
-        if (!ModalComponent.hasTemplate()) {
-            ModalComponent.setTemplate($el.find('.overlay-template'));
-        }
-        $el.find('.component-wrapper').each(function (_, el) {
-            new Component($(el));
+    Cystem.prototype.init = function () {
+        this.apply(this.page.$component);
+        new PopstateAction();
+        new KeyActions();
+    };
+    Cystem.prototype.apply = function ($el) {
+        Overlay.findTemplate($el);
+        Modal.findTemplate($el);
+        $el.find(COMPONENT_SELECTOR).addBack(COMPONENT_SELECTOR).each(function (_, el) {
+            var $component = $(el);
+            var type = $component.getType();
+            switch (type) {
+                case ComponentType.OVERLAY:
+                    new Overlay($component);
+                    break;
+                case ComponentType.MODAL:
+                    new Modal($component);
+                    break;
+                default: new Component($component);
+            }
         });
-        $el.find('.overlay-wrapper').addBack('.overlay-wrapper').each(function (_, el) {
-            new OverlayComponent($(el));
-        });
-        $el.find('.modal-wrapper').addBack('.modal-wrapper').each(function (_, el) {
-            new ModalComponent($(el));
-        });
-        $el.find('form').addBack('form').each(function (_, el) {
+        $el.find('form').each(function (_, el) {
             new FormComponent($(el));
         });
         $el.find('.load').each(function (_, el) {
@@ -29,12 +33,14 @@ var Cystem = (function () {
             new LinkAction($(el));
         });
         new Materialize($el[0]);
-        new PopstateAction();
-        $el.find('.fixed-action-btn').each(function (_, el) {
-            new FloatingActionButton($(el));
+        $el.find('.tabs.formtab').each(function (_, el) {
+            new Formtab($(el));
         });
         $el.find('.ajax-submit, .submit').each(function (_, el) {
             new SubmitAction($(el));
+        });
+        $el.find('.fixed-action-btn').each(function (_, el) {
+            new FloatingActionButton($(el));
         });
     };
     return Cystem;

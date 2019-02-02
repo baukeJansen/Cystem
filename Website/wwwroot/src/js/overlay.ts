@@ -1,4 +1,4 @@
-﻿class Overlay {
+﻿class Overlay2 {
     private _helper: OverlayHelper
     private $overlay: JQuery;
 
@@ -21,7 +21,7 @@
         this.open();
     }
 
-    open(): Overlay {
+    open(): Overlay2 {
         var self = this;
         this._helper.moveParents(this, 'left');
 

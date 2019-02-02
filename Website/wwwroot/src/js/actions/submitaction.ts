@@ -1,5 +1,5 @@
 ﻿class SubmitAction implements IAction {
-    public component: Component = null;
+    public component: IComponent = null;
     private formComponent: FormComponent;
 
     constructor(private $el: JQuery) {
@@ -29,11 +29,11 @@
 
     succes(response: string): void {
         var self = this;
-        var parentComponent: Component = $.getParentComponent(this.component);
+        var mainComponent: IComponent = cystem.page.getMainComponent();
 
         this.formComponent.succes();
 
-        new ReloadAction(parentComponent);
+        new ReloadAction(mainComponent);
 
         setTimeout(function () {
             new CloseAction(self.$el);

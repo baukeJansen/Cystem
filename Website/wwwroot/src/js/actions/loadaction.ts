@@ -1,32 +1,32 @@
 ﻿class LoadAction implements IAction {
-    private component: Component;
-    constructor(private $el: JQuery, method: Method = Method.GET) {
-        var action: ComponentAction = $el.getAction();
+    private component: IComponent;
 
-        this.component = $el.findComponent();
-        this.component.empty();
+    constructor(private $el: JQuery, method: Method = Method.GET) {
+        var self = this;
+        var action: ComponentAction = $el.getAction();
+        var target: ComponentType = $el.getTarget();
+
+        this.component = $el.findComponent().getTargetComponent(target);
+        this.component.clearContent();
 
         var url = $el.getUrl();
         var data = $el.getData();
 
-        var ajax = new AjaxAction(method, url, data);
-        ajax.send(this.onResult, this);
+        var history: HistoryAction = null;
 
         if (method === Method.GET && action === ComponentAction.LOAD) {
-            var target: ComponentType = $el.getTarget();
-
-            var state = {
-                target: target
-            };
-            new HistoryAction(url, state);
-            //history.pushState(state, "", url);
+            history = new HistoryAction(url);
         }
+
+        var ajax = new AjaxAction(method, url, data);
+        ajax.send2(function (response: any) { self.succes.call(self, response, history) });
     }
 
-    onResult(response) {
+    succes(response: any, history: HistoryAction) {
         var $response = $(response);
-        this.component.load($response);
+        this.component.setContent($response);
 
-        cystem.bindActions($response);
+        cystem.apply($response);
+        HistoryAction.reloadState();
     }
 }

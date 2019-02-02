@@ -1,15 +1,18 @@
 ﻿class PopstateAction {
-    component: Component;
+    //component: ;
 
     constructor() {
         var self = this;
-        window.onpopstate = function (e) { self.onPopState.call(self, e); };
+        window.onpopstate = function (e: PopStateEvent) { self.onPopState.call(self, e); };
 
-        this.component = $.getMainComponent();
+        //this.component = $.getMainComponent();
     }
 
-    onPopState(event): void {
-        var self = this;
+    onPopState(event: PopStateEvent): void {
+        var state: any = event.state || {};
+        cystem.page.setState(state);
+
+        /*var self = this;
         var url = document.location.href;
         var state = event.state || {};
         console.log(event);
@@ -30,7 +33,7 @@
 
         switch (state.target) {
             case ComponentType.OVERLAY:
-                var overlay: Component = $.createOverlayComponent();
+                var overlay: Component2 = $.createOverlayComponent();
 
                 ajax.send2(function (response: string) {
                     self.succes.call(self, response, overlay);
@@ -44,13 +47,6 @@
                     self.succes.call(self, response, self.component);
                 });
                 break;
-        }
-    }
-
-    succes(response: string, component: Component) {
-        var $response = $(response);
-        component.load($response);
-
-        cystem.bindActions($response);
+        }*/
     }
 }

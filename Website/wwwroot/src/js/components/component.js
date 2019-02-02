@@ -1,16 +1,15 @@
-var Component = (function () {
-    function Component($component) {
+var Component2 = (function () {
+    function Component2($component) {
         this.$component = $component;
         this.ready = true;
         this.fnReady = [];
         this.target = null;
         var targetType = $component.getTarget();
         if (targetType) {
-            this.target = $.getTargetComponent(this, targetType);
         }
         $component.data('component', this);
     }
-    Component.prototype.empty = function () {
+    Component2.prototype.empty = function () {
         var self = this;
         this.ready = false;
         var $children = this.$component.children();
@@ -24,7 +23,7 @@ var Component = (function () {
             });
         }, 50);
     };
-    Component.prototype.load = function ($replace) {
+    Component2.prototype.load = function ($replace) {
         var self = this;
         $replace.addClass('fade-in');
         if (!this.ready) {
@@ -39,6 +38,6 @@ var Component = (function () {
             }, 300);
         }
     };
-    return Component;
+    return Component2;
 }());
 //# sourceMappingURL=component.js.map

@@ -1,62 +1,17 @@
-jQuery.extend({
-    getMainComponent: function () {
-        var $main = $('.main-component');
-        return $main.data('component');
-    },
-    getParentComponent: function (component) {
-        var $parent = component.$component.parent().closest('.component-wrapper');
-        if ($parent.length) {
-            return $parent.data('component');
-        }
-        return jQuery.getMainComponent();
-    },
-    createOverlayComponent: function () {
-        var $overlay = OverlayComponent.$template.clone();
-        $('body').append($overlay);
-        cystem.bindActions($overlay);
-        var component = $overlay.find('.component-wrapper').data('component');
-        return component;
-    },
-    createModalComponent: function () {
-        var $modal = ModalComponent.$template.clone();
-        var component = $modal.find('.component-wrapper').data('component');
-        return component;
-    },
-    getTargetComponent: function (component, target) {
-        switch (target) {
-            case ComponentType.SELF: return component;
-            case ComponentType.MAIN: return jQuery.getMainComponent();
-            case ComponentType.PARENT: return jQuery.getParentComponent(component);
-            case ComponentType.OVERLAY: return jQuery.createOverlayComponent();
-            case ComponentType.MODAL: return jQuery.createModalComponent();
-            default: return component;
-        }
-    }
-});
+jQuery.extend({});
 jQuery.fn.extend({
     findComponent: function () {
-        var $component = this.closest('.component-wrapper');
-        var component = $component.data('component');
-        var targetType = this.getTarget();
-        if (targetType) {
-            return $.getTargetComponent(component, targetType);
-        }
-        if (component.target) {
-            return component.target;
-        }
-        return component;
+        var $component = this.parent().closest(COMPONENT_SELECTOR);
+        return $component.getComponent();
     },
     getComponent: function () {
-        return this.data('component');
+        return this.data(COMPONENT_DATA);
     },
     setComponent: function (component) {
-        this.data('component', component);
-    },
-    getOverlayComponent: function () {
-        return this.closest('.overlay-wrapper').data('component');
+        this.data(COMPONENT_DATA, component);
     },
     getFormComponent: function () {
-        return this.closest('form').data('component');
+        return this.closest('form').data(COMPONENT_DATA);
     },
     getAction: function () {
         var action = this.data('action');
@@ -84,18 +39,12 @@ jQuery.fn.extend({
     },
     getUrl: function (keepParams) {
         if (keepParams === void 0) { keepParams = false; }
-        var url;
-        if (this[0].hasAttribute('href')) {
-            url = this.attr('href');
-        }
-        else {
-            url = this.data('url');
-        }
+        var url = this.attr('href') || this.data('url');
         if (keepParams) {
             return url;
         }
         else {
-            return url.split('?')[0];
+            return url ? url.split('?')[0] : url;
         }
     },
     getData: function () {

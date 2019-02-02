@@ -1,5 +1,5 @@
-var Overlay = (function () {
-    function Overlay(helper) {
+var Overlay2 = (function () {
+    function Overlay2(helper) {
         var self = this;
         this._helper = helper;
         this.$overlay = helper.$overlayTemplate.clone();
@@ -13,7 +13,7 @@ var Overlay = (function () {
         });
         this.open();
     }
-    Overlay.prototype.open = function () {
+    Overlay2.prototype.open = function () {
         var self = this;
         this._helper.moveParents(this, 'left');
         this.$overlay.removeClass('hide');
@@ -24,12 +24,12 @@ var Overlay = (function () {
         }, 50);
         return this;
     };
-    Overlay.prototype.setContent = function (overlayContent) {
+    Overlay2.prototype.setContent = function (overlayContent) {
         var $overlayContent = $(overlayContent);
         var $contentWrapper = this.$overlay.find('.content-wrapper');
         $contentWrapper.append($overlayContent);
     };
-    Overlay.prototype.close = function () {
+    Overlay2.prototype.close = function () {
         var self = this;
         if (this.$overlay.hasClass('fade'))
             return;
@@ -40,6 +40,6 @@ var Overlay = (function () {
             self.$overlay.remove();
         }, 400);
     };
-    return Overlay;
+    return Overlay2;
 }());
 //# sourceMappingURL=overlay.js.map

@@ -4,11 +4,8 @@
     }
 
     send(): void {
-        this.$form.css({ width: this.$form.outerWidth(), height: this.$form.outerHeight() });
-        this.$form.addClass('loading');
-
-        var $content: JQuery = this.$form.find('> .form-content');
-        $content.addClass('send');
+        var $formContent: JQuery = this.$form.find('> .form-content');
+        new SubmitAnimation(this.$form, $formContent)
     }
 
     succes(): void {
@@ -17,7 +14,7 @@
 
     error(message: JQuery): void {
         this.$form.removeClass('loading').addClass('error');
-        this.$form.empty().append($(message));
+        new FadeInAnimation(this.$form, message);
     }
 
     getMethod(): Method {

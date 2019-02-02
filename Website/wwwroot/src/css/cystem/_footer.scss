@@ -1,12 +1,14 @@
-﻿footer {
+﻿@import 'variables';
+
+footer {
     position: absolute;
     bottom: 0;
     width: 100%;
     padding: 0;
 
-    .component-wrapper {
+    .content {
         padding-top: 20px;
-        transition: .3s;
+        background: $primary-color;
     }
 }
 

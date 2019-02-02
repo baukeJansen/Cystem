@@ -1,4 +1,4 @@
-﻿class Formtab {
+﻿class Formtab1 {
     bind(el: HTMLElement): void {
         var self: Formtab = this;
         var $formtabs: JQuery = $(el).find('.tabs.formtab');

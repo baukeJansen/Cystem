@@ -31370,7 +31370,9 @@ var ComponentType;
     ComponentType["MAIN"] = "main";
     ComponentType["PARENT"] = "parent";
     ComponentType["OVERLAY"] = "overlay";
-    ComponentType["MODAL"] = "popup";
+    ComponentType["MODAL"] = "modal";
+    ComponentType["PAGE"] = "page";
+    ComponentType["COMPONENT"] = "component";
 })(ComponentType || (ComponentType = {}));
 //# sourceMappingURL=componenttarget.js.map
 var Method;
@@ -31382,59 +31384,20 @@ var Method;
     Method["POPSTATE"] = "popstate";
 })(Method || (Method = {}));
 //# sourceMappingURL=method.js.map
-jQuery.extend({
-    getMainComponent: function () {
-        var $main = $('.main-component');
-        return $main.data('component');
-    },
-    getParentComponent: function (component) {
-        var $parent = component.$component.parent().closest('.component-wrapper');
-        if ($parent.length) {
-            return $parent.data('component');
-        }
-        return jQuery.getMainComponent();
-    },
-    createOverlayComponent: function () {
-        var $overlay = OverlayComponent.$template.clone();
-        $('body').append($overlay);
-        cystem.bindActions($overlay);
-        var component = $overlay.find('.component-wrapper').data('component');
-        return component;
-    },
-    createModalComponent: function () {
-        var $modal = ModalComponent.$template.clone();
-        var component = $modal.find('.component-wrapper').data('component');
-        return component;
-    },
-    getTargetComponent: function (component, target) {
-        switch (target) {
-            case ComponentType.SELF: return component;
-            case ComponentType.MAIN: return jQuery.getMainComponent();
-            case ComponentType.PARENT: return jQuery.getParentComponent(component);
-            case ComponentType.OVERLAY: return jQuery.createOverlayComponent();
-            case ComponentType.MODAL: return jQuery.createModalComponent();
-            default: return component;
-        }
-    }
-});
+jQuery.extend({});
 jQuery.fn.extend({
-    getComponent: function () {
-        var $component = this.closest('.component-wrapper');
-        var component = $component.data('component');
-        var targetType = this.getTarget();
-        if (targetType) {
-            return $.getTargetComponent(component, targetType);
-        }
-        if (component.target) {
-            return component.target;
-        }
-        return component;
+    findComponent: function () {
+        var $component = this.parent().closest(COMPONENT_SELECTOR);
+        return $component.getComponent();
     },
-    getOverlayComponent: function () {
-        return this.closest('.overlay-wrapper').data('component');
+    getComponent: function () {
+        return this.data(COMPONENT_DATA);
+    },
+    setComponent: function (component) {
+        this.data(COMPONENT_DATA, component);
     },
     getFormComponent: function () {
-        return this.closest('form').data('component');
+        return this.closest('form').data(COMPONENT_DATA);
     },
     getAction: function () {
         var action = this.data('action');
@@ -31462,18 +31425,12 @@ jQuery.fn.extend({
     },
     getUrl: function (keepParams) {
         if (keepParams === void 0) { keepParams = false; }
-        var url;
-        if (this[0].hasAttribute('href')) {
-            url = this.attr('href');
-        }
-        else {
-            url = this.data('url');
-        }
+        var url = this.attr('href') || this.data('url');
         if (keepParams) {
             return url;
         }
         else {
-            return url.split('?')[0];
+            return url ? url.split('?')[0] : url;
         }
     },
     getData: function () {
@@ -31496,19 +31453,18 @@ jQuery.fn.extend({
     }
 });
 //# sourceMappingURL=jqextensions.js.map
-var Component = (function () {
-    function Component($component) {
+var Component2 = (function () {
+    function Component2($component) {
         this.$component = $component;
         this.ready = true;
         this.fnReady = [];
         this.target = null;
         var targetType = $component.getTarget();
         if (targetType) {
-            this.target = $.getTargetComponent(this, targetType);
         }
         $component.data('component', this);
     }
-    Component.prototype.empty = function () {
+    Component2.prototype.empty = function () {
         var self = this;
         this.ready = false;
         var $children = this.$component.children();
@@ -31522,7 +31478,7 @@ var Component = (function () {
             });
         }, 50);
     };
-    Component.prototype.load = function ($replace) {
+    Component2.prototype.load = function ($replace) {
         var self = this;
         $replace.addClass('fade-in');
         if (!this.ready) {
@@ -31537,7 +31493,7 @@ var Component = (function () {
             }, 300);
         }
     };
-    return Component;
+    return Component2;
 }());
 //# sourceMappingURL=component.js.map
 var FormComponent = (function () {
@@ -31546,17 +31502,15 @@ var FormComponent = (function () {
         $form.data('component', this);
     }
     FormComponent.prototype.send = function () {
-        this.$form.css({ width: this.$form.outerWidth(), height: this.$form.outerHeight() });
-        this.$form.addClass('loading');
-        var $content = this.$form.find('> .form-content');
-        $content.addClass('send');
+        var $formContent = this.$form.find('> .form-content');
+        new SubmitAnimation(this.$form, $formContent);
     };
     FormComponent.prototype.succes = function () {
         this.$form.removeClass('loading').addClass('succes');
     };
     FormComponent.prototype.error = function (message) {
         this.$form.removeClass('loading').addClass('error');
-        this.$form.empty().append($(message));
+        new FadeInAnimation(this.$form, message);
     };
     FormComponent.prototype.getMethod = function () {
         var method = this.$form.attr('method').toLowerCase();
@@ -31617,23 +31571,11 @@ var OverlayComponent = (function () {
         $component.click(function (e) {
             var $target = $(e.target);
             if ($target.hasClass('overlay-wrapper')) {
-                new CloseAction(null, self);
             }
         });
         $component.data('component', this);
     }
     OverlayComponent.prototype.close = function () {
-        var self = this;
-        if (this.$component.hasClass('fade'))
-            return;
-        this.$component.addClass('fade');
-        var mainComponent = $.getMainComponent();
-        var url = mainComponent.$component.find('.component').getUrl();
-        var state = {};
-        new HistoryAction(url, state);
-        setTimeout(function () {
-            self.$component.remove();
-        }, 400);
     };
     OverlayComponent.setTemplate = function ($template) {
         if ($template.length) {
@@ -31651,7 +31593,7 @@ var OverlayComponent = (function () {
 //# sourceMappingURL=overlaycomponent.js.map
 var ComponentActio = (function () {
     function ComponentActio($component) {
-        var component = new Component($component);
+        var component = new Component2($component);
         $component.data('component', component);
     }
     return ComponentActio;
@@ -31661,25 +31603,25 @@ var LoadAction = (function () {
     function LoadAction($el, method) {
         if (method === void 0) { method = Method.GET; }
         this.$el = $el;
+        var self = this;
         var action = $el.getAction();
-        this.component = $el.getComponent();
-        this.component.empty();
+        var target = $el.getTarget();
+        this.component = $el.findComponent().getTargetComponent(target);
+        this.component.clearContent();
         var url = $el.getUrl();
         var data = $el.getData();
-        var ajax = new AjaxAction(method, url, data);
-        ajax.send(this.onResult, this);
+        var history = null;
         if (method === Method.GET && action === ComponentAction.LOAD) {
-            var target = $el.getTarget();
-            var state = {
-                target: target
-            };
-            new HistoryAction(url, state);
+            history = new HistoryAction(url);
         }
+        var ajax = new AjaxAction(method, url, data);
+        ajax.send2(function (response) { self.succes.call(self, response, history); });
     }
-    LoadAction.prototype.onResult = function (response) {
+    LoadAction.prototype.succes = function (response, history) {
         var $response = $(response);
-        this.component.load($response);
-        cystem.bindActions($response);
+        this.component.setContent($response);
+        cystem.apply($response);
+        HistoryAction.reloadState();
     };
     return LoadAction;
 }());
@@ -31691,7 +31633,7 @@ var ReloadAction = (function () {
         if (component) {
             this.$el = component.$component;
         }
-        var $reload = this.$el.find('.component');
+        var $reload = this.$el.find(CONTENT_SELECTOR);
         new LoadAction($reload);
     }
     return ReloadAction;
@@ -31729,7 +31671,7 @@ var SubmitAction = (function () {
         this.component = null;
         var self = this;
         $el.click(function () {
-            self.component = $el.getComponent();
+            self.component = $el.findComponent();
             self.formComponent = $el.getFormComponent();
             self.formComponent.send();
             var method = self.formComponent.getMethod();
@@ -31746,9 +31688,9 @@ var SubmitAction = (function () {
     }
     SubmitAction.prototype.succes = function (response) {
         var self = this;
-        var parentComponent = $.getParentComponent(this.component);
+        var mainComponent = cystem.page.getMainComponent();
         this.formComponent.succes();
-        new ReloadAction(parentComponent);
+        new ReloadAction(mainComponent);
         setTimeout(function () {
             new CloseAction(self.$el);
         }, 500);
@@ -31850,8 +31792,7 @@ var AjaxAction = (function () {
 var CloseAction = (function () {
     function CloseAction($el, component) {
         if (!component) {
-            var $wrapper = $el.closest('.overlay-wrapper, .modal-wrapper').addBack('.overlay-wrapper, .modal-wrapper');
-            component = $wrapper.data('component');
+            component = $el.findComponent();
         }
         component.close();
     }
@@ -31923,9 +31864,14 @@ var Materialize = (function () {
 }());
 //# sourceMappingURL=materialize.js.map
 var HistoryAction = (function () {
-    function HistoryAction(url, state) {
-        history.pushState(state, "", url);
+    function HistoryAction(url) {
+        var state = cystem.page.getState();
+        history.pushState(state, '', url);
+        history.state;
     }
+    HistoryAction.reloadState = function () {
+        history.replaceState(cystem.page.getState(), '');
+    };
     return HistoryAction;
 }());
 //# sourceMappingURL=historyaction.js.map
@@ -31933,47 +31879,42 @@ var PopstateAction = (function () {
     function PopstateAction() {
         var self = this;
         window.onpopstate = function (e) { self.onPopState.call(self, e); };
-        this.component = $.getMainComponent();
     }
     PopstateAction.prototype.onPopState = function (event) {
-        var self = this;
-        var url = document.location.href;
         var state = event.state || {};
-        console.log(event);
-        var previousState = event.originalEvent.state;
-        switch (previousState.target) {
-            case ComponentType.OVERLAY:
-                new CloseAction(null, $('.overlay-wrapper').last().data('component'));
-                break;
-        }
-        var data = {
-            CurrentLayout: $("#Layout").val(),
-            Layout: "AjaxLayout"
-        };
-        var ajax = new AjaxAction(Method.GET, url, data);
-        switch (state.target) {
-            case ComponentType.OVERLAY:
-                var overlay = $.createOverlayComponent();
-                ajax.send2(function (response) {
-                    self.succes.call(self, response, overlay);
-                });
-                break;
-            default:
-                self.component.empty();
-                ajax.send2(function (response) {
-                    self.succes.call(self, response, self.component);
-                });
-                break;
-        }
-    };
-    PopstateAction.prototype.succes = function (response, component) {
-        var $response = $(response);
-        component.load($response);
-        cystem.bindActions($response);
+        cystem.page.setState(state);
     };
     return PopstateAction;
 }());
 //# sourceMappingURL=popstateaction.js.map
+var Formtab = (function () {
+    function Formtab($formtab) {
+        var self = this;
+        var $tabs = $formtab.find('.tab');
+        self.targetInputs($tabs);
+        $tabs.click(function () {
+            var $tab = $(this);
+            $tab.find('input[type="radio"]').prop('checked', true);
+            self.targetInputs($tabs);
+        });
+    }
+    Formtab.prototype.targetInputs = function ($tabs) {
+        setTimeout(function () {
+            var $selectedTab = $tabs.has('a.active');
+            $tabs.not($selectedTab).each(function (_, tab) {
+                var target = $(tab).find('a').attr('href');
+                var $inputs = $(target).find('input');
+                $inputs.prop('disabled', 'disabled');
+            });
+            var target = $selectedTab.find('a').attr('href');
+            var $inputs = $(target).find('input');
+            $inputs.removeAttr('disabled');
+        }, 1);
+    };
+    ;
+    return Formtab;
+}());
+//# sourceMappingURL=formtab.js.map
 var FloatingActionButton = (function () {
     function FloatingActionButton($fab) {
         $fab.floatingActionButton();
@@ -31981,28 +31922,387 @@ var FloatingActionButton = (function () {
     return FloatingActionButton;
 }());
 //# sourceMappingURL=floatingactionbutton.js.map
+var KeyActions = (function () {
+    function KeyActions() {
+        var press = false;
+        $(document).keydown(function (e) {
+            if (e.which === 17 && !press) {
+                press = true;
+                $('.component').addClass('show');
+            }
+        }).keyup(function (e) {
+            if (e.which === 17) {
+                press = false;
+                $('.component').removeClass('show');
+            }
+        });
+    }
+    return KeyActions;
+}());
+//# sourceMappingURL=keyactions.js.map
+var FadeOutAnimation = (function () {
+    function FadeOutAnimation($wrapper, $content, fnReady) {
+        $wrapper.css({ height: $content.outerHeight() });
+        $content.addClass('fade-out');
+        setTimeout(function () {
+            if (fnReady) {
+                fnReady();
+            }
+        }, 500);
+    }
+    return FadeOutAnimation;
+}());
+//# sourceMappingURL=fadeoutanimation.js.map
+var FadeInAnimation = (function () {
+    function FadeInAnimation($wrapper, $content, fnReady) {
+        $content.addClass('fade-in');
+        $wrapper.css({ height: $content.outerHeight() });
+        setTimeout(function () {
+            $content.removeClass('fade-in');
+            $wrapper.css({ height: 'auto' });
+            if (fnReady) {
+                fnReady();
+            }
+        }, 300);
+    }
+    return FadeInAnimation;
+}());
+//# sourceMappingURL=fadeinanimation.js.map
+var SubmitAnimation = (function () {
+    function SubmitAnimation($wrapper, $content, fnReady) {
+        $wrapper.css({ width: $wrapper.outerWidth(), height: $wrapper.outerHeight() });
+        $wrapper.addClass('loading');
+        $content.addClass('send');
+        setTimeout(function () {
+            $content.remove();
+            if (fnReady) {
+                fnReady();
+            }
+        }, 1000);
+    }
+    return SubmitAnimation;
+}());
+//# sourceMappingURL=submitanimation.js.map
+var SlideOutAnimation = (function () {
+    function SlideOutAnimation() {
+    }
+    return SlideOutAnimation;
+}());
+//# sourceMappingURL=slideoutanimation.js.map
+var SlideInAnimation = (function () {
+    function SlideInAnimation() {
+    }
+    return SlideInAnimation;
+}());
+//# sourceMappingURL=slideinanimation.js.map
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    }
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var COMPONENT_SELECTOR = '.component';
+var CONTENT_SELECTOR = '.content';
+var COMPONENT_DATA = 'component';
+var BaseComponent = (function () {
+    function BaseComponent($component) {
+        this.$component = $component;
+        this.children = [];
+        $component.setComponent(this);
+        this.parent = this.findParent($component);
+        if (this.parent) {
+            this.parent.addChild(this);
+        }
+        this.url = $component.find(CONTENT_SELECTOR).getUrl();
+    }
+    BaseComponent.prototype.setState = function (state) {
+        for (var i = 0; i < this.children.length || i < state.components.length; i++) {
+            var child = this.children[i];
+            var childState = state.components[i];
+            if (!child) {
+                switch (childState.type) {
+                    case ComponentType.OVERLAY:
+                        var overlay = Overlay.new();
+                        overlay.setState(childState.components[0]);
+                        break;
+                    case ComponentType.MODAL:
+                        var modal = Modal.new();
+                        modal.setState(childState.components[0]);
+                        break;
+                }
+            }
+            else if (!childState) {
+                child.close(true);
+            }
+            else if (child.getType() != childState.type) {
+                console.error('missing - set state - replace');
+            }
+            else {
+                child.setState(childState);
+            }
+        }
+    };
+    BaseComponent.prototype.findParent = function ($component) {
+        var $parent = $component.parent().closest(COMPONENT_SELECTOR + ', body');
+        return $parent.getComponent();
+    };
+    BaseComponent.prototype.getTargetComponent = function (actionTarget) {
+        if (actionTarget === void 0) { actionTarget = null; }
+        if (!actionTarget) {
+            actionTarget = this.$component.getTarget();
+        }
+        switch (actionTarget) {
+            case ComponentType.MAIN: return cystem.page.getMainComponent();
+            case ComponentType.PARENT: return this.parent;
+            case ComponentType.OVERLAY: return Overlay.new();
+            case ComponentType.MODAL: return Modal.new();
+            case ComponentType.SELF:
+            default:
+                return this;
+        }
+    };
+    BaseComponent.prototype.addChild = function (component) {
+        this.children.push(component);
+    };
+    BaseComponent.prototype.removeChild = function (component) {
+        this.children.splice(this.children.indexOf(component), 1);
+    };
+    BaseComponent.prototype.getChildren = function () {
+        return this.children;
+    };
+    BaseComponent.prototype.getParent = function () {
+        return this.parent;
+    };
+    BaseComponent.prototype.clearContent = function () {
+        var self = this;
+        this.$component.addClass('loading');
+        this.children = [];
+        var $children = this.$component.children();
+        new FadeOutAnimation(this.$component, $children, function () {
+            $children.remove();
+        });
+    };
+    BaseComponent.prototype.delete = function () {
+        this.$component.remove();
+        this.parent.removeChild(this);
+    };
+    BaseComponent.prototype.setContent = function ($content) {
+        this.$component.removeClass('loading');
+        this.$component.append($content);
+        new FadeInAnimation(this.$component, $content);
+    };
+    BaseComponent.prototype.close = function () {
+        this.parent.close();
+    };
+    return BaseComponent;
+}());
+var Page = (function (_super) {
+    __extends(Page, _super);
+    function Page() {
+        var _this = _super.call(this, $('body')) || this;
+        var self = _this;
+        return _this;
+    }
+    Page.prototype.getType = function () {
+        return ComponentType.PAGE;
+    };
+    Page.prototype.getState = function () {
+        var childstate = [];
+        for (var _i = 0, _a = this.children; _i < _a.length; _i++) {
+            var child = _a[_i];
+            childstate.push(child.getState());
+        }
+        return { type: this.getType(), components: childstate };
+    };
+    Page.prototype.getMainComponent = function () {
+        return this.mainComponent;
+    };
+    Page.prototype.addChild = function (component) {
+        _super.prototype.addChild.call(this, component);
+        var type = component.$component.getType();
+        if (type == ComponentType.MAIN) {
+            this.mainComponent = component;
+        }
+    };
+    Page.prototype.findParent = function ($component) {
+        return null;
+    };
+    return Page;
+}(BaseComponent));
+var Component = (function (_super) {
+    __extends(Component, _super);
+    function Component($component) {
+        var _this = _super.call(this, $component) || this;
+        _this.$component = $component;
+        return _this;
+    }
+    Component.prototype.getType = function () {
+        return ComponentType.COMPONENT;
+    };
+    Component.prototype.getState = function () {
+        var childstate = [];
+        for (var _i = 0, _a = this.children; _i < _a.length; _i++) {
+            var child = _a[_i];
+            childstate.push(child.getState());
+        }
+        return { type: this.getType(), url: this.url, components: childstate };
+    };
+    Component.prototype.setContent = function ($content) {
+        _super.prototype.setContent.call(this, $content);
+        this.url = $content.getUrl(true);
+    };
+    Component.prototype.setState = function (state) {
+        if (this.url != state.url) {
+            this.clearContent();
+            var $content = $('<div class="content" data-url="' + state.url + '" data-action="' + ComponentAction.LOADSILENT + '" data-target="' + ComponentType.SELF + '"></div>');
+            this.setContent($content);
+            new LoadAction($content);
+        }
+        _super.prototype.setState.call(this, state);
+    };
+    return Component;
+}(BaseComponent));
+var Overlay = (function (_super) {
+    __extends(Overlay, _super);
+    function Overlay($component) {
+        var _this = _super.call(this, $component) || this;
+        _this.$component = $component;
+        var self = _this;
+        $component.removeClass('hide');
+        $component.addClass('fade');
+        setTimeout(function () {
+            self.$component.removeClass('fade');
+        }, 50);
+        $component.click(function (e) {
+            var $target = $(e.target);
+            if ($target.hasClass('overlay')) {
+                new CloseAction(null, self);
+            }
+        });
+        return _this;
+    }
+    Overlay.new = function () {
+        var $overlay = Overlay.$template.clone();
+        $('body').append($overlay);
+        cystem.apply($overlay);
+        return $overlay.getComponent().getChildren()[0];
+    };
+    Overlay.prototype.getType = function () {
+        return ComponentType.OVERLAY;
+    };
+    Overlay.prototype.getState = function () {
+        var childstate = [];
+        for (var _i = 0, _a = this.children; _i < _a.length; _i++) {
+            var child = _a[_i];
+            childstate.push(child.getState());
+        }
+        return { type: 'overlay', components: childstate };
+    };
+    Overlay.prototype.close = function (silent) {
+        if (silent === void 0) { silent = false; }
+        var self = this;
+        if (this.$component.hasClass('fade'))
+            return;
+        this.$component.addClass('fade');
+        var mainComponent = cystem.page.getMainComponent();
+        var url = mainComponent.$component.find(CONTENT_SELECTOR).getUrl();
+        if (!silent) {
+            var history = new HistoryAction(url);
+        }
+        setTimeout(function () {
+            self.delete();
+            HistoryAction.reloadState();
+        }, 400);
+    };
+    Overlay.findTemplate = function ($el) {
+        if (!this.$template) {
+            var $template = $el.find('.overlay-template');
+            if ($template.length) {
+                var component = $template.findComponent();
+                this.$template = $template;
+                $template.removeClass('overlay-template');
+                $template.detach();
+                component.delete();
+            }
+        }
+    };
+    return Overlay;
+}(BaseComponent));
+var Modal = (function (_super) {
+    __extends(Modal, _super);
+    function Modal($component) {
+        var _this = _super.call(this, $component) || this;
+        _this.$component = $component;
+        return _this;
+    }
+    Modal.prototype.getType = function () {
+        return ComponentType.MODAL;
+    };
+    Modal.new = function () {
+        var $overlay = Modal.$template.clone();
+        $('body').append($overlay);
+        cystem.apply($overlay);
+        return $overlay.getComponent();
+    };
+    Modal.prototype.getState = function () {
+        var childstate = [];
+        for (var _i = 0, _a = this.children; _i < _a.length; _i++) {
+            var child = _a[_i];
+            childstate.push(child.getState());
+        }
+        return { type: 'overlay', components: childstate };
+    };
+    Modal.prototype.close = function () {
+        this.delete();
+    };
+    Modal.findTemplate = function ($el) {
+        if (!this.$template) {
+            var $template = $el.find('.modal-template');
+            if ($template.length) {
+                var component = $template.findComponent();
+                this.$template = $template;
+                $template.removeClass('modal-template');
+                $template.detach();
+                component.delete();
+            }
+        }
+    };
+    return Modal;
+}(BaseComponent));
+//# sourceMappingURL=page.js.map
 var Cystem = (function () {
     function Cystem() {
-        this.parsers = [];
-        this.bindActions($('body'));
+        this.page = new Page();
     }
-    Cystem.prototype.bindActions = function ($el) {
-        if (!OverlayComponent.hasTemplate()) {
-            OverlayComponent.setTemplate($el.find('.overlay-template'));
-        }
-        if (!ModalComponent.hasTemplate()) {
-            ModalComponent.setTemplate($el.find('.overlay-template'));
-        }
-        $el.find('.component-wrapper').each(function (_, el) {
-            new Component($(el));
+    Cystem.prototype.init = function () {
+        this.apply(this.page.$component);
+        new PopstateAction();
+        new KeyActions();
+    };
+    Cystem.prototype.apply = function ($el) {
+        Overlay.findTemplate($el);
+        Modal.findTemplate($el);
+        $el.find(COMPONENT_SELECTOR).addBack(COMPONENT_SELECTOR).each(function (_, el) {
+            var $component = $(el);
+            var type = $component.getType();
+            switch (type) {
+                case ComponentType.OVERLAY:
+                    new Overlay($component);
+                    break;
+                case ComponentType.MODAL:
+                    new Modal($component);
+                    break;
+                default: new Component($component);
+            }
         });
-        $el.find('.overlay-wrapper').addBack('.overlay-wrapper').each(function (_, el) {
-            new OverlayComponent($(el));
-        });
-        $el.find('.modal-wrapper').addBack('.modal-wrapper').each(function (_, el) {
-            new ModalComponent($(el));
-        });
-        $el.find('form').addBack('form').each(function (_, el) {
+        $el.find('form').each(function (_, el) {
             new FormComponent($(el));
         });
         $el.find('.load').each(function (_, el) {
@@ -32012,17 +32312,19 @@ var Cystem = (function () {
             new LinkAction($(el));
         });
         new Materialize($el[0]);
-        new PopstateAction();
-        $el.find('.fixed-action-btn').each(function (_, el) {
-            new FloatingActionButton($(el));
+        $el.find('.tabs.formtab').each(function (_, el) {
+            new Formtab($(el));
         });
         $el.find('.ajax-submit, .submit').each(function (_, el) {
             new SubmitAction($(el));
+        });
+        $el.find('.fixed-action-btn').each(function (_, el) {
+            new FloatingActionButton($(el));
         });
     };
     return Cystem;
 }());
 //# sourceMappingURL=cystem.js.map
 var cystem = new Cystem();
-var state = new StateManager();
+cystem.init();
 //# sourceMappingURL=init.js.map

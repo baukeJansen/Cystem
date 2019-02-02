@@ -1,7 +1,7 @@
-var Formtab = (function () {
-    function Formtab() {
+var Formtab1 = (function () {
+    function Formtab1() {
     }
-    Formtab.prototype.bind = function (el) {
+    Formtab1.prototype.bind = function (el) {
         var self = this;
         var $formtabs = $(el).find('.tabs.formtab');
         $formtabs.each(function (_, tabWrapper) {
@@ -14,7 +14,7 @@ var Formtab = (function () {
             });
         });
     };
-    Formtab.prototype.targetInputs = function ($tabs) {
+    Formtab1.prototype.targetInputs = function ($tabs) {
         setTimeout(function () {
             var $selectedTab = $tabs.has('a.active');
             $tabs.not($selectedTab).each(function (index, tab) {
@@ -28,6 +28,6 @@ var Formtab = (function () {
         }, 1);
     };
     ;
-    return Formtab;
+    return Formtab1;
 }());
 //# sourceMappingURL=formtab.js.map

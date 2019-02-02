@@ -4,6 +4,8 @@ var ComponentType;
     ComponentType["MAIN"] = "main";
     ComponentType["PARENT"] = "parent";
     ComponentType["OVERLAY"] = "overlay";
-    ComponentType["MODAL"] = "popup";
+    ComponentType["MODAL"] = "modal";
+    ComponentType["PAGE"] = "page";
+    ComponentType["COMPONENT"] = "component";
 })(ComponentType || (ComponentType = {}));
 //# sourceMappingURL=componenttarget.js.map

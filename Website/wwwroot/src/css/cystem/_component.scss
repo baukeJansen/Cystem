@@ -1,6 +1,17 @@
-﻿.component {
-    transition: .3s;
-    background: transparent;
+﻿@import 'variables';
+@import 'mixins';
+
+.component {
+    &.show {
+        outline: 4px solid $primary-color;
+
+        @include showOutline();
+    }
+}
+
+.content {
+    transition: .7s;
+    background: $background-color;
     opacity: 1;
 
     &.fade-out {

@@ -1,6 +1,6 @@
 ﻿class OverlayHelper {
     private $window: JQuery<Window>;
-    private _overlays: Overlay[] = [];
+    private _overlays: Overlay2[] = [];
     $body: JQuery;
     $overlayTemplate: JQuery;
 
@@ -26,7 +26,7 @@
 
     close(): void {
         if (this._overlays.length) {
-            var overlay: Overlay = this._overlays.pop();
+            var overlay: Overlay2 = this._overlays.pop();
             overlay.close();
         }
     }

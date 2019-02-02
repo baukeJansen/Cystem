@@ -20,6 +20,7 @@
   <ItemGroup>
     <Content Remove="wwwroot\src\js\actions\ajaxaction.ts" />
     <Content Remove="wwwroot\src\js\actions\popstateaction.ts" />
+    <Content Remove="wwwroot\src\js\animations\fadeoutanimation.ts" />
     <Content Remove="wwwroot\src\js\common\jqextensions.ts" />
     <Content Remove="wwwroot\src\js\components\formcomponent.ts" />
     <Content Remove="wwwroot\src\js\map.ts" />
@@ -130,6 +131,7 @@
   <ItemGroup>
     <TypeScriptCompile Include="wwwroot\src\js\actions\ajaxaction.ts" />
     <TypeScriptCompile Include="wwwroot\src\js\actions\popstateaction.ts" />
+    <TypeScriptCompile Include="wwwroot\src\js\animations\fadeoutanimation.ts" />
     <TypeScriptCompile Include="wwwroot\src\js\common\componentaction.ts" />
     <TypeScriptCompile Include="wwwroot\src\js\common\jqextensions.ts" />
     <TypeScriptCompile Include="wwwroot\src\js\common\method.ts" />

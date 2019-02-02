@@ -1,0 +1,42 @@
+﻿@import 'variables';
+
+.loading {
+    position: relative;
+    background: $background-color-light;
+    overflow: hidden;
+    border-radius: 10px;
+}
+
+.loading::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    left: 50%;
+    padding: 50% 0;
+    border-radius: 100%;
+    transform: translate(-50%);
+    animation-name: loader;
+    animation-duration: 2s;
+    animation-iteration-count: infinite;
+    animation-delay: .5s;
+}
+
+@keyframes loader {
+    0% {
+        top: 30%;
+        transform: translate(-50%) scale(0);
+        opacity: 1;
+        background: $background-color;
+    }
+
+    70% {
+        top: -20%;
+        transform: translate(-50%) scale(1.5);
+        opacity: 0;
+        background: $background-color-light;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}

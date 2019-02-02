@@ -4,6 +4,7 @@
 
         $el.click(function () {
             var action: ComponentAction = $el.getAction();
+
             switch (action) {
                 case ComponentAction.CLOSE:
                     new CloseAction($el);

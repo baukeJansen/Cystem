@@ -1,33 +1,34 @@
 ﻿class Cystem {
-    parsers: IAction[] = [];
+    public page: Page;
 
     constructor() {
-        this.bindActions($('body'));
+        this.page = new Page();
     }
 
-    bindActions($el: JQuery) {
-        if (!OverlayComponent.hasTemplate()) {
-            OverlayComponent.setTemplate($el.find('.overlay-template'));
-        }
+    init() {
+        this.apply(this.page.$component);
 
-        if (!ModalComponent.hasTemplate()) {
-            ModalComponent.setTemplate($el.find('.overlay-template'));
-        }
+        new PopstateAction();
+        new KeyActions();
+    }
 
-        $el.find('.component-wrapper').each(function (_, el) {
-            new Component($(el));
+    apply($el: JQuery) {
+        Overlay.findTemplate($el);
+        Modal.findTemplate($el);
+
+        $el.find(COMPONENT_SELECTOR).addBack(COMPONENT_SELECTOR).each(function (_, el) {
+            var $component = $(el);
+
+            var type: ComponentType = $component.getType();
+
+            switch (type) {
+                case ComponentType.OVERLAY: new Overlay($component); break;
+                case ComponentType.MODAL: new Modal($component); break;
+                default: new Component($component);
+            }
         });
 
-
-        $el.find('.overlay-wrapper').addBack('.overlay-wrapper').each(function (_, el) {
-            new OverlayComponent($(el));
-        });
-
-        $el.find('.modal-wrapper').addBack('.modal-wrapper').each(function (_, el) {
-            new ModalComponent($(el));
-        });
-
-        $el.find('form').addBack('form').each(function (_, el) {
+        $el.find('form').each(function (_, el) {
             new FormComponent($(el));
         });
 
@@ -35,21 +36,22 @@
             new LoadAction($(el));
         });
 
-        $el.find('.ajax-get, .ajax-post, .ajax-delete, .link').each(function (_, el){
+        $el.find('.ajax-get, .ajax-post, .ajax-delete, .link').each(function (_, el) {
             new LinkAction($(el));
         });
 
         new Materialize($el[0]);
 
-        new PopstateAction();
-
-        $el.find('.fixed-action-btn').each(function (_, el) {
-           new FloatingActionButton($(el));
+        $el.find('.tabs.formtab').each(function (_, el) {
+            new Formtab($(el));
         });
-
 
         $el.find('.ajax-submit, .submit').each(function (_, el) {
             new SubmitAction($(el));
+        });
+
+        $el.find('.fixed-action-btn').each(function (_, el) {
+            new FloatingActionButton($(el));
         });
     }
 }

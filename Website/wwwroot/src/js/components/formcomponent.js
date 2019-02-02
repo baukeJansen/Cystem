@@ -4,17 +4,15 @@ var FormComponent = (function () {
         $form.data('component', this);
     }
     FormComponent.prototype.send = function () {
-        this.$form.css({ width: this.$form.outerWidth(), height: this.$form.outerHeight() });
-        this.$form.addClass('loading');
-        var $content = this.$form.find('> .form-content');
-        $content.addClass('send');
+        var $formContent = this.$form.find('> .form-content');
+        new SubmitAnimation(this.$form, $formContent);
     };
     FormComponent.prototype.succes = function () {
         this.$form.removeClass('loading').addClass('succes');
     };
     FormComponent.prototype.error = function (message) {
         this.$form.removeClass('loading').addClass('error');
-        this.$form.empty().append($(message));
+        new FadeInAnimation(this.$form, message);
     };
     FormComponent.prototype.getMethod = function () {
         var method = this.$form.attr('method').toLowerCase();

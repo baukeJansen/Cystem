@@ -1,13 +1,13 @@
-﻿class Component {
+﻿class Component2 {
     protected ready: boolean = true;
     protected fnReady: Function[] = [];
-    public target: Component = null;
+    public target: Component2 = null;
 
     constructor(public $component: JQuery) {
         var targetType: ComponentType = $component.getTarget();
 
         if (targetType) {
-            this.target = $.getTargetComponent(this, targetType);
+            //this.target = $.getTargetComponent(this, targetType);
         }
 
         $component.data('component', this);

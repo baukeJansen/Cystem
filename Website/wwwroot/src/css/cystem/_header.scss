@@ -1,12 +1,26 @@
 ﻿@import 'variables';
+@import 'mixins';
 
 header {
+    .component.show {
+        box-shadow: none;
+        outline: none;
+
+        nav {
+            @include showOutline();
+        }
+    }
+
     nav {
         position: fixed;
         top: 0;
         left: 0;
         width: 100%;
         z-index: 997;
+
+        .row {
+            padding: 0;
+        }
     }
 
     .admin-icons {

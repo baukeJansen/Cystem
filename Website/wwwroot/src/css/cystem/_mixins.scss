@@ -1,1 +1,7 @@
 ﻿@import 'variables';
+
+@mixin showOutline() {
+    box-shadow: 0 0 0 1px $secondary-color;
+    outline: 2px dashed $secondary-color;
+    outline-offset: -2px;
+}

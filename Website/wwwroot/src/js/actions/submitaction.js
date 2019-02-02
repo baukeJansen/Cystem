@@ -21,9 +21,9 @@ var SubmitAction = (function () {
     }
     SubmitAction.prototype.succes = function (response) {
         var self = this;
-        var parentComponent = $.getParentComponent(this.component);
+        var mainComponent = cystem.page.getMainComponent();
         this.formComponent.succes();
-        new ReloadAction(parentComponent);
+        new ReloadAction(mainComponent);
         setTimeout(function () {
             new CloseAction(self.$el);
         }, 500);

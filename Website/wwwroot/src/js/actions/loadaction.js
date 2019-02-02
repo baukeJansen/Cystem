@@ -2,25 +2,25 @@ var LoadAction = (function () {
     function LoadAction($el, method) {
         if (method === void 0) { method = Method.GET; }
         this.$el = $el;
+        var self = this;
         var action = $el.getAction();
-        this.component = $el.findComponent();
-        this.component.empty();
+        var target = $el.getTarget();
+        this.component = $el.findComponent().getTargetComponent(target);
+        this.component.clearContent();
         var url = $el.getUrl();
         var data = $el.getData();
-        var ajax = new AjaxAction(method, url, data);
-        ajax.send(this.onResult, this);
+        var history = null;
         if (method === Method.GET && action === ComponentAction.LOAD) {
-            var target = $el.getTarget();
-            var state = {
-                target: target
-            };
-            new HistoryAction(url, state);
+            history = new HistoryAction(url);
         }
+        var ajax = new AjaxAction(method, url, data);
+        ajax.send2(function (response) { self.succes.call(self, response, history); });
     }
-    LoadAction.prototype.onResult = function (response) {
+    LoadAction.prototype.succes = function (response, history) {
         var $response = $(response);
-        this.component.load($response);
-        cystem.bindActions($response);
+        this.component.setContent($response);
+        cystem.apply($response);
+        HistoryAction.reloadState();
     };
     return LoadAction;
 }());
