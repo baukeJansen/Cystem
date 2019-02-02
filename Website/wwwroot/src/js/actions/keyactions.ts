@@ -1,4 +1,4 @@
-﻿class KeyActions {
+﻿class KeyActions implements IAction {
     constructor() {
         var press = false;
 

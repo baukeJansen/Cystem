@@ -1,4 +1,4 @@
-﻿class ReloadAction {
+﻿class ReloadAction implements IAction {
     constructor(private component?: IComponent, private $el?: JQuery) {
         if (component) {
             this.$el = component.$component;

@@ -35,10 +35,11 @@
       "wwwroot/src/js/common/method.js",
       "wwwroot/src/js/common/jqextensions.js",
 
-      "wwwroot/src/js/components/component.js",
-      "wwwroot/src/js/components/formcomponent.js",
-      "wwwroot/src/js/components/modalcomponent.js",
-      "wwwroot/src/js/components/overlaycomponent.js",
+      "wwwroot/src/js/animations/fadeoutanimation.js",
+      "wwwroot/src/js/animations/fadeinanimation.js",
+      "wwwroot/src/js/animations/submitanimation.js",
+      "wwwroot/src/js/animations/slideoutanimation.js",
+      "wwwroot/src/js/animations/slideinanimation.js",
 
       "wwwroot/src/js/actions/componentaction.js",
       "wwwroot/src/js/actions/loadaction.js",
@@ -54,16 +55,14 @@
       "wwwroot/src/js/actions/floatingactionbutton.js",
       "wwwroot/src/js/actions/keyactions.js",
 
-      "wwwroot/src/js/animations/fadeoutanimation.js",
-      "wwwroot/src/js/animations/fadeinanimation.js",
-      "wwwroot/src/js/animations/submitanimation.js",
-      "wwwroot/src/js/animations/slideoutanimation.js",
-      "wwwroot/src/js/animations/slideinanimation.js",
+      "wwwroot/src/js/components/basecomponent.js",
+      "wwwroot/src/js/components/page.js",
+      "wwwroot/src/js/components/component.js",
+      "wwwroot/src/js/components/overlay.js",
+      "wwwroot/src/js/components/modal.js",
+      "wwwroot/src/js/components/formcomponent.js",
 
-      "wwwroot/src/js/page.js",
-
-      "wwwroot/src/js/cystem.js",
-      "wwwroot/src/js/init.js"
+      "wwwroot/src/js/cystem.js"
     ],
     "minify": {
       "enabled": true,

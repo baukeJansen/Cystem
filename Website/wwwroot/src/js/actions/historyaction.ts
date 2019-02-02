@@ -1,4 +1,4 @@
-﻿class HistoryAction {
+﻿class HistoryAction implements IAction {
     public constructor(url) {
         var state: object = cystem.page.getState();
         history.pushState(state, '', url);

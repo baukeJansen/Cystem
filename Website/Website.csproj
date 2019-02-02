@@ -28,7 +28,6 @@
 
   <ItemGroup>
     <None Remove="wwwroot\src\js\common\method.ts" />
-    <None Remove="wwwroot\src\js\overlayhelper.ts" />
     <None Remove="wwwroot\src\js\servicemanager.ts" />
   </ItemGroup>
 
@@ -108,21 +107,9 @@
     <None Include="wwwroot\src\css\materialize\components\_waves.scss" />
     <None Include="wwwroot\src\css\materialize\_materialize.scss" />
     <None Include="wwwroot\src\css\website.scss" />
-    <None Include="wwwroot\src\js\action.js" />
-    <None Include="wwwroot\src\js\action.js.map" />
-    <None Include="wwwroot\src\js\action.ts" />
     <None Include="wwwroot\src\js\cystem.js" />
     <None Include="wwwroot\src\js\cystem.js.map" />
     <None Include="wwwroot\src\js\cystem.ts" />
-    <None Include="wwwroot\src\js\modalhelper.js" />
-    <None Include="wwwroot\src\js\modalhelper.js.map" />
-    <None Include="wwwroot\src\js\modalhelper.ts" />
-    <None Include="wwwroot\src\js\navigate.js" />
-    <None Include="wwwroot\src\js\navigate.js.map" />
-    <None Include="wwwroot\src\js\navigate.ts" />
-    <None Include="wwwroot\src\js\overlay.js" />
-    <None Include="wwwroot\src\js\overlay.js.map" />
-    <None Include="wwwroot\src\js\overlay.ts" />
     <None Include="wwwroot\src\lib\chart.js" />
     <None Include="wwwroot\src\lib\materialize.js" />
     <None Include="wwwroot\src\lib\moment.js" />
@@ -136,7 +123,6 @@
     <TypeScriptCompile Include="wwwroot\src\js\common\jqextensions.ts" />
     <TypeScriptCompile Include="wwwroot\src\js\common\method.ts" />
     <TypeScriptCompile Include="wwwroot\src\js\components\formcomponent.ts" />
-    <TypeScriptCompile Include="wwwroot\src\js\overlayhelper.ts" />
   </ItemGroup>
 
   <ItemGroup>

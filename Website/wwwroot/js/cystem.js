@@ -31453,48 +31453,52 @@ jQuery.fn.extend({
     }
 });
 //# sourceMappingURL=jqextensions.js.map
-var Component2 = (function () {
-    function Component2($component) {
-        this.$component = $component;
-        this.ready = true;
-        this.fnReady = [];
-        this.target = null;
-        var targetType = $component.getTarget();
-        if (targetType) {
-        }
-        $component.data('component', this);
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
     }
-    Component2.prototype.empty = function () {
-        var self = this;
-        this.ready = false;
-        var $children = this.$component.children();
-        this.$component.css({ height: $children.outerHeight() });
-        $children.addClass('fade-out');
-        setTimeout(function () {
-            $children.remove();
-            self.ready = true;
-            $.each(self.fnReady, function (_, fn) {
-                fn();
-            });
-        }, 50);
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
-    Component2.prototype.load = function ($replace) {
-        var self = this;
-        $replace.addClass('fade-in');
-        if (!this.ready) {
-            this.fnReady.push(function () { self.load($replace); });
-        }
-        else {
-            this.$component.append($replace);
-            this.$component.css({ height: $replace.outerHeight() });
-            setTimeout(function () {
-                $replace.removeClass('fade-in');
-                self.$component.css({ height: 'auto' });
-            }, 300);
-        }
+})();
+var Component = (function (_super) {
+    __extends(Component, _super);
+    function Component($component) {
+        var _this = _super.call(this, $component) || this;
+        _this.$component = $component;
+        return _this;
+    }
+    Component.prototype.getType = function () {
+        return ComponentType.COMPONENT;
     };
-    return Component2;
-}());
+    Component.prototype.getState = function () {
+        var childstate = [];
+        for (var _i = 0, _a = this.children; _i < _a.length; _i++) {
+            var child = _a[_i];
+            childstate.push(child.getState());
+        }
+        return { type: this.getType(), url: this.url, components: childstate };
+    };
+    Component.prototype.setContent = function ($content) {
+        _super.prototype.setContent.call(this, $content);
+        this.url = $content.getUrl(true);
+    };
+    Component.prototype.setState = function (state) {
+        if (this.url != state.url) {
+            this.clearContent();
+            var $content = $('<div class="content" data-url="' + state.url + '" data-action="' + ComponentAction.LOADSILENT + '" data-target="' + ComponentType.SELF + '"></div>');
+            this.setContent($content);
+            new LoadAction($content);
+        }
+        _super.prototype.setState.call(this, state);
+    };
+    return Component;
+}(BaseComponent));
 //# sourceMappingURL=component.js.map
 var FormComponent = (function () {
     function FormComponent($form) {
@@ -31526,79 +31530,6 @@ var FormComponent = (function () {
     return FormComponent;
 }());
 //# sourceMappingURL=formcomponent.js.map
-var ModalComponent = (function () {
-    function ModalComponent($component) {
-        this.$component = $component;
-        var self = this;
-        $component.removeClass('hide');
-        $component.addClass('fade');
-        setTimeout(function () {
-            self.$component.removeClass('fade');
-        }, 50);
-        $component.data('component', this);
-    }
-    ModalComponent.prototype.close = function () {
-        var self = this;
-        if (this.$component.hasClass('fade'))
-            return;
-        this.$component.addClass('fade');
-        setTimeout(function () {
-            self.$component.remove();
-        }, 400);
-    };
-    ModalComponent.setTemplate = function ($template) {
-        if ($template.length) {
-            $template.removeClass('overlay-template');
-            $template.detach();
-            this.$template = $template;
-        }
-    };
-    ModalComponent.hasTemplate = function () {
-        return this.$template != null;
-    };
-    return ModalComponent;
-}());
-//# sourceMappingURL=modalcomponent.js.map
-var OverlayComponent = (function () {
-    function OverlayComponent($component) {
-        this.$component = $component;
-        var self = this;
-        $component.removeClass('hide');
-        $component.addClass('fade');
-        setTimeout(function () {
-            self.$component.removeClass('fade');
-        }, 50);
-        $component.click(function (e) {
-            var $target = $(e.target);
-            if ($target.hasClass('overlay-wrapper')) {
-            }
-        });
-        $component.data('component', this);
-    }
-    OverlayComponent.prototype.close = function () {
-    };
-    OverlayComponent.setTemplate = function ($template) {
-        if ($template.length) {
-            $template.removeClass('overlay-template');
-            $template.detach();
-            this.$template = $template;
-        }
-    };
-    OverlayComponent.hasTemplate = function () {
-        return this.$template != null;
-    };
-    OverlayComponent.$template = null;
-    return OverlayComponent;
-}());
-//# sourceMappingURL=overlaycomponent.js.map
-var ComponentActio = (function () {
-    function ComponentActio($component) {
-        var component = new Component2($component);
-        $component.data('component', component);
-    }
-    return ComponentActio;
-}());
-//# sourceMappingURL=componentaction.js.map
 var LoadAction = (function () {
     function LoadAction($el, method) {
         if (method === void 0) { method = Method.GET; }
@@ -31995,288 +31926,6 @@ var SlideInAnimation = (function () {
     return SlideInAnimation;
 }());
 //# sourceMappingURL=slideinanimation.js.map
-var __extends = (this && this.__extends) || (function () {
-    var extendStatics = function (d, b) {
-        extendStatics = Object.setPrototypeOf ||
-            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-        return extendStatics(d, b);
-    }
-    return function (d, b) {
-        extendStatics(d, b);
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-})();
-var COMPONENT_SELECTOR = '.component';
-var CONTENT_SELECTOR = '.content';
-var COMPONENT_DATA = 'component';
-var BaseComponent = (function () {
-    function BaseComponent($component) {
-        this.$component = $component;
-        this.children = [];
-        $component.setComponent(this);
-        this.parent = this.findParent($component);
-        if (this.parent) {
-            this.parent.addChild(this);
-        }
-        this.url = $component.find(CONTENT_SELECTOR).getUrl();
-    }
-    BaseComponent.prototype.setState = function (state) {
-        for (var i = 0; i < this.children.length || i < state.components.length; i++) {
-            var child = this.children[i];
-            var childState = state.components[i];
-            if (!child) {
-                switch (childState.type) {
-                    case ComponentType.OVERLAY:
-                        var overlay = Overlay.new();
-                        overlay.setState(childState.components[0]);
-                        break;
-                    case ComponentType.MODAL:
-                        var modal = Modal.new();
-                        modal.setState(childState.components[0]);
-                        break;
-                }
-            }
-            else if (!childState) {
-                child.close(true);
-            }
-            else if (child.getType() != childState.type) {
-                console.error('missing - set state - replace');
-            }
-            else {
-                child.setState(childState);
-            }
-        }
-    };
-    BaseComponent.prototype.findParent = function ($component) {
-        var $parent = $component.parent().closest(COMPONENT_SELECTOR + ', body');
-        return $parent.getComponent();
-    };
-    BaseComponent.prototype.getTargetComponent = function (actionTarget) {
-        if (actionTarget === void 0) { actionTarget = null; }
-        if (!actionTarget) {
-            actionTarget = this.$component.getTarget();
-        }
-        switch (actionTarget) {
-            case ComponentType.MAIN: return cystem.page.getMainComponent();
-            case ComponentType.PARENT: return this.parent;
-            case ComponentType.OVERLAY: return Overlay.new();
-            case ComponentType.MODAL: return Modal.new();
-            case ComponentType.SELF:
-            default:
-                return this;
-        }
-    };
-    BaseComponent.prototype.addChild = function (component) {
-        this.children.push(component);
-    };
-    BaseComponent.prototype.removeChild = function (component) {
-        this.children.splice(this.children.indexOf(component), 1);
-    };
-    BaseComponent.prototype.getChildren = function () {
-        return this.children;
-    };
-    BaseComponent.prototype.getParent = function () {
-        return this.parent;
-    };
-    BaseComponent.prototype.clearContent = function () {
-        var self = this;
-        this.$component.addClass('loading');
-        this.children = [];
-        var $children = this.$component.children();
-        new FadeOutAnimation(this.$component, $children, function () {
-            $children.remove();
-        });
-    };
-    BaseComponent.prototype.delete = function () {
-        this.$component.remove();
-        this.parent.removeChild(this);
-    };
-    BaseComponent.prototype.setContent = function ($content) {
-        this.$component.removeClass('loading');
-        this.$component.append($content);
-        new FadeInAnimation(this.$component, $content);
-    };
-    BaseComponent.prototype.close = function () {
-        this.parent.close();
-    };
-    return BaseComponent;
-}());
-var Page = (function (_super) {
-    __extends(Page, _super);
-    function Page() {
-        var _this = _super.call(this, $('body')) || this;
-        var self = _this;
-        return _this;
-    }
-    Page.prototype.getType = function () {
-        return ComponentType.PAGE;
-    };
-    Page.prototype.getState = function () {
-        var childstate = [];
-        for (var _i = 0, _a = this.children; _i < _a.length; _i++) {
-            var child = _a[_i];
-            childstate.push(child.getState());
-        }
-        return { type: this.getType(), components: childstate };
-    };
-    Page.prototype.getMainComponent = function () {
-        return this.mainComponent;
-    };
-    Page.prototype.addChild = function (component) {
-        _super.prototype.addChild.call(this, component);
-        var type = component.$component.getType();
-        if (type == ComponentType.MAIN) {
-            this.mainComponent = component;
-        }
-    };
-    Page.prototype.findParent = function ($component) {
-        return null;
-    };
-    return Page;
-}(BaseComponent));
-var Component = (function (_super) {
-    __extends(Component, _super);
-    function Component($component) {
-        var _this = _super.call(this, $component) || this;
-        _this.$component = $component;
-        return _this;
-    }
-    Component.prototype.getType = function () {
-        return ComponentType.COMPONENT;
-    };
-    Component.prototype.getState = function () {
-        var childstate = [];
-        for (var _i = 0, _a = this.children; _i < _a.length; _i++) {
-            var child = _a[_i];
-            childstate.push(child.getState());
-        }
-        return { type: this.getType(), url: this.url, components: childstate };
-    };
-    Component.prototype.setContent = function ($content) {
-        _super.prototype.setContent.call(this, $content);
-        this.url = $content.getUrl(true);
-    };
-    Component.prototype.setState = function (state) {
-        if (this.url != state.url) {
-            this.clearContent();
-            var $content = $('<div class="content" data-url="' + state.url + '" data-action="' + ComponentAction.LOADSILENT + '" data-target="' + ComponentType.SELF + '"></div>');
-            this.setContent($content);
-            new LoadAction($content);
-        }
-        _super.prototype.setState.call(this, state);
-    };
-    return Component;
-}(BaseComponent));
-var Overlay = (function (_super) {
-    __extends(Overlay, _super);
-    function Overlay($component) {
-        var _this = _super.call(this, $component) || this;
-        _this.$component = $component;
-        var self = _this;
-        $component.removeClass('hide');
-        $component.addClass('fade');
-        setTimeout(function () {
-            self.$component.removeClass('fade');
-        }, 50);
-        $component.click(function (e) {
-            var $target = $(e.target);
-            if ($target.hasClass('overlay')) {
-                new CloseAction(null, self);
-            }
-        });
-        return _this;
-    }
-    Overlay.new = function () {
-        var $overlay = Overlay.$template.clone();
-        $('body').append($overlay);
-        cystem.apply($overlay);
-        return $overlay.getComponent().getChildren()[0];
-    };
-    Overlay.prototype.getType = function () {
-        return ComponentType.OVERLAY;
-    };
-    Overlay.prototype.getState = function () {
-        var childstate = [];
-        for (var _i = 0, _a = this.children; _i < _a.length; _i++) {
-            var child = _a[_i];
-            childstate.push(child.getState());
-        }
-        return { type: 'overlay', components: childstate };
-    };
-    Overlay.prototype.close = function (silent) {
-        if (silent === void 0) { silent = false; }
-        var self = this;
-        if (this.$component.hasClass('fade'))
-            return;
-        this.$component.addClass('fade');
-        var mainComponent = cystem.page.getMainComponent();
-        var url = mainComponent.$component.find(CONTENT_SELECTOR).getUrl();
-        if (!silent) {
-            var history = new HistoryAction(url);
-        }
-        setTimeout(function () {
-            self.delete();
-            HistoryAction.reloadState();
-        }, 400);
-    };
-    Overlay.findTemplate = function ($el) {
-        if (!this.$template) {
-            var $template = $el.find('.overlay-template');
-            if ($template.length) {
-                var component = $template.findComponent();
-                this.$template = $template;
-                $template.removeClass('overlay-template');
-                $template.detach();
-                component.delete();
-            }
-        }
-    };
-    return Overlay;
-}(BaseComponent));
-var Modal = (function (_super) {
-    __extends(Modal, _super);
-    function Modal($component) {
-        var _this = _super.call(this, $component) || this;
-        _this.$component = $component;
-        return _this;
-    }
-    Modal.prototype.getType = function () {
-        return ComponentType.MODAL;
-    };
-    Modal.new = function () {
-        var $overlay = Modal.$template.clone();
-        $('body').append($overlay);
-        cystem.apply($overlay);
-        return $overlay.getComponent();
-    };
-    Modal.prototype.getState = function () {
-        var childstate = [];
-        for (var _i = 0, _a = this.children; _i < _a.length; _i++) {
-            var child = _a[_i];
-            childstate.push(child.getState());
-        }
-        return { type: 'overlay', components: childstate };
-    };
-    Modal.prototype.close = function () {
-        this.delete();
-    };
-    Modal.findTemplate = function ($el) {
-        if (!this.$template) {
-            var $template = $el.find('.modal-template');
-            if ($template.length) {
-                var component = $template.findComponent();
-                this.$template = $template;
-                $template.removeClass('modal-template');
-                $template.detach();
-                component.delete();
-            }
-        }
-    };
-    return Modal;
-}(BaseComponent));
-//# sourceMappingURL=page.js.map
 var Cystem = (function () {
     function Cystem() {
         this.page = new Page();
@@ -32324,7 +31973,6 @@ var Cystem = (function () {
     };
     return Cystem;
 }());
-//# sourceMappingURL=cystem.js.map
 var cystem = new Cystem();
 cystem.init();
-//# sourceMappingURL=init.js.map
+//# sourceMappingURL=cystem.js.map

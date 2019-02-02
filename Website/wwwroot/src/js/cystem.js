@@ -45,4 +45,6 @@ var Cystem = (function () {
     };
     return Cystem;
 }());
+var cystem = new Cystem();
+cystem.init();
 //# sourceMappingURL=cystem.js.map

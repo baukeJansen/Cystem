@@ -1,4 +1,4 @@
-﻿class PopstateAction {
+﻿class PopstateAction implements IAction {
     //component: ;
 
     constructor() {

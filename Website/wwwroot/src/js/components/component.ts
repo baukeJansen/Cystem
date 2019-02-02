@@ -1,51 +1,36 @@
-﻿class Component2 {
-    protected ready: boolean = true;
-    protected fnReady: Function[] = [];
-    public target: Component2 = null;
-
-    constructor(public $component: JQuery) {
-        var targetType: ComponentType = $component.getTarget();
-
-        if (targetType) {
-            //this.target = $.getTargetComponent(this, targetType);
-        }
-
-        $component.data('component', this);
+﻿class Component extends BaseComponent {
+    public constructor(public $component: JQuery) {
+        super($component);
     }
 
-    empty(): void {
-        var self = this;
-        this.ready = false;
-
-        var $children = this.$component.children();
-        this.$component.css({ height: $children.outerHeight() });
-        $children.addClass('fade-out');
-
-        setTimeout(function () {
-            $children.remove();
-            self.ready = true;
-
-            $.each(self.fnReady, function (_, fn) {
-                fn();
-            });
-        }, 50);
+    public getType(): ComponentType {
+        return ComponentType.COMPONENT;
     }
 
-    load($replace: JQuery): void {
-        var self = this;
-        $replace.addClass('fade-in');
-
-        if (!this.ready) {
-            this.fnReady.push(function () { self.load($replace); });
-        } else {
-            this.$component.append($replace);
-
-            this.$component.css({ height: $replace.outerHeight() });
-
-            setTimeout(function () {
-                $replace.removeClass('fade-in');
-                self.$component.css({ height: 'auto' });
-            }, 300);
+    public getState(): object {
+        var childstate: object[] = [];
+        for (var child of this.children) {
+            childstate.push(child.getState());
         }
+
+        return { type: this.getType(), url: this.url, components: childstate };
+    }
+
+    public setContent($content: JQuery): void {
+        super.setContent($content);
+
+        this.url = $content.getUrl(true);
+    }
+
+    public setState(state: any) {
+        if (this.url != state.url) {
+            this.clearContent();
+
+            var $content = $('<div class="content" data-url="' + state.url + '" data-action="' + ComponentAction.LOADSILENT + '" data-target="' + ComponentType.SELF + '"></div>');
+            this.setContent($content);
+            new LoadAction($content);
+        }
+
+        super.setState(state);
     }
 }

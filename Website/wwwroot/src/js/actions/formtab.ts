@@ -1,4 +1,4 @@
-﻿class Formtab {
+﻿class Formtab implements IAction {
     constructor($formtab: JQuery) {
         var self: Formtab = this;
         var $tabs = $formtab.find('.tab');
