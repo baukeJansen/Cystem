@@ -1,7 +1,7 @@
 ﻿using AutoMapper;
+using Website.Common.Models;
 using Website.Common.Models.EAV;
 using Website.Common.Viewmodels;
-using Attribute = Website.Common.Models.EAV.Attribute;
 
 namespace Website.Common.AutoMapper
 {
@@ -13,8 +13,8 @@ namespace Website.Common.AutoMapper
             CreateMap<ValueViewModel, Value>(MemberList.None)
                 .AfterMap((s, d) => { d.SerializedString = s.SerializedString; });
 
-            CreateMap<Attribute, AttributeViewModel>(MemberList.None);
-            CreateMap<AttributeViewModel, Attribute>(MemberList.None);
+            CreateMap<Group, GroupViewModel>(MemberList.None);
+            CreateMap<GroupViewModel, Group>(MemberList.None);
 
             CreateMap<Value, GenericViewModel>(MemberList.None);
             CreateMap<GenericViewModel, Value>(MemberList.None);

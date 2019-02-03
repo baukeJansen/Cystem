@@ -1,13 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Website.Common.Enums;
-using Website.Common.Models.EAV;
+using Website.Common.Models;
 
 namespace Website.Views.HtmlHelpers
 {
-    public interface IAttributeHelper
+    public interface IGroupHelper
     {
-        Task Render(Attribute attribute, DisplaySetting options = DisplaySetting.Render);
-        List<Attribute> GetAttributes();
+        Task Render(Group group, DisplaySetting options = DisplaySetting.Render);
+        List<Group> GetGroups();
     }
 }

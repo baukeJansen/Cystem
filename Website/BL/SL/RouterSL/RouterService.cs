@@ -37,7 +37,7 @@ namespace Website.BL.SL.RouterSL
         public override void Store(GenericViewModel viewModel)
         {
             List<Value> values;
-            if (viewModel.Value.AttributeId != 0)
+            if (viewModel.Value.GroupId != 0)
             {
                 values = new List<Value> { viewModel.Value };
             }

@@ -1,12 +1,10 @@
 ﻿using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Routing;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Website.Common.Data;
 using Website.Common.Enums;
-using Website.Common.Extensions;
+using Website.Common.Models;
 using Website.Common.Models.EAV;
 using Website.Common.Viewmodels;
 using Website.ViewComponents;
@@ -33,28 +31,28 @@ namespace Website.Views.HtmlHelpers
             {
                 Value = new Value
                 {
-                    Attribute = new Attribute { Label = "Link" },
+                    Group = new Group { Label = "Link" },
                     String = url,
                     Values = new List<Value>
                     {
                         new Value
                         {
-                            Attribute = new Attribute { Label = "Template" },
+                            Group = new Group { Label = "Template" },
                             String = link ? "link" : "button"
                         },
                         new Value
                         {
-                            Attribute = new Attribute { Label = "Text" },
+                            Group = new Group { Label = "Text" },
                             String = buttonText
                         },
                         new Value
                         {
-                            Attribute = new Attribute { Label = "Icon" },
+                            Group = new Group { Label = "Icon" },
                             String = icon
                         },
                         new Value
                         {
-                            Attribute = new Attribute{ Label = "Attributes" },
+                            Group = new Group{ Label = "Attributes" },
                             String = ParseAttributes(attributes)
                         }
                     }

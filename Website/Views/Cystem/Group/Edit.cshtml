@@ -2,16 +2,15 @@
 @using Website.Controllers.Cystem
 @using Website.Common.Viewmodels
 @using Website.Common.Enums
-@using ValueType = Website.Common.Enums.ValueType
-@model AttributeViewModel
+@model GroupViewModel
 
 <div class="container">
     <div class="row">
         <div class="col s12">
-            <h1>Attribute</h1>
+            <h1>Group</h1>
         </div>
     </div>
-    @using (Html.BeginForm<AttributeController>(c => c.Store(Param<AttributeViewModel>.Any), new { Area = "Cystem" }, FormMethod.Post, true, new { }))
+    @using (Html.BeginForm<GroupController>(c => c.Store(Param<GroupViewModel>.Any), new { Area = "Cystem" }, FormMethod.Post, true, new { }))
     {
         @Html.HiddenFor(m => m.Id)
 

@@ -96,20 +96,20 @@ IHtmlContent CreateTab(string tabName, ValueType tabType, string valueExpression
 
 <div class="row">
     <div class="col s12">
-        @await Render.SelectButton("/cystem/select-attribute/", "Attribute")
+        @await Render.SelectButton("/cystem/select-attribute/", "Group")
     </div>
 </div>
 
 <div class="row">
     <div class="col s12 input-field ">
-        @Html.Editor(Expression + ".AttributeId")
-        @Html.Label("Attribute")
+        @Html.Editor(Expression + ".GroupId")
+        @Html.Label("Group")
     </div>
 </div>
 
 <div class="row">
     <div class="col s12 input-field ">
-        @Html.TextBox(Expression + ".GroupId")
+        @Html.TextBox(Expression + ".ParentId")
         @Html.Label("Parent")
     </div>
 </div>

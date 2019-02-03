@@ -1,7 +1,6 @@
 ﻿@using Website.Common.Viewmodels
 @using Website.Common.Models.EAV
 @using Website.Common.Enums
-@using Attribute = Website.Common.Models.EAV.Attribute
 @model GenericViewModel
 @inject IValueHelper Value
 
@@ -18,7 +17,7 @@
             sourceValue.Values = new List<Value>();
         }
 
-        int templateIndex = sourceValue.Values.FindIndex(v => v.Attribute?.Label == "Template");
+        int templateIndex = sourceValue.Values.FindIndex(v => v.Group?.Label == "Template");
         if (templateIndex != -1)
         {
             sourceValue.Values[templateIndex] = template;

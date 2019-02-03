@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Website.DAL;
 
 namespace Website.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20190203085124_extendValue")]
+    partial class extendValue
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -48,13 +50,28 @@ namespace Website.Migrations
                     b.ToTable("Daily");
                 });
 
+            modelBuilder.Entity("Website.Common.Models.EAV.Attribute", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Label");
+
+                    b.Property<int>("Type");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Attributes");
+                });
+
             modelBuilder.Entity("Website.Common.Models.EAV.Value", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int>("GroupId");
+                    b.Property<int>("AttributeId");
 
                     b.Property<int?>("Int");
 
@@ -74,7 +91,7 @@ namespace Website.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("GroupId");
+                    b.HasIndex("AttributeId");
 
                     b.HasIndex("ParentId");
 
@@ -83,26 +100,11 @@ namespace Website.Migrations
                     b.ToTable("Values");
                 });
 
-            modelBuilder.Entity("Website.Common.Models.Group", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Label");
-
-                    b.Property<int>("Type");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Groups");
-                });
-
             modelBuilder.Entity("Website.Common.Models.EAV.Value", b =>
                 {
-                    b.HasOne("Website.Common.Models.Group", "Group")
+                    b.HasOne("Website.Common.Models.EAV.Attribute", "Attribute")
                         .WithMany("Values")
-                        .HasForeignKey("GroupId")
+                        .HasForeignKey("AttributeId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("Website.Common.Models.EAV.Value", "Parent")

@@ -1,14 +1,14 @@
 ﻿@using Website.Common.Viewmodels
 @using Website.Common.Models.EAV
-@inject IAttributeHelper AttributeHelper
+@inject IGroupHelper AttributeHelper
 @model GenericViewModel
 
 <li class="collection-item related-attribute">
-    @if (Model.Value.RelatedAttribute != null)
+    @if (Model.Value.RelatedGroup != null)
     {
         <div class="row">
             <div class="col s12 l12">
-                @Model.Value.RelatedAttribute.Label
+                @Model.Value.RelatedGroup.Label
             </div>
         </div>
     }

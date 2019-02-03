@@ -1,9 +1,7 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Mvc;
-using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Website.Common.Models.EAV;
+using Website.Common.Models;
 using Website.Common.Viewmodels;
 using Website.DAL;
 using Website.Views.HtmlHelpers;
@@ -11,53 +9,53 @@ using Website.Views.HtmlHelpers;
 namespace Website.Controllers.Cystem
 {
     [Area("Cystem")]
-    public class AttributeController : BaseController<AttributeViewModel>
+    public class GroupController : BaseController<GroupViewModel>
     {
         private readonly DataContext context;
         private readonly IMapper mapper;
 
-        public AttributeController(DataContext context, IMapper mapper, IValueHelper valueHelper) : base(valueHelper)
+        public GroupController(DataContext context, IMapper mapper, IValueHelper valueHelper) : base(valueHelper)
         {
             this.context = context;
             this.mapper = mapper;
         }
 
         [HttpGet]
-        public IActionResult Overview(AttributeOverviewViewModel vm)
+        public IActionResult Overview(GroupOverviewViewModel vm)
         {
-            vm.Attributes = context.Attributes.ToList();
+            vm.Groups = context.Groups.ToList();
             return View("Overview", vm);
         }
 
         [HttpGet]
-        public IActionResult Create(AttributeViewModel vm)
+        public IActionResult Create(GroupViewModel vm)
         {
             vm.Types = ValueController.GetValueTypes();
             return View("Edit", vm);
         }
 
         [HttpGet]
-        public IActionResult Edit(AttributeViewModel vm)
+        public IActionResult Edit(GroupViewModel vm)
         {
-            Attribute model = context.Attributes.Find(vm.Id);
+            Group model = context.Groups.Find(vm.Id);
             mapper.Map(model, vm);
             vm.Types = ValueController.GetValueTypes();
             return View("Edit", vm);
         }
 
         [HttpPost]
-        public IActionResult Store(AttributeViewModel vm)
+        public IActionResult Store(GroupViewModel vm)
         {
             if (vm.Id == 0)
             {
-                Attribute model = new Attribute();
+                Group model = new Group();
 
                 model = mapper.Map(vm, model);
-                context.Attributes.Add(model);
+                context.Groups.Add(model);
             }
             else
             {
-                Attribute model = context.Attributes.Find(vm.Id);
+                Group model = context.Groups.Find(vm.Id);
                 model = mapper.Map(vm, model);
                 context.Update(model);
             }
@@ -67,9 +65,9 @@ namespace Website.Controllers.Cystem
         }
 
         [HttpDelete]
-        public IActionResult Delete(AttributeViewModel vm)
+        public IActionResult Delete(GroupViewModel vm)
         {
-            context.Remove(new Attribute { Id = vm.Id });
+            context.Remove(new Group { Id = vm.Id });
             context.SaveChanges();
             return Ok();
         }

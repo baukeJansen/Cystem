@@ -8,7 +8,7 @@ namespace Website.DAL
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options)
         { }
-        public DbSet<Attribute> Attributes { get; set; }
+        public DbSet<Group> Groups { get; set; }
 
         public DbSet<Value> Values { get; set; }
 
@@ -20,7 +20,7 @@ namespace Website.DAL
 
             /* Indexes */
             modelBuilder.Entity<Value>()
-                .HasIndex(v => v.AttributeId);
+                .HasIndex(v => v.GroupId);
 
             modelBuilder.Entity<Value>()
                 .HasIndex(p => p.SerializedString);

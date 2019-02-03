@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
-using Website.Common.Models.EAV;
+using Website.Common.Models;
 
 namespace Website.Common.Viewmodels
 {
-    public class AttributeOverviewViewModel : ActionViewModel
+    public class GroupOverviewViewModel : ActionViewModel
     {
-            public List<Attribute> Attributes { get; set; }
+            public List<Group> Groups { get; set; }
     }
 }

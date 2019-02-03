@@ -126,10 +126,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Content Update="Views\Cystem\Attribute\Edit.cshtml">
+    <Content Update="Views\Cystem\Group\Edit.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
-    <Content Update="Views\Cystem\Attribute\Overview.cshtml">
+    <Content Update="Views\Cystem\Group\Overview.cshtml">
       <Pack>$(IncludeRazorContentInPack)</Pack>
     </Content>
     <Content Update="Views\Cystem\Value\SortedOverview.cshtml">

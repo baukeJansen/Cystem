@@ -1,16 +1,13 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Data;
-using System.Data.Common;
 using System.Data.SqlClient;
-using System.Linq;
 using System.Threading.Tasks;
 using Website.Common.Data;
 using Website.Common.Extensions;
+using Website.Common.Models;
 using Website.Common.Models.EAV;
 using Website.DAL;
-using Attribute = Website.Common.Models.EAV.Attribute;
-using ValueType = Website.Common.Enums.ValueType;
 
 namespace Website.BL.QL.ValueQL
 {
@@ -97,9 +94,9 @@ namespace Website.BL.QL.ValueQL
                     {
                         while (reader.HasRows && await reader.ReadAsync())
                         {
-                            Attribute attribute = new Attribute();
-                            reader.MapDataToObject(attribute);
-                            result.Attributes.Add(attribute);
+                            Group group = new Group();
+                            reader.MapDataToObject(group);
+                            result.Groups.Add(group);
                         }
                     }
 
@@ -146,9 +143,9 @@ namespace Website.BL.QL.ValueQL
                     {
                         while (reader.HasRows && await reader.ReadAsync())
                         {
-                            Attribute attribute = new Attribute();
-                            reader.MapDataToObject(attribute);
-                            result.Attributes.Add(attribute);
+                            Group group = new Group();
+                            reader.MapDataToObject(group);
+                            result.Groups.Add(group);
                         }
                     }
 

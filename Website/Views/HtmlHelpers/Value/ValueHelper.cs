@@ -39,7 +39,7 @@ namespace Website.Views.HtmlHelpers
         public Value Get(List<Value> values, string label)
         {
             if (values == null) return null;
-            return values.Where(v => v.Attribute.Label == label).FirstOrDefault();
+            return values.Where(v => v.Group.Label == label).FirstOrDefault();
         }
 
         public Value Get(GenericViewModel model, ValueType type)
@@ -75,7 +75,7 @@ namespace Website.Views.HtmlHelpers
         public List<Value> GetAll(List<Value> values, string label)
         {
             if (values == null) return new List<Value>();
-            return values.Where(v => v.Attribute.Label == label).ToList();
+            return values.Where(v => v.Group.Label == label).ToList();
         }
 
         public List<Value> GetAll(GenericViewModel model, ValueType type)
@@ -166,7 +166,7 @@ namespace Website.Views.HtmlHelpers
 
             foreach (Value target in valueTargets)
             {
-                if (source.AttributeId == target.RelatedAttribute.Id)
+                if (source.GroupId == target.RelatedGroup.Id)
                 {
                     target.RelatedValue = source;
 

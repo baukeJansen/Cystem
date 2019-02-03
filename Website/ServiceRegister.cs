@@ -34,7 +34,7 @@ namespace Website
             // Helper
             services.AddTransient<ICystemHelper, CystemHelper>();
             services.AddTransient<IValueHelper, ValueHelper>();
-            services.AddTransient<IAttributeHelper, AttributeHelper>();
+            services.AddTransient<IGroupHelper, GroupHelper>();
             services.AddTransient<IRenderHelper, RenderHelper>();
         
             // Singleton - Only one instance is ever created and returned.

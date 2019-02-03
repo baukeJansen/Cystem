@@ -29,15 +29,15 @@ namespace Website.Controllers.Cystem
         [HttpGet]
         public IActionResult Overview(ValueOverviewViewModel vm)
         {
-            vm.Values = context.Values.Include(v => v.Attribute).ToList();
+            vm.Values = context.Values.Include(v => v.Group).ToList();
             return View("Overview", vm);
         }
 
         [HttpGet]
         public IActionResult SortedOverview(ValueOverviewViewModel vm)
         {
-            List<Value> values = context.Values.Include(v => v.Attribute).ToList();
-            List<Value> parentValues = values.Where(v => v.GroupId == null).ToList();
+            List<Value> values = context.Values.Include(v => v.Group).ToList();
+            List<Value> parentValues = values.Where(v => v.ParentId == null).ToList();
             /*List<Value> sortedValues = new List<Value>();
 
             foreach(Value value in values)

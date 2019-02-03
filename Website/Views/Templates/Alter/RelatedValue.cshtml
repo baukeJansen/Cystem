@@ -8,7 +8,7 @@
     <div class="row">
         @if (Model.Value.RelatedValue != null)
         {
-            <div class="col s2 l1">@Model.Value.RelatedValue.Attribute.Label:</div>
+            <div class="col s2 l1">@Model.Value.RelatedValue.Group.Label:</div>
             <div class="col s8 l10">@Value.Display(Model.Value.RelatedValue)</div>
         }
         else

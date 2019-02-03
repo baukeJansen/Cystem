@@ -12,7 +12,7 @@
 @{
     RenderValue = @<div class="block-row">
         <div class="block v-id">@item.Id</div>
-        <div class="block v-label"><a class="ajax-get" href="/cystem/attribute/edit?id=@item.Attribute.Id" data-target="@ComponentTarget.Overlay"><span class="v-attribute">@item.Attribute.Label</span></a></div>
+        <div class="block v-label"><a class="ajax-get" href="/cystem/attribute/edit?id=@item.Group.Id" data-target="@ComponentTarget.Overlay"><span class="v-attribute">@item.Group.Label</span></a></div>
 
         <div class="block v-item">
             @switch (item.Type)

@@ -21,7 +21,7 @@
                             @value.Id
                         </div>
                         <div class="col s3">
-                            @value.Attribute.Label
+                            @value.Group.Label
                         </div>
                         <div class="col s6">
                             @switch (value.Type)
@@ -69,7 +69,7 @@
                         {
                         <tr>
                             <td>@value.Id</td>
-                            <td>@value.Attribute.Label</td>
+                            <td>@value.Group.Label</td>
 
                             <td>
                                 @switch (value.Type)

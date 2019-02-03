@@ -6,40 +6,40 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Website.Common.Enums;
+using Website.Common.Models;
 using Website.DAL;
-using Attribute = Website.Common.Models.EAV.Attribute;
 
 namespace Website.Views.HtmlHelpers
 {
-    public class AttributeHelper : IAttributeHelper, IViewContextAware
+    public class GroupHelper : IGroupHelper, IViewContextAware
     {
         private readonly IHtmlHelper Html;
         private readonly IServiceProvider provider;
 
-        public AttributeHelper(IHtmlHelper htmlHelper, IServiceProvider provider)
+        public GroupHelper(IHtmlHelper htmlHelper, IServiceProvider provider)
         {
             Html = htmlHelper;
             this.provider = provider;
         }
 
-        public async Task Render(Attribute attribute, DisplaySetting options = DisplaySetting.Render)
+        public async Task Render(Group group, DisplaySetting options = DisplaySetting.Render)
         {
-            if (attribute == null) return;
+            if (group == null) return;
 
-            string template = GetTemplate(attribute, options);
-            await Html.RenderPartialAsync(template, attribute);
+            string template = GetTemplate(group, options);
+            await Html.RenderPartialAsync(template, group);
         }
 
-        public List<Attribute> GetAttributes()
+        public List<Group> GetGroups()
         {
             DataContext context = provider.GetRequiredService<DataContext>();
-            return context.Attributes.ToList();
+            return context.Groups.ToList();
         }
 
-        private string GetTemplate(Attribute attribute, DisplaySetting option = DisplaySetting.Render)
+        private string GetTemplate(Group group, DisplaySetting option = DisplaySetting.Render)
         {
             string Location = "/Views/Templates/";
-            string Render = "Render/";
+            //string Render = "Render/";
             string Display = "Display/";
             string Edit = "Edit/";
             string FileType = ".cshtml";
@@ -48,11 +48,11 @@ namespace Website.Views.HtmlHelpers
             {
                 default:
                 case DisplaySetting.Render:
-                    return Location + Display + "Attribute" + FileType;
+                    return Location + Display + "Group" + FileType;
                case DisplaySetting.Display:
-                    return Location + Display + "Attribute" + FileType;
+                    return Location + Display + "Group" + FileType;
                 case DisplaySetting.Edit:
-                    return Location + Edit + "Attribute" + FileType;
+                    return Location + Edit + "Group" + FileType;
             }
         }
 

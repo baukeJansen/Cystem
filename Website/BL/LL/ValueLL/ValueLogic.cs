@@ -120,15 +120,15 @@ namespace Website.BL.LL.ValueLL
         {
             foreach (Value value in result.Values)
             {
-                value.Attribute = result.Attributes.Find(a => a.Id == value.AttributeId);
+                value.Group = result.Groups.Find(a => a.Id == value.GroupId);
 
-                if (value.GroupId.HasValue)
+                if (value.ParentId.HasValue)
                 {
-                    Value group = result.Values.Find(v => v.Id == value.GroupId);
+                    Value group = result.Values.Find(v => v.Id == value.ParentId);
 
                     if (group != null)
                     {
-                        value.Group = group;
+                        value.Parent = group;
                         if (group.Values == null) group.Values = new List<Value>();
                         group.Values.Add(value);
                     }
@@ -141,7 +141,7 @@ namespace Website.BL.LL.ValueLL
 
                 if (value.Type == ValueType.RelatedAttribute)
                 {
-                    value.RelatedAttribute = result.Attributes.Find(a => a.Id == value.Int);
+                    value.RelatedGroup = result.Groups.Find(a => a.Id == value.Int);
                 }
 
                 if (value.Type == ValueType.ParamValue)

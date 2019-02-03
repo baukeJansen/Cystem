@@ -1,7 +1,7 @@
 ﻿@using Website.Common.Viewmodels
 @using Website.Common.Models.EAV
+@using Website.Common.Models
 @using Website.Common.Enums
-@using Attribute = Website.Common.Models.EAV.Attribute
 @model GenericViewModel
 @inject IValueHelper Value
 
@@ -14,7 +14,7 @@
     if (attributes != null)
     {
         if (attributes.Values == null) { attributes.Values = new List<Value>(); }
-        attributes.Values[attributes.Values.FindIndex(v => v.Attribute.Label == "Template")] = editTemplate;
+        attributes.Values[attributes.Values.FindIndex(v => v.Group.Label == "Template")] = editTemplate;
     }
 }
 
@@ -33,7 +33,7 @@
             Value settings = new Value
             {
                 String = "Value",
-                Attribute = new Attribute
+                Group = new Group
                 {
                     Label = "Settings"
                 }

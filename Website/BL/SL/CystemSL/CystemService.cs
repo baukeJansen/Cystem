@@ -1,14 +1,13 @@
 ﻿using AutoMapper;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Website.BL.LL.ValueLL;
+using Website.Common.Models;
 using Website.Common.Models.EAV;
 using Website.Common.Viewmodels;
 using Website.DAL;
 using ValueType = Website.Common.Enums.ValueType;
-using Attribute = Website.Common.Models.EAV.Attribute;
 
 namespace Website.BL.SL.CystemSL
 {
@@ -54,19 +53,19 @@ namespace Website.BL.SL.CystemSL
 
                 Value page = new Value {
                     Type = ValueType.StringValue,
-                    Attribute = new Attribute { Label = "Url" },
+                    Group = new Group { Label = "Url" },
                     String = "",
                     Values = new List<Value> {
                         new Value
                         {
                             Type = ValueType.StringValue,
-                            Attribute = new Attribute { Label = "Template" },
+                            Group = new Group { Label = "Template" },
                             String = "delete-details"
                         },
                         new Value
                         {
                             Type = ValueType.RelatedValue,
-                            Attribute = new Attribute {Label = "ToDelete" },
+                            Group = new Group {Label = "ToDelete" },
                             RelatedValue = preview
                         }
                     }

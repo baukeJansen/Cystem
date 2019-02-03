@@ -1,7 +1,6 @@
 ﻿@using Website.Common.Viewmodels
 @using Website.Common.Models.EAV
 @using Website.Common.Enums
-@using Attribute = Website.Common.Models.EAV.Attribute
 @model GenericViewModel
 @inject IValueHelper Value
 
@@ -11,8 +10,8 @@
     if (newValue != null)
     {
         newValue.Id = 0;
-        newValue.AttributeId = 0;
-        newValue.GroupId = Model.Id;
+        newValue.GroupId = 0;
+        newValue.ParentId = Model.Id;
     }
 }
 

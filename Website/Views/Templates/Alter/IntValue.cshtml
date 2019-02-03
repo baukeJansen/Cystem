@@ -5,7 +5,7 @@
 
 <li class="collection-item int">
     <div class="row">
-        <div class="col s2 l1">@Model.Value.Attribute.Label:</div> <div class="col s8 l10">@Model.Value.Int</div>
+        <div class="col s2 l1">@Model.Value.Group.Label:</div> <div class="col s8 l10">@Model.Value.Int</div>
         <div class="col s2 l1">
             @await Render.EditButton("/cystem/edit-value/", new { id = Model.Value.Id }, "", target: ComponentTarget.Overlay, htmlAttributes: new { @class = "right" })
         </div>

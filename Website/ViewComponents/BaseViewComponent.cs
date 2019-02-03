@@ -33,7 +33,7 @@ namespace Website.ViewComponents
         public Value Get(List<Value> values, string label)
         {
             if (values == null) return null;
-            return values.Where(v => v.Attribute.Label == label).FirstOrDefault();
+            return values.Where(v => v.Group.Label == label).FirstOrDefault();
         }
 
 
@@ -94,7 +94,7 @@ namespace Website.ViewComponents
 
         private string ViewByAttribute(Value value)
         {
-            string _label = value.Attribute.Label.ToLower().Replace(' ', '-');
+            string _label = value.Group.Label.ToLower().Replace(' ', '-');
             if (!TemplateAttributes.Contains(_label)) return null;
 
             return TemplateLocation + RenderPath + _label + FileType;

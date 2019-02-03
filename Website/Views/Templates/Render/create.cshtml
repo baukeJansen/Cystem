@@ -1,6 +1,5 @@
 ﻿@using Website.Common.Viewmodels
 @using Website.Common.Models.EAV
-@using Attribute = Website.Common.Models.EAV.Attribute
 @model GenericViewModel
 @inject IValueHelper Value
 
@@ -25,12 +24,12 @@
         @using (Html.BeginForm(null, null, new { }, FormMethod.Post, true, new { action = "/cystem/edit-page/" }))
         {
             @Html.Hidden("Value.Type", "RelatedValue")
-            @Html.Hidden("Value.AttributeId", 37)
+            @Html.Hidden("Value.GroupId", 37)
             @Html.Hidden("Value.GroupId", 33)
 
             @Html.Hidden("Value.Values[0].Type", "RelatedValue")
             @Html.Hidden("Value.Values[0].Int", 26)
-            @Html.Hidden("Value.Values[0].AttributeId", 25)
+            @Html.Hidden("Value.Values[0].GroupId", 25)
 
             attributes.Values.Add(settings);
 

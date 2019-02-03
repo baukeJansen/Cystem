@@ -1,14 +1,14 @@
 ﻿@using Website.Common.Viewmodels
 @using Website.Common.Models.EAV
+@using Website.Common.Models
 @using Website.Common.Enums
-@using Attribute = Website.Common.Models.EAV.Attribute
 @using ValueType = Website.Common.Enums.ValueType
 @model GenericViewModel
 @inject IValueHelper Value
 
 <div class="input-field col s12">
     @{
-        Attribute attribute = Model.Value.RelatedAttribute;
+        Group group = Model.Value.RelatedGroup;
         Value source = Model.Value.RelatedValue;
 
         if (source != null)
@@ -28,24 +28,24 @@
             @Html.Hidden(settings.String + ".Id", Model.Value.RelatedValue.Id)
         }
 
-        @Html.Hidden(settings.String + ".AttributeId", attribute.Id)
-        @Html.Hidden(settings.String + ".Type", attribute.Type)
+        @Html.Hidden(settings.String + ".GroupId", group.Id)
+        @Html.Hidden(settings.String + ".Type", group.Type)
 
-        @switch (attribute.Type)
+        @switch (group.Type)
         {
             case ValueType.IntValue:
                 @Html.TextBox(settings.String + ".Int", source != null ? source.Int : null, new { @type = "number" })
-                @Html.Label(settings.String + ".Int", attribute.Label)
+                @Html.Label(settings.String + ".Int", group.Label)
                 break;
 
             case ValueType.StringValue:
                 @Html.TextBox(settings.String + ".String", source != null ? source.String : null)
-                @Html.Label(settings.String + ".String", attribute.Label)
+                @Html.Label(settings.String + ".String", group.Label)
                 break;
 
             case ValueType.SerializedStringValue:
                 @Html.TextBox(settings.String + ".SerializedString", source != null ? source.SerializedString : null)
-                @Html.Label(settings.String + ".SerializedString", attribute.Label)
+                @Html.Label(settings.String + ".SerializedString", group.Label)
                 break;
         }
     }

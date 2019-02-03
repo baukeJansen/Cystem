@@ -1,0 +1,32 @@
+﻿@using Website.Common.Viewmodels
+@using Website.Common.Enums
+@using Website.Common.Models
+@model GroupOverviewViewModel
+
+<div class="container">
+    <div class="row">
+        <div class="col s12">
+            <h1>Groups overview</h1>
+
+            @await Render.FloatingButton(Url.Action("create", "group", new { Area = "Cystem" }), "add")
+
+            <ul class="collection">
+                @foreach (Group group in Model.Groups)
+                {
+                    <li class="collection-item row">
+                        <div class="col s1">
+                            @group.Id
+                        </div>
+                        <div class="col s8">
+                            @group.Label
+                        </div>
+                        <div class="secondary-content">
+                            @await Render.EditButton("/cystem/group/edit/", new { Id = group.Id }, "")
+                            @await Render.Button("/cystem/group/delete/", "", "delete", DisplaySetting.Render, new { Id = group.Id }, ComponentAction.None, cssClasses: "link waves-effect btn-simple")
+                        </div>
+                    </li>
+                }
+            </ul>
+        </div>
+    </div>
+</div>
