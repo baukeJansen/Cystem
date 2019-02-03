@@ -29,7 +29,7 @@
 <body>
     <div class="header-space loading"></div>
 
-    <div class="component" data-type="@ComponentTarget.Main">
+    <div class="component" data-type="@ComponentType.Main">
         <div class="content" data-url="@Model.Url">
             @RenderBody()
         </div>
@@ -38,16 +38,16 @@
     <div class="footer-space"></div>
 
     <header>
-        <div class="component z-depth-1" data-target="@ComponentTarget.Main">
-            <div class="content load" data-url="/cystem/header/" data-action="@ComponentAction.LoadSilent" data-target="@ComponentTarget.Self">
+        <div class="component z-depth-1" data-target="@ComponentType.Main">
+            <div class="content load" data-url="/cystem/header/" data-action="@ComponentAction.LoadSilent" data-target="@ComponentType.Self">
 
             </div>
         </div>
     </header>
 
     <footer>
-        <div class="component z-depth-1 loading" data-target="@ComponentTarget.Main">
-            <div class="content load" data-url="/cystem/footer/" data-action="@ComponentAction.LoadSilent" data-target="@ComponentTarget.Self">
+        <div class="component z-depth-1 loading" data-target="@ComponentType.Main">
+            <div class="content load" data-url="/cystem/footer/" data-action="@ComponentAction.LoadSilent" data-target="@ComponentType.Self">
 
             </div>
         </div>
@@ -61,8 +61,8 @@
         <div class="content load" data-url="/cystem/modal/" data-action="@ComponentAction.LoadSilent"></div>
     </div>
 
-    <div class="component z-depth-1" data-target="@ComponentTarget.Main">
-        <div class="content load" data-url="/cystem/floating-action-button/"  data-action="@ComponentAction.LoadSilent" data-target="@ComponentTarget.Self"></div>
+    <div class="component z-depth-1" data-target="@ComponentType.Main">
+        <div class="content load" data-url="/cystem/floating-action-button/"  data-action="@ComponentAction.LoadSilent" data-target="@ComponentType.Self"></div>
     </div>
 
     <environment names="Development">

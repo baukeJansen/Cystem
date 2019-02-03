@@ -7,9 +7,17 @@
     <div class="row">
         <div class="col s12">
             <h1>Groups overview</h1>
+        </div>
+    </div>
 
+    <div class="row">
+        <div class="col s12">
             @await Render.FloatingButton(Url.Action("create", "group", new { Area = "Cystem" }), "add")
+        </div>
+    </div>
 
+    <div class="row">
+        <div class="col s12">
             <ul class="collection">
                 @foreach (Group group in Model.Groups)
                 {
@@ -22,7 +30,7 @@
                         </div>
                         <div class="secondary-content">
                             @await Render.EditButton("/cystem/group/edit/", new { Id = group.Id }, "")
-                            @await Render.Button("/cystem/group/delete/", "", "delete", DisplaySetting.Render, new { Id = group.Id }, ComponentAction.None, cssClasses: "link waves-effect btn-simple")
+                            @await Render.Button("/cystem/group/delete/", "", "delete", DisplaySetting.Render, new { Id = group.Id }, ComponentAction.None, ComponentType.Modal, cssClasses: "link waves-effect btn-simple")
                         </div>
                     </li>
                 }

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace Website.Common.Enums
 {
-    public enum ComponentTarget
+    public enum ComponentType
     {
         Self, Parent, Main, Overlay, Modal
     }
