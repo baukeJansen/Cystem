@@ -1,5 +1,5 @@
 ﻿using Website.Common.Enums;
-using Website.Common.Models.EAV;
+using Website.Common.Models;
 
 namespace Website.Common.Viewmodels
 {

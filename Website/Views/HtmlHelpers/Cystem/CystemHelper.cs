@@ -8,7 +8,7 @@ using System.Text.Encodings.Web;
 using System.Threading.Tasks;
 using Website.Common.Enums;
 using Website.Common.Extensions;
-using Website.Common.Models.EAV;
+using Website.Common.Models;
 using ValueType = Website.Common.Enums.ValueType;
 
 namespace Website.Views.HtmlHelpers

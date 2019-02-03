@@ -1,9 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Website.Common.Enums;
-using Website.Common.Models.EAV;
 
 namespace Website.Common.Viewmodels
 {

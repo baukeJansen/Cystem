@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Html;
+using System;
 using System.Threading.Tasks;
 using Website.Common.Enums;
-using Website.Common.Models.EAV;
-using System;
+using Website.Common.Models;
 
 namespace Website.Views.HtmlHelpers
 {

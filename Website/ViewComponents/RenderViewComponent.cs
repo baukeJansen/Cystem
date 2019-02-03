@@ -1,13 +1,5 @@
-﻿using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ViewComponents;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text.Encodings.Web;
+﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using Website.Common.Enums;
-using Website.Common.Models.EAV;
 using Website.Common.Viewmodels;
 using Website.Views.HtmlHelpers;
 

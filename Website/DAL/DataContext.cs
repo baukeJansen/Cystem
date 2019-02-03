@@ -1,7 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Website.Common.Models;
-using Website.Common.Models.EAV;
-
 namespace Website.DAL
 {
     public class DataContext : DbContext

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
 using ValueType = Website.Common.Enums.ValueType;
 
-namespace Website.Common.Models.EAV
+namespace Website.Common.Models
 {
     public class Value : Model 
     {

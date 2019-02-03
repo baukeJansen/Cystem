@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Website.Common.Enums;
-using Website.Common.Models.EAV;
+using Website.Common.Models;
 using Website.Common.Viewmodels;
 using ValueType = Website.Common.Enums.ValueType;
 

@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Website.Common.Data;
 using Website.Common.Extensions;
 using Website.Common.Models;
-using Website.Common.Models.EAV;
 using Website.DAL;
 
 namespace Website.BL.QL.ValueQL

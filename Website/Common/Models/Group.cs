@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations.Schema;
-using Website.Common.Enums;
-using Website.Common.Models.EAV;
 using ValueType = Website.Common.Enums.ValueType;
 
 namespace Website.Common.Models

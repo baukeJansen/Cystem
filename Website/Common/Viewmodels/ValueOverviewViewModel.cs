@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Website.Common.Models.EAV;
+﻿using System.Collections.Generic;
+using Website.Common.Models;
 
 namespace Website.Common.Viewmodels
 {

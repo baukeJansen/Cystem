@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Website.BL.LL.ValueLL;
 using Website.Common.Enums;
 using Website.Common.Exceptions;
-using Website.Common.Models.EAV;
+using Website.Common.Models;
 using Website.Common.Viewmodels;
 using Website.DAL;
 

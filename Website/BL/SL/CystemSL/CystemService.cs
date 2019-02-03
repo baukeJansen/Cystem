@@ -4,7 +4,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Website.BL.LL.ValueLL;
 using Website.Common.Models;
-using Website.Common.Models.EAV;
 using Website.Common.Viewmodels;
 using Website.DAL;
 using ValueType = Website.Common.Enums.ValueType;

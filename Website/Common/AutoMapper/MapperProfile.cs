@@ -1,6 +1,5 @@
 ﻿using AutoMapper;
 using Website.Common.Models;
-using Website.Common.Models.EAV;
 using Website.Common.Viewmodels;
 
 namespace Website.Common.AutoMapper

@@ -5,7 +5,6 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Website.Common.Enums;
 using Website.Common.Models;
-using Website.Common.Models.EAV;
 using Website.Common.Viewmodels;
 using Website.ViewComponents;
 

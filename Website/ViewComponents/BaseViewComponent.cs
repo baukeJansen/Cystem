@@ -1,10 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using Website.Common.Enums;
-using Website.Common.Models.EAV;
+using Website.Common.Models;
 using Website.Common.Viewmodels;
 using Website.Views.HtmlHelpers;
 using ValueType = Website.Common.Enums.ValueType;

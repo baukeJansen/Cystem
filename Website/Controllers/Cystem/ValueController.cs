@@ -2,11 +2,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using Website.Common.Extensions;
-using Website.Common.Models.EAV;
+using Website.Common.Models;
 using Website.Common.Viewmodels;
 using Website.DAL;
 using Website.Views.HtmlHelpers;

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using Website.Common.Models;
-using Website.Common.Models.EAV;
 
 namespace Website.Common.Data
 {

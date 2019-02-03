@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Website.BL.QL.ValueQL;
 using Website.Common.Data;
-using Website.Common.Models.EAV;
+using Website.Common.Models;
 using Website.DAL;
 using ValueType = Website.Common.Enums.ValueType;
 
