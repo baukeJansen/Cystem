@@ -1,6 +1,10 @@
-﻿.btn-simple {
-    background: transparent;
+﻿@import 'variables';
+
+.btn-simple {
+    color: $on-background-color;
+    background: $background-color;
     border: 0;
+    cursor: pointer;
 }
 
 .fixed-action-btn {

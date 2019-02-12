@@ -1,15 +1,20 @@
 ﻿@using Website.Common.Viewmodels
 @using Website.Common.Models
-@model GenericViewModel
 @inject IValueHelper Value
+@model GenericViewModel
 
 @{
-    Value attributes = Value.Get(Model, "Modify entry");
+    Value model = Value.Get(Model, "Model");
     Value settings = Value.Get(Model, "Settings");
-    if (attributes != null && attributes.Values == null)
-    {
-        attributes.Values = new List<Value>();
-    }
+
+    List<Value> values = model.Values ?? new List<Value>();
+
+    //Value attributes = Value.Get(Model, "Modify entry");
+    //Value settings = Value.Get(Model, "Settings");
+    //if (attributes != null && attributes.Values == null)
+    //{
+    //    attributes.Values = new List<Value>();
+    //}
 }
 
 <div class="container">
@@ -19,27 +24,33 @@
         </div>
     </div>
 
-    @if (attributes != null && settings != null)
+    @if (settings != null)
     {
-        @using (Html.BeginForm(null, null, new { }, FormMethod.Post, true, new { action = "/cystem/edit-page/" }))
+        if (model != null)
         {
-            @Html.Hidden("Value.Type", "RelatedValue")
-            @Html.Hidden("Value.GroupId", 37)
-            @Html.Hidden("Value.GroupId", 33)
+            Value template = Value.Get(model, "Child template");
+            Value.Remove(model, template);
+            template.Group.Label = "Template";
 
-            @Html.Hidden("Value.Values[0].Type", "RelatedValue")
-            @Html.Hidden("Value.Values[0].Int", 26)
-            @Html.Hidden("Value.Values[0].GroupId", 25)
+            @using (Html.BeginForm(null, null, new { }, FormMethod.Post, true, new { action = "/create/" }))
+            {
+                <div class="form-content">
+                    @Html.Hidden(settings.String + ".ParentId", model.Int)
 
-            attributes.Values.Add(settings);
+                    @foreach (Value value in values)
+                    {
+                        Value.Add(value, settings);
+                        Value.Add(value, template);
+                        @await Render.Value(value, Model.Options);
+                    }
 
-            @await Render.Value(attributes, Model.Options)
-
-            <div class="row">
-                <div class="col s12 right-align">
-                    @await Render.SubmitButton("Create", "add")
+                    <div class="row">
+                        <div class="col s12 right-align">
+                            @await Render.SubmitButton("Create", "add")
+                        </div>
+                    </div>
                 </div>
-            </div>
+            }
         }
     }
     else
@@ -53,4 +64,33 @@
             </div>
         }
     }
+
+    @*if (attributes != null && settings != null)
+        {
+            @using (Html.BeginForm(null, null, new { }, FormMethod.Post, true, new { action = "/cystem/edit-page/" }))
+            {
+                attributes.Values.Add(settings);
+
+                @Html.Hidden(settings.String + ".ParentId", 169)
+
+                @await Render.Value(attributes, Model.Options)
+
+                <div class="row">
+                    <div class="col s12 right-align">
+                        @await Render.SubmitButton("Create", "add")
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            if (settings == null)
+            {
+                <div class="row">
+                    <div class="col s12 error">
+                        settings missing
+                    </div>
+                </div>
+            }
+        }*@
 </div>

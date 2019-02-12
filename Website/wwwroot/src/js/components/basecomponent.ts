@@ -6,6 +6,7 @@ abstract class BaseComponent implements IComponent {
     protected parent: IComponent
     protected children: IComponent[] = [];
     protected url: string;
+    protected resultAction: Function = null;
 
     public abstract getType(): ComponentType;
 
@@ -96,11 +97,6 @@ abstract class BaseComponent implements IComponent {
         });
     }
 
-    public delete(): void {
-        this.$component.remove();
-        this.parent.removeChild(this);
-    }
-
     public setContent($content: JQuery): void {
         this.$component.removeClass('loading');
 
@@ -108,7 +104,27 @@ abstract class BaseComponent implements IComponent {
         new FadeInAnimation(this.$component, $content);
     }
 
+    public onResultAction(fn: Function): void {
+        this.resultAction = fn;
+    }
+
+    public onResult(result: any): void {
+        if (this.resultAction) {
+            this.resultAction(result);
+        } else {
+            if (this.parent) {
+                this.parent.onResult(result);
+            }
+        }
+    }
+
     public close(): void {
         this.parent.close();
     }
+
+    public delete(): void {
+        this.$component.remove();
+        this.parent.removeChild(this);
+    }
+
 }

@@ -34,7 +34,7 @@ namespace Website.Common.Models
 
         public string SerializedString { get; set; }
 
-        public DateTime Time { get; set; }
+        public DateTime? DateTime { get; set; }
 
         public int Order { get; set; }
 

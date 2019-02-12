@@ -1,5 +1,6 @@
 ﻿@using Website.Common.Viewmodels
 @using Website.Common.Models
+@using Website.Common.Enums
 @using ValueType = Website.Common.Enums.ValueType
 @model GenericViewModel
 @inject IValueHelper Value
@@ -14,6 +15,11 @@
             Model.Value.Int = source.Int;
             Model.Value.String = source.String;
             Model.Value.SerializedString = source.SerializedString;
+            Model.Value.DateTime = source.DateTime;
+        }
+        else
+        {
+            Model.Value.Int = null;
         }
 
         Value settings = Value.Get(Model, "Settings");
@@ -24,10 +30,15 @@
         @if (source != null)
         {
             @Html.Hidden(settings.String + ".Id", Model.Value.RelatedValue.Id)
+            if (source.ParentId.HasValue)
+            {
+                @Html.Hidden(settings.String + ".ParentId", source.ParentId.Value)
+            }
         }
 
         @Html.Hidden(settings.String + ".GroupId", group.Id)
         @Html.Hidden(settings.String + ".Type", group.Type)
+
 
         @switch (group.Type)
         {
@@ -44,6 +55,12 @@
             case ValueType.SerializedStringValue:
                 @Html.TextBox(settings.String + ".SerializedString", source != null ? source.SerializedString : null)
                 @Html.Label(settings.String + ".SerializedString", group.Label)
+                break;
+
+            case ValueType.DateValue:
+                DateTime time = source == null ? DateTime.Now : source.DateTime.HasValue ? source.DateTime.Value : DateTime.Now;
+                @Html.TextBox(settings.String + ".Time", time.ToString("dd-MM-yyyy"), new { @class = "datepicker" })
+                @Html.Label(settings.String + ".Time", group.Label)
                 break;
         }
     }

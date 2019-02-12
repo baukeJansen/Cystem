@@ -1,7 +1,7 @@
 ﻿class LoadAction implements IAction {
     private component: IComponent;
 
-    constructor(private $el: JQuery, method: Method = Method.GET) {
+    constructor(private $el: JQuery, method: Method = Method.GET, private fnSucces?: Function) {
         var self = this;
         var action: ComponentAction = $el.getAction();
         var target: ComponentType = $el.getTarget();
@@ -25,6 +25,10 @@
     succes(response: any, history: HistoryAction) {
         var $response = $(response);
         this.component.setContent($response);
+
+        if (this.fnSucces) {
+            this.fnSucces(this.component);
+        }
 
         cystem.apply($response);
         HistoryAction.reloadState();

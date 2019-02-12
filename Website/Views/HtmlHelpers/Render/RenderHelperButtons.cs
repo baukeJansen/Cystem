@@ -74,29 +74,29 @@ namespace Website.Views.HtmlHelpers
 
         public async Task<IHtmlContent> SimpleButton(string url, string buttonText, DisplaySetting options, object routeValues = null, ComponentAction action = ComponentAction.Load, ComponentType target = ComponentType.Self, object htmlAttributes = null)
         {
-            return await Button(url, buttonText, null, options, routeValues, action, target, htmlAttributes, "ajax-get btn-simple waves-effect");
+            return await Button(url, buttonText, null, options, routeValues, action, target, htmlAttributes, "link btn-simple waves-effect");
         }
 
         public async Task<IHtmlContent> IconButton(string url, string icon, object routeValues = null, DisplaySetting options = DisplaySetting.Render, ComponentAction action = ComponentAction.Load, ComponentType target = ComponentType.Self, object htmlAttributes = null)
         {
-            return await Button(url, null, icon, options, routeValues, action, target, htmlAttributes, "ajax-get btn-flat waves-effect");
+            return await Button(url, null, icon, options, routeValues, action, target, htmlAttributes, "link btn-flat waves-effect");
         }
 
         public async Task<IHtmlContent> FloatingButton(string url, string icon, object routeValues = null, DisplaySetting options = DisplaySetting.Render, ComponentAction action = ComponentAction.Load, ComponentType target = ComponentType.Overlay, object htmlAttributes = null)
         {
-            return await Button(url, null, icon, options, routeValues, action, target, htmlAttributes, "ajax-get right btn-floating waves-effect waves-light btn-large");
+            return await Button(url, null, icon, options, routeValues, action, target, htmlAttributes, "link right btn-floating waves-effect waves-light btn-large");
         }
 
         public async Task<IHtmlContent> CreateButton(string url, object routeValues = null, string buttonText = "New", string icon = "add", DisplaySetting options = DisplaySetting.Render, ComponentAction action = ComponentAction.Load, ComponentType target = ComponentType.Overlay, object htmlAttributes = null)
         {
             string buttonClass = string.IsNullOrEmpty(buttonText) ? "btn-simple" : "btn-flat";
-            return await Button(url, null, icon, options, routeValues, action, target, htmlAttributes, "ajax-get waves-effect" + buttonClass);
+            return await Button(url, null, icon, options, routeValues, action, target, htmlAttributes, "link waves-effect" + buttonClass);
         }
 
         public async Task<IHtmlContent> EditButton(string url, object routeValues = null, string buttonText = "Edit", string icon = "edit", DisplaySetting options = DisplaySetting.Render, ComponentAction action = ComponentAction.Load, ComponentType target = ComponentType.Overlay, object htmlAttributes = null)
         {
             string buttonClass = string.IsNullOrEmpty(buttonText) ? "btn-simple" : "btn-flat";
-            return await Button(url, buttonText, icon, options, routeValues, action, target, htmlAttributes, "ajax-get waves-effect " + buttonClass);
+            return await Button(url, buttonText, icon, options, routeValues, action, target, htmlAttributes, "link waves-effect " + buttonClass);
         }
 
 
@@ -104,12 +104,12 @@ namespace Website.Views.HtmlHelpers
         {
             IDictionary<string, object> attributes = ParseHtmlAttributes(htmlAttributes);
             attributes["type"] = "submit";
-            return await Button(null, buttonText, icon, DisplaySetting.Render, null, action, target, htmlAttributes, "ajax-submit btn waves-effect waves-light " + classes, false);
+            return await Button(null, buttonText, icon, DisplaySetting.Render, null, action, target, htmlAttributes, "submit btn waves-effect waves-light " + classes, false);
         }
 
         public async Task<IHtmlContent> DeleteButton(string url, object routeValues = null, string buttonText = "Delete", DisplaySetting options = DisplaySetting.Render, ComponentAction action = ComponentAction.Close, ComponentType target = ComponentType.Self, object htmlAttributes = null)
         {
-            return await Button(url, buttonText, "delete", options, routeValues, action, target, htmlAttributes, "ajax-delete btn-flat waves-effect");
+            return await Button(url, buttonText, "delete", options, routeValues, action, target, htmlAttributes, "link btn-flat waves-effect");
         }
 
         public async Task<IHtmlContent> DeleteModalButton(Value value, string buttonText = "Delete", DisplaySetting options = DisplaySetting.Render, ComponentAction action = ComponentAction.Load, ComponentType target = ComponentType.Modal, object htmlAttributes = null)
@@ -119,13 +119,13 @@ namespace Website.Views.HtmlHelpers
             attributes["data-target"] = "#modal";
             string buttonClass = string.IsNullOrEmpty(buttonText) ? "btn-simple" : "btn-flat";
 
-            builder.AppendHtml(await Button("/cystem/confirm-delete/", buttonText, "delete", options, new { value.Id }, action, target, attributes, "ajax-get waves-effect " + buttonClass));
+            builder.AppendHtml(await Button("/cystem/confirm-delete/", buttonText, "delete", options, new { value.Id }, action, target, attributes, "link waves-effect " + buttonClass));
             return builder;
         }
 
-        public async Task<IHtmlContent> SelectButton(string url, string buttonText, object routeValues = null, string icon = "arrow_forward", DisplaySetting options = DisplaySetting.Render, ComponentAction action = ComponentAction.Load, ComponentType target = ComponentType.Overlay, object htmlAttributes = null)
+        public async Task<IHtmlContent> SelectButton(string url, string buttonText, object routeValues = null, string icon = "arrow_forward", DisplaySetting options = DisplaySetting.Render, ComponentAction action = ComponentAction.Select, ComponentType target = ComponentType.Overlay, object htmlAttributes = null)
         {
-            return await Button(url, buttonText, icon, options, routeValues, action, target, htmlAttributes, "ajax-get btn-flat waves-effect");
+            return await Button(url, buttonText, icon, options, routeValues, action, target, htmlAttributes, "link btn-flat waves-effect select-button");
         }
 
         private string ParseRouteValues(object values)

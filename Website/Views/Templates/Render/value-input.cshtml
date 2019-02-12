@@ -1,0 +1,79 @@
+﻿@using Website.Common.Viewmodels
+@using Website.Common.Models
+@using Website.Common.Enums
+@using ValueType = Website.Common.Enums.ValueType
+@model GenericViewModel
+@inject IValueHelper Value
+
+@{
+    string expression = "";
+    object objectValue = null;
+
+    Value value = Model.Value;
+    Value settings = Value.Get(Model, "Settings");
+    Value valueOption = Value.Get(Model, "Value option");
+
+    ValueOption option = valueOption != null ? (ValueOption)valueOption.Int : ValueOption.Edit;
+
+    IDictionary<string, object> htmlAttributes = new Dictionary<string, object>();
+}
+
+<div class="row @(option == ValueOption.Hidden ? "hide" : "")">
+    <div class="input-field col s12">
+        @if (settings != null)
+        {
+            if (value.Id != 0)
+            {
+                @Html.Hidden(settings.String + ".Id", value.Id)
+            }
+
+            if (value.ParentId.HasValue)
+            {
+                @Html.Hidden(settings.String + ".ParentId", value.ParentId.Value)
+            }
+
+            @Html.Hidden(settings.String + ".GroupId", value.Group.Id)
+            @Html.Hidden(settings.String + ".Type", value.Group.Type)
+
+            @switch (value.Type)
+            {
+                case ValueType.RelatedValue:
+                case ValueType.IntValue:
+                    expression = settings.String + ".Int";
+                    objectValue = value.Int;
+                    htmlAttributes["type"] = "number";
+                    break;
+
+                case ValueType.StringValue:
+                    expression = settings.String + ".String";
+                    objectValue = value.String;
+                    break;
+
+                case ValueType.SerializedStringValue:
+                    expression = settings.String + ".SerializedString";
+                    objectValue = value.SerializedString;
+                    break;
+
+                case ValueType.DateValue:
+                    expression = settings.String + ".Time";
+                    objectValue = (value.DateTime.HasValue ? value.DateTime.Value : DateTime.Now).ToString("dd-MM-yyyy");
+
+                    htmlAttributes["class"] = "datepicker";
+                    break;
+            }
+
+            if (option == ValueOption.Hidden)
+            {
+                htmlAttributes["type"] = "hidden";
+            }
+
+            if (option == ValueOption.Readonly)
+            {
+                htmlAttributes["readonly"] = "readonly";
+            }
+
+            @Html.TextBox(expression, objectValue, htmlAttributes)
+            @Html.Label(expression, value.Group.Label)
+        }
+    </div>
+</div>

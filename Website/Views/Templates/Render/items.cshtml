@@ -1,0 +1,22 @@
+﻿@using Website.Common.Viewmodels
+@using Website.Common.Models
+@inject IValueHelper Value
+@model GenericViewModel
+
+@{
+    Value template = Value.Get(Model, "Template");
+    Value itemTemplate = Value.Get(Model, "Child template");
+
+    Value.Remove(Model, "Template");
+    Value.Remove(Model, "Child template");
+
+    itemTemplate.Group = template.Group;
+}
+
+@foreach (Value value in Model.Value.Values)
+{
+    Value.Remove(value, "Template");
+    Value.Add(value, itemTemplate);
+
+    @await Render.Value(value);
+}

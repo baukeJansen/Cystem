@@ -5,6 +5,7 @@ var BaseComponent = (function () {
     function BaseComponent($component) {
         this.$component = $component;
         this.children = [];
+        this.resultAction = null;
         $component.setComponent(this);
         this.parent = this.findParent($component);
         if (this.parent) {
@@ -79,17 +80,30 @@ var BaseComponent = (function () {
             $children.remove();
         });
     };
-    BaseComponent.prototype.delete = function () {
-        this.$component.remove();
-        this.parent.removeChild(this);
-    };
     BaseComponent.prototype.setContent = function ($content) {
         this.$component.removeClass('loading');
         this.$component.append($content);
         new FadeInAnimation(this.$component, $content);
     };
+    BaseComponent.prototype.onResultAction = function (fn) {
+        this.resultAction = fn;
+    };
+    BaseComponent.prototype.onResult = function (result) {
+        if (this.resultAction) {
+            this.resultAction(result);
+        }
+        else {
+            if (this.parent) {
+                this.parent.onResult(result);
+            }
+        }
+    };
     BaseComponent.prototype.close = function () {
         this.parent.close();
+    };
+    BaseComponent.prototype.delete = function () {
+        this.$component.remove();
+        this.parent.removeChild(this);
     };
     return BaseComponent;
 }());

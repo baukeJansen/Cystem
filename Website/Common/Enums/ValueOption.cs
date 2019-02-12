@@ -5,8 +5,8 @@ using System.Threading.Tasks;
 
 namespace Website.Common.Enums
 {
-    public enum ComponentAction
+    public enum ValueOption
     {
-        Display = 0, Load = 1, LoadSilent = 2, Close = 3, None = 4, Select = 5, Result = 6
+        Edit = 0, Readonly = 1, Hidden = 2, Select = 3
     }
 }

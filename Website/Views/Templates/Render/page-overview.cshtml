@@ -4,7 +4,7 @@
 @inject IValueHelper Value
 
 @{
-    Value addButton = Value.Get(Model, "Link")?.RelatedValue;
+    Value createPage = Value.Get(Model, "Link")?.RelatedValue;
 }
 
 <div class="container">
@@ -14,15 +14,15 @@
         </div>
     </div>
 
-    @if (addButton != null)
+    @if (createPage != null)
     {
         <div class="row">
             <div class="col s12">
-                @await Render.FloatingButton(addButton.SerializedString, "add", null, Model.Options)
+                @await Render.FloatingButton(createPage.SerializedString, "add", null, Model.Options)
             </div>
         </div>
     }
-
+    
     <div class="row">
         <ul class="collection z-depth-1">
             @await Render.Value(Model, "Group")

@@ -21,7 +21,7 @@
     }
 
     .collection-item.int {
-        border-top: $header-size solid color('shades', 'white');
+        border-top: $header-size solid color('indigo', 'base');
     }
 
     .collection-item.string {
@@ -50,6 +50,10 @@
 
     .collection-item.related-attribute {
         border-top: $header-size solid color('amber', 'darken-1');
+    }
+
+    .collection-item.time {
+        border-top: $header-size solid color('blue-grey', 'darken-1');
     }
 
     .collection-item.none {

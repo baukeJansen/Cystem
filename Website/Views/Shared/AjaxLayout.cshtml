@@ -1,7 +1,9 @@
 ﻿@using Website.Common.Enums
 @using Website.Common.Viewmodels
+@using Website.Views.HtmlHelpers
+@inject IValueHelper Value
 @model ActionViewModel
 
 <div class="content" data-url="@Model.Url" data-action="@ComponentAction.LoadSilent" data-target="@ComponentType.Self">
-    @RenderBody()
+@RenderBody()
 </div>

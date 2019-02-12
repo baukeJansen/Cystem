@@ -1,6 +1,6 @@
 ﻿@using Website.Common.Viewmodels
 @using Website.Common.Models
-@using ValueType = Website.Common.Enums.ValueType
+@using Website.Common.Enums
 @model GenericViewModel
 @inject IGroupHelper GroupHelper
 
@@ -11,7 +11,9 @@
     <ul class="collection">
         @foreach (Group group in groups)
         {
-            <li class="collection-item">@group.Label</li>
+            <li class="collection-item">
+                <button class="link btn-simple" data-action="@ComponentAction.Result" data-value="@group.Id">@group.Label</button>
+            </li>
         }
     </ul>
 </div>

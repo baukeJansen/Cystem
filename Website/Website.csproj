@@ -4,6 +4,7 @@
     <TargetFramework>netcoreapp2.2</TargetFramework>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
+    <UserSecretsId>1e7cc3c1-2ef5-4e57-bb99-8c3a822643b4</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>
@@ -50,7 +51,7 @@
   <ItemGroup>
     <Folder Include="BL\LL\PageLL\" />
     <Folder Include="Common\Interfaces\" />
-    <Folder Include="Views\Shared\DisplayTemplates\" />
+    <Folder Include="wwwroot\css\" />
     <Folder Include="wwwroot\src\img\" />
   </ItemGroup>
 

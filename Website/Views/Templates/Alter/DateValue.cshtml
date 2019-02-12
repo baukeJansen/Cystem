@@ -1,0 +1,23 @@
+﻿@using Website.Common.Viewmodels
+@using Website.Common.Enums
+@model GenericViewModel
+
+@{ 
+    string time = "";
+    if (Model.Value.DateTime.HasValue)
+    {
+        time = Model.Value.DateTime.Value.ToString("dd-MM-yyyy");
+    }
+}
+
+<li class="collection-item time">
+    <div class="row">
+        <div class="col s2 l1">@Model.Value.Group.Label:</div>
+        <div class="col s8 l10">@time</div>
+        <div class="col s2 l1">
+            @await Render.EditButton("/cystem/edit-value/", new { id = Model.Value.Id }, "", target: ComponentType.Overlay, htmlAttributes: new { @class = "right" })
+        </div>
+    </div>
+
+    @{ await Cystem.DisplayChilds(Model.Value, DisplaySetting.Alter); }
+</li>

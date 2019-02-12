@@ -1,0 +1,56 @@
+﻿@using Website.Common.Viewmodels
+@using Website.Common.Models
+@model GenericViewModel
+@inject IValueHelper Value
+
+@{
+    Value attributes = Value.Get(Model, "Modify entry");
+    Value settings = Value.Get(Model, "Settings");
+    if (attributes != null && attributes.Values == null)
+    {
+        attributes.Values = new List<Value>();
+    }
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col s12">
+            <h2>@await Render.Value(Model, "Title")</h2>
+        </div>
+    </div>
+
+    @if (attributes != null && settings != null)
+    {
+        @using (Html.BeginForm(null, null, new { }, FormMethod.Post, true, new { action = "/cystem/edit-page/" }))
+        {
+            @Html.Hidden("Value.Type", "RelatedValue")
+            @Html.Hidden("Value.GroupId", 37)
+            @Html.Hidden("Value.ParentId", 33)
+
+            @Html.Hidden("Value.Values[0].Type", "RelatedValue")
+            @Html.Hidden("Value.Values[0].Int", 26)
+            @Html.Hidden("Value.Values[0].GroupId", 25)
+
+            attributes.Values.Add(settings);
+
+            @await Render.Value(attributes, Model.Options)
+
+            <div class="row">
+                <div class="col s12 right-align">
+                    @await Render.SubmitButton("Create", "add")
+                </div>
+            </div>
+        }
+    }
+    else
+    {
+        if (settings == null)
+        {
+            <div class="row">
+                <div class="col s12 error">
+                    settings missing
+                </div>
+            </div>
+        }
+    }
+</div>

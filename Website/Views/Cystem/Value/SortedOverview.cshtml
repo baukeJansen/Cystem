@@ -11,41 +11,46 @@
 
 @{
     RenderValue = @<div class="block-row">
-        <div class="block v-id">@item.Id</div>
-        <div class="block v-label"><a class="ajax-get" href="/cystem/attribute/edit?id=@item.Group.Id" data-target="@ComponentType.Overlay"><span class="v-attribute">@item.Group.Label</span></a></div>
+    <div class="block v-id">@item.Id</div>
+    <div class="block v-label"><a class="ajax-get" href="/cystem/group/edit?id=@item.Group.Id" data-target="@ComponentType.Overlay"><span class="v-attribute">@item.Group.Label</span></a></div>
 
-        <div class="block v-item">
-            @switch (item.Type)
-            {
-                case ValueType.StringValue:@item.String break;
-                case ValueType.SerializedStringValue:@item.SerializedString break;
-                case ValueType.IntValue: @item.Int break;
-                case ValueType.GroupValue:
-                    @: {group}
-                    break;
-                case ValueType.RelatedValue: 
-                    <a class="ajax-get" href="/cystem/value/edit?id=@item.Int" data-target="@ComponentType.Overlay"><span class="v-related-value">@item.Int</span></a>
-                    break;
-                case ValueType.RelatedAttribute: 
-                    <a class="ajax-get" href="/cystem/attribute/edit?id=@item.Int" data-target="@ComponentType.Overlay"><span class="v-related-attribute">@item.Int</span></a>
-                    break;
-                case ValueType.ParamValue:
-                    @:{param}
-                    break;
-            }
-        </div>
-
-        <div class="block v-icons">
-            @await Render.EditButton(@Url.Action("Edit", "Value", new { id = item.Id, Area = "Cystem" }), null, "")
-            @await Render.DeleteModalButton(item, "")
-        </div>
-        
-        @if (item.Values != null) {
-            foreach (Value value in item.Values) {
-                <div class="indent">@RenderValue(value)</div>
-            }
+    <div class="block v-item">
+        @switch (item.Type)
+        {
+            case ValueType.StringValue:@item.String break;
+            case ValueType.SerializedStringValue:@item.SerializedString break;
+            case ValueType.IntValue: @item.Int break;
+            case ValueType.GroupValue:
+                @:{group}
+                break;
+            case ValueType.RelatedValue:
+                <a class="ajax-get" href="/cystem/value/edit?id=@item.Int" data-target="@ComponentType.Overlay"><span class="v-related-value">@item.Int</span></a>
+                break;
+            case ValueType.RelatedAttribute:
+                <a class="ajax-get" href="/cystem/group/edit?id=@item.Int" data-target="@ComponentType.Overlay"><span class="v-related-attribute">@item.Int</span></a>
+                break;
+            case ValueType.ParamValue:
+                @:{param}
+                break;
+            case ValueType.DateValue:
+                @Html.DisplayFor(m => item.DateTime)
+                break;
         }
-     </div>;
+    </div>
+
+    <div class="block v-icons">
+        @await Render.EditButton(@Url.Action("Edit", "Value", new { id = item.Id, Area = "Cystem" }), null, "")
+        @await Render.DeleteModalButton(item, "")
+    </div>
+
+    @if (item.Values != null)
+    {
+        foreach (Value value in item.Values)
+        {
+            <div class="indent">@RenderValue(value)</div>
+        }
+    }
+</div>;
 }
 
 <div class="container">
@@ -57,8 +62,8 @@
 
             <div>
                 @foreach (Value value in Model.Values)
-                {
-                    @RenderValue(value)
+            {
+                @RenderValue(value)
                 }
             </div>
         </div>

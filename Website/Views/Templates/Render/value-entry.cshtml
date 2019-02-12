@@ -42,77 +42,84 @@ IHtmlContent CreateTab(string tabName, ValueType tabType, string valueExpression
 
 @if (Expression != null)
 {
-@Html.Hidden(Expression + ".Id")
+    @Html.Hidden(Expression + ".Id")
 
-<div class="row">
-    <div class="col s12">
-        <ul class="tabs formtab">
-            @foreach (ValueType type in Enum.GetValues(ValueType.None.GetType()))
-            {
-                @CreateTab(type.Name(), type, Expression, Model.Value.Type);
-            }
-        </ul>
+    <div class="row">
+        <div class="col s12">
+            <ul class="tabs formtab">
+                @foreach (ValueType type in Enum.GetValues(ValueType.None.GetType()))
+                {
+                    @CreateTab(type.Name(), type, Expression, Model.Value.Type);
+                }
+            </ul>
 
-    </div>
-</div>
-
-<div class="row">
-    <div id="@ValueType.None" class="input-field col s12">
-
+        </div>
     </div>
 
-    <div id="@ValueType.StringValue" class="input-field col s12">
-        @Html.Editor(Expression + ".String")
-        @Html.Label("String")
+    <div class="row">
+        <div id="@ValueType.None" class="input-field col s12">
+
+        </div>
+
+        <div id="@ValueType.StringValue" class="input-field col s12">
+            @Html.Editor(Expression + ".String")
+            @Html.Label("String")
+        </div>
+
+        <div id="@ValueType.SerializedStringValue" class="input-field col s12">
+            @Html.Editor(Expression + ".SerializedString")
+            @Html.Label("SerializedString")
+        </div>
+
+        <div id="@ValueType.IntValue" class="input-field col s12">
+            @Html.Editor(Expression + ".Int")
+            @Html.Label("Int")
+        </div>
+
+        <div id="@ValueType.GroupValue" class="input-field col s12">
+
+        </div>
+
+        <div id="@ValueType.RelatedValue" class="input-field col s12">
+            @Html.Editor(Expression + ".Int")
+            @Html.Label("Int")
+        </div>
+
+        <div id="@ValueType.RelatedAttribute" class="input-field col s12">
+            @Html.Editor(Expression + ".Int")
+            @Html.Label("Int")
+        </div>
+
+        <div id="@ValueType.ParamValue" class="input-field col s12">
+        </div>
+
+        <div id="@ValueType.DateValue" class="input-field col s12">
+            @Html.Editor(Expression + ".Time")
+            @Html.Label("Time")
+        </div>
     </div>
 
-    <div id="@ValueType.SerializedStringValue" class="input-field col s12">
-        @Html.Editor(Expression + ".SerializedString")
-        @Html.Label("SerializedString")
+    <div class="row">
+        <div class="col s12 input-field select-field">
+            @await Render.SelectButton("/cystem/select-group/", "")
+            @Html.Editor(Expression + ".GroupId")
+            @Html.Label("Group")
+        </div>
     </div>
 
-    <div id="@ValueType.IntValue" class="input-field col s12">
-        @Html.Editor(Expression + ".Int")
-        @Html.Label("Int")
+    <div class="row">
+        <div class="col s12 input-field ">
+            @Html.TextBox(Expression + ".ParentId")
+            @Html.Label("Parent")
+        </div>
     </div>
 
-    <div id="@ValueType.GroupValue" class="input-field col s12">
-
+    <div class="row">
+        <div class="col s12 input-field ">
+            @Html.TextBox(Expression + ".Order")
+            @Html.Label("Order")
+        </div>
     </div>
-
-    <div id="@ValueType.RelatedValue" class="input-field col s12">
-        @Html.Editor(Expression + ".Int")
-        @Html.Label("Int")
-    </div>
-
-    <div id="@ValueType.RelatedAttribute" class="input-field col s12">
-        @Html.Editor(Expression + ".Int")
-        @Html.Label("Int")
-    </div>
-
-    <div id="@ValueType.ParamValue" class="input-field col s12">
-    </div>
-</div>
-
-<div class="row">
-    <div class="col s12">
-        @await Render.SelectButton("/cystem/select-attribute/", "Group")
-    </div>
-</div>
-
-<div class="row">
-    <div class="col s12 input-field ">
-        @Html.Editor(Expression + ".GroupId")
-        @Html.Label("Group")
-    </div>
-</div>
-
-<div class="row">
-    <div class="col s12 input-field ">
-        @Html.TextBox(Expression + ".ParentId")
-        @Html.Label("Parent")
-    </div>
-</div>
 }
 else
 {

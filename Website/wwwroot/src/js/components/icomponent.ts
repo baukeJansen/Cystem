@@ -9,8 +9,10 @@
     removeChild(component: IComponent): void;
     getChildren(): IComponent[];
     getParent(): IComponent;
-    clearContent(): void;
-    delete(): void;
     setContent($content: JQuery): void;
+    clearContent(): void;
+    onResultAction(fn: Function): void;
+    onResult(result: any): void;
     close(silent?: boolean): void;
+    delete(): void;
 }

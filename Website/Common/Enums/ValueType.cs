@@ -23,6 +23,8 @@ namespace Website.Common.Enums
         [Display(Name = "Attribuut")]
         RelatedAttribute = 6,
         [Display(Name = "Param")]
-        ParamValue = 7
+        ParamValue = 7,
+        [Display(Name = "Date")]
+        DateValue = 9
     }
 }

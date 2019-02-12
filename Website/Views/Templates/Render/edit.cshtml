@@ -3,19 +3,14 @@
 @model GenericViewModel
 @inject IValueHelper Value
 
-@{
-    Value source = Value.Get(Model, "Param");
-    Value attributesRef = Value.Get(Model, "Related");
-    Value editTemplate = Value.Get(attributesRef, "Template");
-    Value attributes = attributesRef?.RelatedValue;
-
+@*{
     if (attributes != null)
     {
         if (attributes.Values == null) { attributes.Values = new List<Value>(); }
         attributes.Values[attributes.Values.FindIndex(v => v.Group.Label == "Template")] = editTemplate;
     }
 }
-
+    
 <div class="container">
     <div class="row">
         <div class="col s12">
@@ -48,6 +43,75 @@
                         @await Render.DeleteModalButton(attributes, "Delete", Model.Options, htmlAttributes: new { @class = "btn-outline" })
                         @await Render.SubmitButton("Update")
                     </div>
+                </div>
+            </div>
+        }
+    }
+</div>*@
+
+
+@{
+    Value source = Value.Get(Model, "Param")?.RelatedValue;
+    Value modelTarget = Value.Get(Model, "Related");
+    Value settings = Value.Get(modelTarget, "Settings");
+
+    Value model = modelTarget?.RelatedValue;
+    Value.SetModelSource(model, source);
+    List<Value> values = model.Values ?? new List<Value>();
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col s12">
+            <h2>@await Render.Value(Model, "Title")</h2>
+        </div>
+    </div>
+
+    @if (settings != null)
+    {
+        if (model != null)
+        {
+            
+
+            Value template = Value.Get(model, "Child template");
+            if (template != null)
+            {
+                Value.Remove(model, template);
+                template.Group.Label = "Template";
+            }
+
+            @using (Html.BeginForm(null, null, new { }, FormMethod.Post, true, new { action = "/edit/" }))
+            {
+                <div class="form-content">
+                    @Html.Hidden(settings.String + ".ParentId", model.Int)
+
+                    @foreach (Value value in values)
+                    {
+                        Value.Add(value, settings);
+                        if (template != null)
+                        {
+                            Value.Add(value, template);
+                        }
+                        @await Render.Value(value, Model.Options);
+                    }
+
+                    <div class="row">
+                        <div class="col s12 right-align">
+                            @await Render.DeleteModalButton(model, "Delete", Model.Options, htmlAttributes: new { @class = "btn-outline" })
+                            @await Render.SubmitButton("Update")
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+    }
+    else
+    {
+        if (settings == null)
+        {
+            <div class="row">
+                <div class="col s12 error">
+                    settings missing
                 </div>
             </div>
         }

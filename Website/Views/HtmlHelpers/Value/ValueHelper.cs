@@ -90,6 +90,26 @@ namespace Website.Views.HtmlHelpers
             return values.Where(v => v.Type == type).ToList();
         }
 
+        /* Add */
+        public void Add(GenericViewModel model, Value childValue)
+        {
+            if (model == null) return;
+
+            Add(model.Value, childValue);
+        }
+
+        public void Add(Value value, Value childValue)
+        {
+            if (value == null) return;
+
+            if (value.Values == null)
+            {
+                value.Values = new List<Value>();
+            }
+
+            value.Values.Add(childValue);
+        }
+
         /* Dispaly */
         public string Display(GenericViewModel vm, string label)
         {
@@ -136,6 +156,10 @@ namespace Website.Views.HtmlHelpers
 
                 case ValueType.RelatedAttribute:
                     return value.Int.ToString();
+
+                case ValueType.DateValue:
+                    if (!value.DateTime.HasValue) return "";
+                    return value.DateTime.Value.ToString("dd-MM-yyyy");
             }
         }
 
@@ -175,6 +199,37 @@ namespace Website.Views.HtmlHelpers
             }
         }
 
+        public void SetModelSource(Value model, Value source)
+        {
+            if (model == null || model.Values == null || source == null) return;
+
+            SetModelSource(model.Values, source);
+        }
+
+        public void SetModelSource(List<Value> modelValues, Value source)
+        {
+            Value modelValue = modelValues.Where(v => v.GroupId == source.GroupId).FirstOrDefault();
+            if (modelValue == null) return;
+
+            modelValue.Id = source.Id;
+            //modelValue.GroupId = source.GroupId;
+            modelValue.Int = source.Int;
+            modelValue.String = source.String;
+            modelValue.SerializedString = source.SerializedString;
+            modelValue.DateTime = source.DateTime;
+            modelValue.Order = source.Order;
+            modelValue.ParentId = source.ParentId;
+            modelValue.Type = source.Type;
+
+            if (modelValue.Values != null)
+            {
+                foreach (Value value in source.Values)
+                {
+                    SetModelSource(modelValue.Values, value);
+                }
+            }
+        }
+
         /* Remove */
         public void Remove(GenericViewModel model, string label)
         {
@@ -182,6 +237,28 @@ namespace Website.Views.HtmlHelpers
 
             Value remove = Get(model, label);
             Remove(model.Value.Values, remove);
+        }
+
+        public void Remove(Value value, string label)
+        {
+            if (value == null) return;
+
+            Value remove = Get(value, label);
+            Remove(value.Values, remove);
+        }
+
+        public void Remove(GenericViewModel model, Value remove)
+        {
+            if (model == null || model.Value == null) return;
+
+            Remove(model.Value.Values, remove);
+        }
+
+        public void Remove(Value value, Value remove)
+        {
+            if (value == null) return;
+
+            Remove(value.Values, remove);
         }
 
         public void Remove(List<Value> values, Value remove)

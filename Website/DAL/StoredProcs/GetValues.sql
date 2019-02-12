@@ -12,13 +12,13 @@ BEGIN
 
 	WITH CTE_VALUES AS (
 
-		SELECT CAST(1 AS INT) AS Recursion, CAST(1 AS INT) AS Related, V1.Id, V1.Type, V1.ParentId, V1.GroupId, V1.Int, V1.String, V1.SerializedString
+		SELECT CAST(1 AS INT) AS Recursion, CAST(1 AS INT) AS Related, V1.Id, V1.Type, V1.ParentId, V1.GroupId, V1.Int, V1.String, V1.SerializedString, V1.DateTime, V1.[Order]
 		FROM [Values] V1
 		WHERE Id = @id
 		OR SerializedString = @url
 
 		UNION ALL
-		SELECT C.Recursion + 1, C.Related, V.Id, V.Type, V.ParentId, V.GroupId, V.Int, V.String, V.SerializedString
+		SELECT C.Recursion + 1, C.Related, V.Id, V.Type, V.ParentId, V.GroupId, V.Int, V.String, V.SerializedString, V.DateTime, V.[Order]
 		FROM CTE_VALUES C
 			JOIN [Values] V
 			ON C.Id = V.ParentId
@@ -26,7 +26,7 @@ BEGIN
 		AND (C.Recursion <= @relatedRecursionDepth OR C.Related = 1)
 
 		UNION ALL
-		SELECT 1, C.Related + 1, V.Id, V.Type, V.ParentId, V.GroupId, V.Int, V.String, V.SerializedString
+		SELECT 1, C.Related + 1, V.Id, V.Type, V.ParentId, V.GroupId, V.Int, V.String, V.SerializedString, V.DateTime, V.[Order]
 		FROM [Values] V
 			JOIN CTE_VALUES C
 			ON V.Id = C.Int
@@ -34,21 +34,21 @@ BEGIN
 		AND C.Type = 4
 
 		UNION ALL
-		SELECT 1, C.Related + 1, V.Id, V.Type, V.ParentId, V.GroupId, V.Int, V.String, V.SerializedString
+		SELECT 1, C.Related + 1, V.Id, V.Type, V.ParentId, V.GroupId, V.Int, V.String, V.SerializedString, V.DateTime, V.[Order]
 		FROM [Values] V
 			JOIN CTE_VALUES C
 			ON V.Id = @param
 		WHERE C.Related <= 1
 		AND C.Type = 7
 	)
-	SELECT Recursion, Related, Id, Type, ParentId, GroupId, Int, String, SerializedString 
+	SELECT Recursion, Related, Id, Type, ParentId, GroupId, Int, String, SerializedString, DateTime, [Order]
 	INTO #Values
 	FROM CTE_VALUES
 
 	-- Distinct, order by recursion, related
-	SELECT V.Id, V.Type, V.ParentId, V.GroupId, V.Int, V.String, V.SerializedString 
+	SELECT V.Id, V.Type, V.ParentId, V.GroupId, V.Int, V.String, V.SerializedString , V.DateTime, V.[Order]
 	FROM (
-		SELECT Distinct DistinctValues.Rec, DistinctValues.Rel, V.Id, V.Type, V.ParentId, V.GroupId, V.Int, V.String, V.SerializedString
+		SELECT Distinct DistinctValues.Rec, DistinctValues.Rel, V.Id, V.Type, V.ParentId, V.GroupId, V.Int, V.String, V.SerializedString, V.DateTime, V.[Order]
 		FROM #Values V
 		INNER JOIN(
 			SELECT Id, MIN(Recursion) Rec, MIN(Related) Rel

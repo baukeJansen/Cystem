@@ -21,6 +21,9 @@ namespace Website.Views.HtmlHelpers
         List<Value> GetAll(List<Value> values, ValueType type);
         List<Value> GetAll(Value values, ValueType type);
 
+        void Add(GenericViewModel model, Value childValue);
+        void Add(Value value, Value childValue);
+
         string Display(GenericViewModel vm, string label);
         string Display(List<Value> values, string label);
         string Display(Value value, string label);
@@ -28,8 +31,12 @@ namespace Website.Views.HtmlHelpers
         string Display(Value value);
 
         void MergeEditorValues(Value source, Value target);
+        void SetModelSource(Value model, Value source);
 
         void Remove(GenericViewModel model, string label);
+        void Remove(Value remove, string label);
+        void Remove(GenericViewModel model, Value remove);
+        void Remove(Value value, Value remove);
         void Remove(List<Value> values, Value remove);
     }
 }

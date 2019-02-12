@@ -53,6 +53,7 @@
       "wwwroot/src/js/actions/formtab.js",
       "wwwroot/src/js/actions/floatingactionbutton.js",
       "wwwroot/src/js/actions/keyactions.js",
+      "wwwroot/src/js/actions/resultaction.js",
 
       "wwwroot/src/js/components/basecomponent.js",
       "wwwroot/src/js/components/page.js",

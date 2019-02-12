@@ -1,0 +1,45 @@
+﻿@using Website.Common.Viewmodels
+@using Website.Common.Models
+@model GenericViewModel
+@inject IValueHelper Value
+
+@{
+    Value settings = Value.Get(Model, "Settings");
+    Value template = Value.Get(Model, "Template");
+    Value valueInputTemplate = new Value { Group = new Group { Label = "Template" }, String = "value-input" };
+
+    Value.Remove(Model, template);
+    Value.Add(Model, valueInputTemplate);
+
+    string Name = settings?.String;
+    int i = 0;
+
+    List<Value> childValues = Model.Value.Values;
+}
+
+@await Render.Value(Model)
+
+@{ 
+    Value.Remove(Model, valueInputTemplate);
+    Value.Remove(Model, settings);
+    Value.Remove(Model, "Value option");
+}
+
+@if (childValues != null)
+{
+    @for (; i < childValues.Count; i++)
+    {
+        Value childValue = childValues[i];
+
+        settings.String = Name + ".Values[" + i + "]";
+        Value.Add(childValue, settings);
+        Value.Add(childValue, template);
+
+        @await Render.Value(childValue, Model.Options);
+        settings.String = Name;
+    }
+}
+
+@{
+    settings.Int = i;
+}

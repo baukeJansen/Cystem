@@ -41,6 +41,15 @@ form {
         animation-timing-function: ease;
         animation-fill-mode: forwards;
     }
+
+    .select-field .select-button {
+        position: absolute;
+        width: 100%;
+        top: 0;
+        text-align: right;
+        padding: 0 20px 0 0;
+        height: 100%;
+    }
 }
 
 @keyframes send {

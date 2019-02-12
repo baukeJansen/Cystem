@@ -7,7 +7,7 @@
 @{
     Value settings = Value.Get(Model, "Settings");
     Value template = Value.Get(Model, "Template");
-    List<Value> attributes = Value.GetAll(Model.Value.Values, ValueType.RelatedAttribute);
+    List<Value> attributes = Value.GetAll(Model.Value.Values, ValueType.RelatedAttribute).OrderBy(v => v.Order).ToList();
 
     string Name = settings?.String;
     int i = 0;

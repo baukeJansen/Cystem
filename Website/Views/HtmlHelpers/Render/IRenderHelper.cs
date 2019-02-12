@@ -42,6 +42,6 @@ namespace Website.Views.HtmlHelpers
         Task<IHtmlContent> SubmitButton(string buttonText = "Submit", string icon = "send", ComponentAction action = ComponentAction.Close, ComponentType target = ComponentType.Self, string classes = "", object htmlAttributes = null);
         Task<IHtmlContent> DeleteButton(string url, object routeValues = null, string buttonText = "Delete", DisplaySetting options = DisplaySetting.Render, ComponentAction action = ComponentAction.Close, ComponentType target = ComponentType.Self, object htmlAttributes = null);
         Task<IHtmlContent> DeleteModalButton(Value value, string buttonText = "Delete", DisplaySetting options = DisplaySetting.Render, ComponentAction action = ComponentAction.Close, ComponentType target = ComponentType.Self, object htmlAttributes = null);
-        Task<IHtmlContent> SelectButton(string url, string buttonText, object routeValues = null, string icon = "arrow_forward", DisplaySetting options = DisplaySetting.Render, ComponentAction action = ComponentAction.Load, ComponentType target = ComponentType.Overlay, object htmlAttributes = null);
+        Task<IHtmlContent> SelectButton(string url, string buttonText, object routeValues = null, string icon = "arrow_forward", DisplaySetting options = DisplaySetting.Render, ComponentAction action = ComponentAction.Select, ComponentType target = ComponentType.Overlay, object htmlAttributes = null);
     }
 }

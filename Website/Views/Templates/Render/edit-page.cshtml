@@ -1,0 +1,55 @@
+﻿@using Website.Common.Viewmodels
+@using Website.Common.Models
+@model GenericViewModel
+@inject IValueHelper Value
+
+@{
+    Value source = Value.Get(Model, "Param");
+    Value attributesRef = Value.Get(Model, "Related");
+    Value editTemplate = Value.Get(attributesRef, "Template");
+    Value attributes = attributesRef?.RelatedValue;
+
+    if (attributes != null)
+    {
+        if (attributes.Values == null) { attributes.Values = new List<Value>(); }
+        attributes.Values[attributes.Values.FindIndex(v => v.Group.Label == "Template")] = editTemplate;
+    }
+}
+
+<div class="container">
+    <div class="row">
+        <div class="col s12">
+            <h2>@await Render.Value(Model, "Title")</h2>
+        </div>
+    </div>
+
+    @if (attributes != null)
+    {
+        @using (Html.BeginForm(null, null, new { }, FormMethod.Post, true, new { action = "/cystem/edit-page/" }))
+        {
+
+            Value settings = new Value
+            {
+                String = "Value",
+                Group = new Group
+                {
+                    Label = "Settings"
+                }
+            };
+
+            attributes.Values.Add(settings);
+            Value.MergeEditorValues(source, attributes);
+
+            <div class="form-content">
+                @await Render.Value(attributes, Model.Options)
+
+                <div class="row">
+                    <div class="col s12 right-align">
+                        @await Render.DeleteModalButton(attributes, "Delete", Model.Options, htmlAttributes: new { @class = "btn-outline" })
+                        @await Render.SubmitButton("Update")
+                    </div>
+                </div>
+            </div>
+        }
+    }
+</div>
