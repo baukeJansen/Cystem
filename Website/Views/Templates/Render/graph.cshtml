@@ -1,0 +1,26 @@
+﻿@using Website.Common.Viewmodels
+@using Website.Common.Enums
+@model GenericViewModel
+
+<div class="container">
+    <div class="row">
+        <div class="col s12">
+            <h2>@await Render.Value(Model, "Title")</h2>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="component z-depth-1">
+            <div class="content load" data-url="/eggs/graph-data/" data-action="@ComponentAction.LoadSilent">
+
+            </div>
+        </div>
+
+        <div class="col s12 chart-wrapper">
+            <canvas class="graph" width="400" height="400"></canvas>
+            <div class="graph-data hide">
+
+            </div>
+        </div>
+    </div>
+</div>

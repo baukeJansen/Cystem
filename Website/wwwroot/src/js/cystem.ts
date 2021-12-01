@@ -53,6 +53,10 @@
         $el.find('.fixed-action-btn').each(function (_, el) {
             new FloatingActionButton($(el));
         });
+
+        $el.find('.graph').each(function (_, el) {
+            new Graph($(el));
+        });
     }
 }
 

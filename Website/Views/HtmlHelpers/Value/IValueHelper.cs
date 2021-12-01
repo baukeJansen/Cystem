@@ -30,6 +30,7 @@ namespace Website.Views.HtmlHelpers
         string Display(GenericViewModel value);
         string Display(Value value);
 
+        void CreateModel(Value model);
         void MergeEditorValues(Value source, Value target);
         void SetModelSource(Value model, Value source);
 

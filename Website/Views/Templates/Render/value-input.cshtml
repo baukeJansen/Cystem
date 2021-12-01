@@ -55,7 +55,7 @@
                     break;
 
                 case ValueType.DateValue:
-                    expression = settings.String + ".Time";
+                    expression = settings.String + ".DateTime";
                     objectValue = (value.DateTime.HasValue ? value.DateTime.Value : DateTime.Now).ToString("dd-MM-yyyy");
 
                     htmlAttributes["class"] = "datepicker";

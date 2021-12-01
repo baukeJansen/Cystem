@@ -5,6 +5,7 @@
 
 @{
     Value model = Value.Get(Model, "Model");
+    Value.CreateModel(model);
     Value settings = Value.Get(Model, "Settings");
 
     List<Value> values = model.Values ?? new List<Value>();

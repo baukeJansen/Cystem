@@ -163,6 +163,26 @@ namespace Website.Views.HtmlHelpers
             }
         }
 
+        /* New */
+        public void CreateModel(Value model)
+        {
+            if (model == null || model.Values == null) return;
+
+            CreateModel(model.Values);
+        }
+
+        public void CreateModel(List<Value> values)
+        {
+            if (values == null) return;
+
+            foreach(Value value in values)
+            {
+                value.Id = 0;
+                CreateModel(value.Values);
+            }
+        }
+
+
         /* Merge */
         public void MergeEditorValues(Value source, Value target)
         {
@@ -221,7 +241,7 @@ namespace Website.Views.HtmlHelpers
             modelValue.ParentId = source.ParentId;
             modelValue.Type = source.Type;
 
-            if (modelValue.Values != null)
+            if (modelValue.Values != null && source.Values != null)
             {
                 foreach (Value value in source.Values)
                 {

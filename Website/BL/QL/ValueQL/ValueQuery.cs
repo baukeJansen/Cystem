@@ -29,8 +29,12 @@ namespace Website.BL.QL.ValueQL
                 new SqlParameter("@recursionDepth", SqlDbType.Int){
                     Value = 20
                 },
+                new SqlParameter("@relatedDepth", SqlDbType.Int)
+                {
+                    Value = 1
+                },
                 new SqlParameter("@relatedRecursionDepth", SqlDbType.Int) {
-                    Value = 2
+                    Value = 3
                 },
                 new SqlParameter("@param", SqlDbType.Int)
                 {
@@ -56,8 +60,12 @@ namespace Website.BL.QL.ValueQL
                 new SqlParameter("@recursionDepth", SqlDbType.Int){
                     Value = 20
                 },
+                new SqlParameter("@relatedDepth", SqlDbType.Int)
+                {
+                    Value = 1
+                },
                 new SqlParameter("@relatedRecursionDepth", SqlDbType.Int) {
-                    Value = 2
+                    Value = 3
                 },
                 new SqlParameter("@param", SqlDbType.Int)
                 {
